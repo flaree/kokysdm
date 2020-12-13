@@ -1,9 +1,9 @@
-new bool:ClanVehicles[MAX_VEHICLES] = {false, ...};
+static Iterator:clanVehicles<MAX_VEHICLES>;
 
 CMD<CM>:setofficial(cmdid, playerid, params[])
 {
 	new TargetClan[64], level;
-	if(sscanf(params, "s[64]i", TargetClan, level)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /setofficial [clanname] [level] (1 = official, 0 = unofficial)");
+	if(sscanf(params, "is[64]", level, TargetClan)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /setofficial [level] (1 = official, 0 = unofficial) [clanname]");
 
 	yield 1;
 	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE name = '%e'", TargetClan));
@@ -24,7 +24,7 @@ CMD<CM>:setofficial(cmdid, playerid, params[])
 }
 CMD<CM>:respawnclanvehicles(cmdid, playerid, params[])
 {
-	DeleteAllClanVehicles();
+	DeleteAllClanVehicles(0);
 	return true;
 }
 CMD<CM>:createclanvehicle(cmdid, playerid, params[])
@@ -63,9 +63,15 @@ CMD<CM>:deletevehicle(cmdid, playerid, params[])
 }
 CMD<CM>:saveclanvehicle(cmdid, playerid, params[])
 {
-	if(isnull(params)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /saveclanvehicle [clanname]");
-	if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER) return SendErrorMessage(playerid, "You must be in a clan vehicle. Refer to /createclanvehicle.");
-	if(!ClanAlreadyExists(params)) return SendClientMessage(playerid, COLOR_GRAY, sprintf("No clan been found with the name %s.", params));
+	new clanName[64], colorOne, colorTwo;
+	if(sscanf(params, "s[64]ii", clanName, colorOne, colorTwo)) 
+		return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /saveclanvehicle [clanname] [color 1] [color 2]");
+	if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
+		return SendErrorMessage(playerid, "You must be in a clan vehicle. Refer to /createclanvehicle.");
+	if(!ClanAlreadyExists(clanName)) 
+		return SendClientMessage(playerid, COLOR_GRAY, sprintf("No clan been found with the name %s.", clanName));
+	if (!(0 < colorOne < 255) || !(0 < colorTwo < 255))
+		return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /saveclanvehicle [clanname] [color 1 (0-255)] [color 2 (0-255)]");
 
 	new vehicleid, vehiclemodel, Float:x, Float:y, Float:z, Float:a;
 	vehicleid = GetPlayerVehicleID(playerid);
@@ -73,11 +79,11 @@ CMD<CM>:saveclanvehicle(cmdid, playerid, params[])
 	GetVehiclePos(vehicleid, x, y, z);
 	GetVehicleZAngle(vehicleid, a);
 
-	new clanid = GetClanIDFromName(params);
-	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO clan_vehicles (clan_id, vehicle_id, clan_name, x, y, z, a) VALUES(%i, %i, '%s', %f, %f, %f, %f)", clanid, vehiclemodel, params, x, y, z, a));
+	new clanid = GetClanIDFromName(clanName);
+	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO clan_vehicles (clan_id, vehicle_id, clan_name, x, y, z, a, colorOne, colorTwo) VALUES(%i, %i, '%s', %f, %f, %f, %f, %i, %i)", clanid, vehiclemodel, clanName, x, y, z, a, colorOne, colorTwo));
 	DestroyVehicle(vehicleid);
-	DeleteAllClanVehicles();
 	SendClientMessage(playerid, COLOR_LIGHTBLUE, "Clan Management: You have sucessfully set the clan vehicle in the database.");
+	DeleteAllClanVehicles(0);
 	return true;
 }
 CMD<CM>:setspawn(cmdid, playerid, params[])
@@ -106,12 +112,13 @@ CMD<CM>:setclanskin(cmdid, playerid, params[])
 	return 1;
 }
 
-SpawnAllClanVehicles()
+// param="type" // Used to determine if it is called under OnGameModeInit or after
+forward SpawnAllClanVehicles(const type);
+public SpawnAllClanVehicles(const type)
 {
-	await mysql_aquery(SQL_CONNECTION, "SELECT * FROM clan_vehicles");
 	if(!cache_num_rows()) return true;
 
-	new carid, clanname[32], idclan, vehid, Float:x, Float:y, Float:z, Float:a;
+	new carid, clanname[32], idclan, vehid, Float:x, Float:y, Float:z, Float:a, colorOne, colorTwo;
 	for(new i = 0, r = cache_num_rows(); i < r; i++)
 	{
 		cache_get_value_name_int(i, "clan_id", idclan);
@@ -121,26 +128,31 @@ SpawnAllClanVehicles()
 		cache_get_value_name_float(i, "y", y);
 		cache_get_value_name_float(i, "z", z);
 		cache_get_value_name_float(i, "a", a);
+		// color fix
+		cache_get_value_name_int(i, "colorOne", colorOne);
+		cache_get_value_name_int(i, "colorTwo", colorTwo);
 
-		carid = AddStaticVehicleEx(vehid, x, y, z, a, PlayerColors[idclan + 5], PlayerColors[idclan + 5], 60, 0);
+		if (type)
+			carid = AddStaticVehicleEx(vehid, x, y, z, a, colorOne, colorTwo, 60, 0);
+		else 
+			carid = CreateVehicle(vehid, x, y, z, a, colorOne, colorTwo, 60);
+
 		SetVehicleNumberPlate(carid, clanname);
 		LinkVehicleToInterior(carid, 0);
 		SetVehicleVirtualWorld(carid, WORLD_TDM);
-		ClanVehicles[carid] = true;
+		Iter_Add(clanVehicles, carid);
 	}	
 	return true;
 }
-DeleteAllClanVehicles()
+DeleteAllClanVehicles(const type)
 {
-	foreach(new v: Vehicle)
+	foreach(new v : clanVehicles)
 	{
-	    if(GetVehicleModel(v) != 0) // if vehicle id valid
-	    {
-	        DestroyVehicle(v);
-	        ClanVehicles[v] = false;
-	    }
+		DestroyVehicle(v);
+		Iter_SafeRemove(clanVehicles, v, v);
 	}
-	return SpawnAllClanVehicles();
+	mysql_pquery_s(SQL_CONNECTION, str_format("SELECT * FROM clan_vehicles"), "SpawnAllClanVehicles", "i", type);	
+	return 1;
 }
 UpdateClanOfficialLevel(clanid, level)
 {

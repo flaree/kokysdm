@@ -68,8 +68,9 @@ new ammudata[][] =
 	{WEAPON_MOLTOV, 1, -10000},
 	{WEAPON_M4, 100, -25000}
 };
-forward OnTDMPlayerDisconnect(playerid, reason);
-public OnTDMPlayerDisconnect(playerid, reason)
+
+#include <pp-hooks>
+hook public OnPlayerDisconnect(playerid, reason)
 {
 	if(ActivityState[playerid] == ACTIVITY_TDM)
 	{
@@ -90,8 +91,8 @@ public OnTDMPlayerDisconnect(playerid, reason)
 			SendPlayerToLobby(playerid);
 		}
 	}
-	return false;
 }
+
 InitTDM()
 {
 	Iter_Init(TDMPlayers);
@@ -150,27 +151,29 @@ InitTDM()
 
 	return true;
 }
-forward OnTDMPlayerKeyStateChange(playerid, newkeys, oldkeys);
-public OnTDMPlayerKeyStateChange(playerid, newkeys, oldkeys)
+
+hook public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	if(PRESSED(KEY_SECONDARY_ATTACK))
+	if (ActivityState[playerid] == ACTIVITY_TDM)
 	{
-		if(IsPlayerInRangeOfPoint(playerid, 5.0, 1367.9875, -1279.7437, 13.5469))
+		if(PRESSED(KEY_SECONDARY_ATTACK))
 		{
-			inAmmunation[playerid] = 1;
-			SetPlayerPosEx(playerid, 286.148986, -40.644397, 1001.515625, 1, WORLD_TDM);
-			SendClientMessage(playerid, COLOR_LIGHTRED, "Ammunation: Welcome to ammunation, use /buy to purchase ammunation.");
-		}
-		if(IsPlayerInRangeOfPoint(playerid, 5.0, 286.148986, -40.644397, 1001.515625))
-		{
-			inAmmunation[playerid] = 0;
-			SetPlayerPosEx(playerid, 1367.9875, -1279.7437, 13.5469, 0, WORLD_TDM);
+			if(IsPlayerInRangeOfPoint(playerid, 5.0, 1367.9875, -1279.7437, 13.5469))
+			{
+				inAmmunation[playerid] = 1;
+				SetPlayerPosEx(playerid, 286.148986, -40.644397, 1001.515625, 1, WORLD_TDM);
+				SendClientMessage(playerid, COLOR_LIGHTRED, "Ammunation: Welcome to ammunation, use /buy to purchase ammunation.");
+			}
+			if(IsPlayerInRangeOfPoint(playerid, 5.0, 286.148986, -40.644397, 1001.515625))
+			{
+				inAmmunation[playerid] = 0;
+				SetPlayerPosEx(playerid, 1367.9875, -1279.7437, 13.5469, 0, WORLD_TDM);
+			}
 		}
 	}
 	return false;
 }
-forward OnPlayerEnterTDMCheckpoint(playerid);
-public OnPlayerEnterTDMCheckpoint(playerid)
+hook public OnPlayerEnterCheckpoint(playerid)
 {
 	if(ActivityState[playerid] == ACTIVITY_TDM && cancapture[playerid])
 	{
@@ -189,23 +192,21 @@ public OnPlayerEnterTDMCheckpoint(playerid)
 	}
 	return false;
 }
-forward OnTDMPlayerUpdate(playerid);
-public OnTDMPlayerUpdate(playerid)
+hook public OnPlayerUpdate(playerid)
 {
 	if(ActivityState[playerid] == ACTIVITY_TDM && capturingturf[playerid] == 1)
 	{
 		if(!IsPlayerInArea(playerid, TDM_TURFPOS))
 		{
-			capturingturf[playerid] = 0;
 			SendTDMMessage(COLOR_LIGHTRED, sprintf("TURF: {%06x}%s {ffffff}has left the turf while capturing. The turf is now available for capture!", GetPlayerColor(playerid) >>> 8, GetName(playerid)));
 			KillTimer(capturingtimer[playerid]);
+			capturingturf[playerid] = 0;
+			beingcaptured = -1;
 			GangZoneStopFlashForAll(igsturf);
 		}
 	}
-	return false;
 }
-forward OnPlayerEnterTDMVehicle(playerid, vehicleid, ispassenger);
-public OnPlayerEnterTDMVehicle(playerid, vehicleid, ispassenger)
+hook public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 {
 	if(ActivityState[playerid] == ACTIVITY_TDM)
 	{
@@ -214,8 +215,9 @@ public OnPlayerEnterTDMVehicle(playerid, vehicleid, ispassenger)
 			SendTDMMessage(COLOR_LIGHTRED, sprintf("TURF: {%06x}%s {ffffff}has entered a vehicle while capturing the turf. The turf is now available for capture!",
 				GetPlayerColor(playerid) >>> 8, GetName(playerid)));
 			KillTimer(capturingtimer[playerid]);
-			GangZoneStopFlashForAll(igsturf);
+			capturingturf[playerid] = 0;
 			beingcaptured = -1;
+			GangZoneStopFlashForAll(igsturf);
 		}
 		if(!ispassenger)
 		{
@@ -230,7 +232,6 @@ public OnPlayerEnterTDMVehicle(playerid, vehicleid, ispassenger)
 			}
 		}
 	}
-	return false;
 }
 
 OfficialClanSelection(playerid)
@@ -395,7 +396,6 @@ public CapturingTurf(playerid, team)
 	allowcapture = 0;
 	beingcaptured = -1;
 	capturingturf[playerid] = 0;
-	beingcaptured = -1;
 	return true;
 }
 GangZoneFlashForTDM(color)

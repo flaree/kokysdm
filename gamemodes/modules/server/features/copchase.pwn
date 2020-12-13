@@ -317,9 +317,10 @@ CMD:radio(cmdid, playerid, params[])
 
 	return 1;
 }
+
 //hooks
-forward OnCCPlayerDisconnect(playerid, reason);
-public OnCCPlayerDisconnect(playerid, reason)
+#include <pp-hooks>
+hook public OnPlayerDisconnect(playerid, reason)
 {
 	if(Account[playerid][pCopchase] == 2){
 		new msg[128];
@@ -341,10 +342,8 @@ public OnCCPlayerDisconnect(playerid, reason)
 		PlayerTextDrawHide(playerid, Account[playerid][TextDraw][2]);
 		PlayerTextDrawHide(playerid, Account[playerid][TextDraw][3]);
 	}
-	return false;
 }
-forward OnCCPlayerKeyStateChange(playerid, newkeys, oldkeys);
-public OnCCPlayerKeyStateChange(playerid, newkeys, oldkeys)
+hook public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
 	// COPCHASE - PRESSING Y TO BECOME VISIBLE IN THE MAP
 	if(Account[playerid][pCopchase] == 2 && PRESSED(KEY_YES) && Ytimer[playerid] == 0)
@@ -366,5 +365,4 @@ public OnCCPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		SendPoliceRadioMessage(sprintf("{%06x}%s (%d){6A5ACD} %s", GetPlayerColor(playerid) >>> 8, GetName(playerid), playerid, (Account[playerid][pCopchaseVisible]) ? ("is now visible in the radar!") : ("is no longer visible in the radar!")));
 		Ytimer[playerid] = 5;
 	}
-	return false;
 }

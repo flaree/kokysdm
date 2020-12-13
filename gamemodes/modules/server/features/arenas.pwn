@@ -264,12 +264,12 @@ new ArenaWeapons[][ARENA_WEAPONS] =
 };
 
 //hooks
-forward OnArenaPlayerDisconnect(playerid, reason);
-public OnArenaPlayerDisconnect(playerid, reason)
+#include <pp-hooks>
+hook public OnPlayerDisconnect(playerid, reason)
 {
 	if(ActivityState[playerid] == ACTIVITY_ARENADM) UpdateArena(playerid);
-	return false;
 }
+
 forward SendPlayerToArena(playerid);
 public SendPlayerToArena(playerid)
 {
@@ -289,6 +289,7 @@ public SendPlayerToArena(playerid)
 	RemoveRestrictedArenaSkin(playerid);
 	return true;
 }
+
 ArenaInit()
 {
 	Iter_Init(ArenaOccupants);

@@ -529,11 +529,10 @@ HandleEventSpawn(playerid)
 }
 
 // -----------------------------------------------------------------------------
-forward OnEventPlayerDisconnect(playerid, reason);
-public OnEventPlayerDisconnect(playerid, reason)
+#include <pp-hooks>
+hook public OnPlayerDisconnect(playerid, reason)
 {
 	if(ActivityState[playerid] == ACTIVITY_EVENT) ExitEvent(playerid);
-	return false;
 }
 
 // -----------------------------------------------------------------------------

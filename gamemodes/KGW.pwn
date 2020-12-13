@@ -12,7 +12,7 @@
 ==============================================================================================================
 Update K:DM 0.43
 Memorial Developers -> Koky ~ TommyB ~ J0sh ES ~ Graber
-Developers -> SimoSbara ~ Davis ~ rivera ~ Bauer ~ josef 
+Developers -> SimoSbara ~ Davis ~ westham ~ Bauer ~ josef 
 Losers -> BanksDM - LSDM - CarnageTDM!
 
 */
@@ -42,18 +42,13 @@ Losers -> BanksDM - LSDM - CarnageTDM!
 
 //pawnplus stuff
 #define PP_SYNTAX
-#include <PawnPlus>
-
-#include <async-dialogs>
-
 #define MYSQL_ASYNC_DEFAULT_PARALLEL true
+#include <PawnPlus>
+#include <async-dialogs>
 #include <pp-mysql>
+#include <pp-hooks>
 
 //#include <mSelection>
-
-new formatString[256];
-
-#define SendFormatMessage(%0,%1,%2,%3) format(formatString, sizeof(formatString),%2,%3) && SendClientMessage(%0, %1, formatString)
 
 new countdowntime[MAX_PLAYERS];
 new countdowntimer[MAX_PLAYERS];
@@ -66,6 +61,7 @@ new TimesHit[MAX_PLAYERS];
 new List:DialogOptions[MAX_PLAYERS];
 new HitmarkerTimer[MAX_PLAYERS];
 new PlayerSecondTimer[MAX_PLAYERS];
+new pName[MAX_PLAYERS][MAX_PLAYER_NAME + 1];
 
 //antispam stuff
 new MessageAmount[MAX_PLAYERS]; //how many chat messages a player has sent, decrements by 2 every second
@@ -522,81 +518,21 @@ new WeaponNameList[][] =
 	"Parachute"
 };
 
-//==============================================================================
-//          -- > Gamemode Includes
-//==============================================================================
-
-//player activity tracking
-#include "modules/server/activity.pwn"
-
-//anticheat
-#include "modules/server/anticheat/anticheat.pwn"
-
-//server maps
-#include "modules/server/maps/lobby.pwn"
-#include "modules/server/maps/sewers.pwn"
-#include "modules/server/maps/western.pwn"
-#include "modules/server/maps/farm.pwn"
-#include "modules/server/maps/dust2.pwn"
-#include "modules/server/maps/tdm.pwn"
-
-//other
-#include "modules/server/hooks.pwn"
-#include "modules/server/mysql.pwn"
-#include "modules/server/load_settings.pwn"
-#include "modules/server/discord.pwn"
-
-//registering/logging in
-#include "modules/player/accounts.pwn"
-
-//features
-#include "modules/server/features/arenas.pwn"
-#include "modules/server/features/duel.pwn"
-#include "modules/server/features/reports.pwn"
-#include "modules/server/features/teamdeathmatch.pwn"
-#include "modules/server/features/skinroll.pwn"
-#include "modules/server/features/spectating.pwn"
-#include "modules/server/features/upgrade.pwn"
-#include "modules/server/features/copchase.pwn"
-#include "modules/server/features/freeroam.pwn"
-#include "modules/server/features/leaderboards.pwn"
-#include "modules/server/features/events.pwn"
-#include "modules/server/features/customskins.pwn"
-#include "modules/server/lobby.pwn"
-#include "modules/server/features/monthlydeathmatcher.pwn"
-#include "modules/server/features/latestdonator.pwn"
-#include "modules/server/features/clans.pwn"
-#include "modules/server/features/serverhub.pwn"
-//#include "modules/server/mselecti.pwn"
-//#include "modules/server/features/headshotarenas.pwn"
-
-//player
-#include "modules/player/sessiontds.pwn"
-#include "modules/player/networktds.pwn"
-#include "modules/player/settings.pwn"
-
-//admin
-#include "modules/server/admin/admincmds.pwn"
-#include "modules/server/admin/adminfunctions.pwn"
-//#include "modules/server/admin/adminnotes.pwn"
-
-//clanmanagement
-#include "modules/server/admin/clanmanagement/officialclans.pwn"
-
-
 //==========================================================================
 //==========================================================================
 
-new AdminNames[][] =
+stock AdminNames(const level)
 {
-	"None",
-	"1",
-	"2",
-	"3",
-	"4",
-	"5",
-	"6"
-};
+	new adminName[24];
+	switch(level)
+	{
+		case 1..6: 
+			format(adminName, sizeof adminName, "%i", level);
+		default:
+			format(adminName, sizeof adminName, "None");
+	}
+	return adminName;
+}
 
 //nnow
 enum E_SAZONE
@@ -1027,8 +963,6 @@ new VehicleNames[][] =
 #define LANGUAGE_ESPANOL 4
 #define LANGUAGE_OTHER 4
 
-#define		FORMAT:%0(%1)		format(%0, sizeof(%0), %1)
-
 #define 	BODY_PART_GROIN 	4
 #define 	BODY_PART_RIGHT_ARM 5
 #define 	BODY_PART_LEFT_ARM 	6
@@ -1042,6 +976,67 @@ new VehicleNames[][] =
 #define     GUCCICLOUT 20009
 #define     OGPAPA     20010
 #define     KFC        20011
+
+//==============================================================================
+//          -- > Gamemode Includes
+//==============================================================================
+
+//player activity tracking
+#include "modules/server/activity.pwn"
+
+//anticheat
+#include "modules/server/anticheat/anticheat.pwn"
+
+//server maps
+#include "modules/server/maps/lobby.pwn"
+#include "modules/server/maps/sewers.pwn"
+#include "modules/server/maps/western.pwn"
+#include "modules/server/maps/farm.pwn"
+#include "modules/server/maps/dust2.pwn"
+#include "modules/server/maps/tdm.pwn"
+
+//other
+#include "modules/server/mysql.pwn"
+#include "modules/server/load_settings.pwn"
+
+//registering/logging in
+#include "modules/player/accounts.pwn"
+
+//features
+#include "modules/server/features/arenas.pwn"
+#include "modules/server/features/duel.pwn"
+#include "modules/server/features/reports.pwn"
+#include "modules/server/features/teamdeathmatch.pwn"
+#include "modules/server/features/skinroll.pwn"
+#include "modules/server/features/spectating.pwn"
+#include "modules/server/features/upgrade.pwn"
+#include "modules/server/features/copchase.pwn"
+#include "modules/server/features/freeroam.pwn"
+#include "modules/server/features/leaderboards.pwn"
+#include "modules/server/features/events.pwn"
+#include "modules/server/features/customskins.pwn"
+#include "modules/server/lobby.pwn"
+#include "modules/server/features/monthlydeathmatcher.pwn"
+#include "modules/server/features/latestdonator.pwn"
+#include "modules/server/features/clans.pwn"
+#include "modules/server/features/serverhub.pwn"
+//#include "modules/server/mselecti.pwn"
+//#include "modules/server/features/headshotarenas.pwn"
+
+//player
+#include "modules/player/sessiontds.pwn"
+#include "modules/player/networktds.pwn"
+#include "modules/player/settings.pwn"
+
+//admin
+#include "modules/server/admin/admincmds.pwn"
+#include "modules/server/admin/adminfunctions.pwn"
+#include "modules/server/admin/duty.pwn"
+#include "modules/server/discord.pwn"
+//#include "modules/server/admin/adminnotes.pwn"
+
+//clanmanagement
+#include "modules/server/admin/clanmanagement/officialclans.pwn"
 
 //==Events==//
 //==================Stock(s)===============
@@ -1256,7 +1251,7 @@ public SendRandomMessage()
 	{
 		"[Koky's Deathmatch]{FFFFFF}: Did you know? There is a 1 in 100 chance of receiving a Premium Key upon killing another player!", //this is the text of your second message
 		"[Koky's Deathmatch]{FFFFFF}: Want a custom skin? Use /skinroll in the lobby!",
-		"[Koky's Deathmatch]{FFFFFF}: Got an idea in mind? Suggest it on our forums. (www.kokysdm.com)",
+		"[Koky's Deathmatch]{FFFFFF}: Got an idea in mind? Suggest it on our forums. (www.kokysdm.net)",
 		"[Koky's Deathmatch]{FFFFFF}: Use /top to view the top kills, headshots and deaths!",
 		"[Koky's Deathmatch]{FFFFFF}: You can duel your friend and foes, use /duel!",
 		"[Koky's Deathmatch]{FFFFFF}: Not having fun? Start your own event! (/startevent)",
@@ -1287,8 +1282,6 @@ public OnGameModeInit()
 	SetCbugAllowed(false);
 
 	MySQLConnect();
-	RegisterCallbackHooks();
-
 	CreateSessionBox();
 
 	//set gamemode text
@@ -1312,7 +1305,7 @@ public OnGameModeInit()
 	//"hooks"
 	InitDuelArenas();
 	InitTDM();
-	SpawnAllClanVehicles();
+	DeleteAllClanVehicles(1);
 	SkinRollInit();
 	InitServerHub();
 	ArenaInit();
@@ -1524,6 +1517,9 @@ public OnPlayerConnect(playerid)
 	PreloadAnimLib(playerid,"INT_HOUSE");
 	PreloadAnimLib(playerid,"FOOD");
 
+	//get the player's name and store it in memory so we don't have to constantly re-fetch it from the samp server
+	GetPlayerName(playerid, pName[playerid], MAX_PLAYER_NAME + 1);
+
 	//farm arena building removals
 	RemoveBuildingForPlayer(playerid, 11618, -688.117, 939.179, 11.125, 0.250);
 	RemoveBuildingForPlayer(playerid, 11654, -681.875, 965.890, 11.125, 0.250);
@@ -1618,7 +1614,7 @@ Forum_Dialog(playerid)
 {
 	new str[400];
 	format(str, sizeof(str), "{FFFFFF}Hello, %s!\n\nIt is important for you to add your forum account to your in-game account, this cannot be changed so please be correct.\nThis will allow you to receive purchases made on the forums such as Account Upgrades instant.\nIf you also win a giveaway, you will instantly get your item(s).", GetName(playerid));
-	Dialog_Show(playerid, FORUM, DIALOG_STYLE_INPUT, "Koky's Deathmatch | wwww.kokysdm.com/forum", str, "Input", "Cancel");
+	Dialog_Show(playerid, FORUM, DIALOG_STYLE_INPUT, "Koky's Deathmatch | wwww.kokysdm.net/forum", str, "Input", "Cancel");
 }
 UserGroup_Dialog(playerid)
 {
@@ -2135,9 +2131,7 @@ KickPlayer(playerid)
 
 GetName(playerid)
 {
-	new name[MAX_PLAYER_NAME];
-	GetPlayerName(playerid, name, MAX_PLAYER_NAME);
-	return name;
+	return pName[playerid];
 }
 public OnPlayerUpdate(playerid)
 {
@@ -3110,6 +3104,7 @@ ChatSend(language, const str[])
 	
 	return 1;
 }
+
 public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &weapon, &bodypart)
 {
 	if(IsPlayerConnected(issuerid) && IsPlayerConnected(playerid))
@@ -3117,9 +3112,13 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &weapon, &bodypart)
 		//don't do damage if the player isn't supposed to have the weapon
 		if(!WeaponData[issuerid][GetWeaponSlot(weapon)][ACWeaponPossession]) return 0;
 
+		if (adminDuty[playerid])
+			return 0;
+
 		if(ActivityState[issuerid] == ACTIVITY_DUEL && DuelTeam[ActivityStateID[issuerid]][issuerid] == DuelTeam[ActivityStateID[issuerid]][playerid]) return 0;
 		if(Account[playerid][TDMTeam] == Account[issuerid][TDMTeam] && Account[playerid][TDMTeam] != 0) return 0;
 		if(inAmmunation[playerid] == 1) return 0;
+		if (ActivityState[issuerid] == ACTIVITY_DUEL_PREP) return 0;
 		if(ActivityState[playerid] == ACTIVITY_LOBBY) return 0;
 		if(EventDeath[playerid] && ActivityState[playerid] == ACTIVITY_EVENT) return 0;
 		if(ActivityState[playerid] == ACTIVITY_EVENT && ActivityStateID[playerid] == EVENT_HEADSHOTSONLY && bodypart != 9) return 0;
@@ -3366,8 +3365,11 @@ public OnPlayerSpawn(playerid)
 	CheckUpgrade(playerid);
 	MuteCheck(playerid);
 	RemoveRestrictedArenaSkin(playerid);
-	SetPlayerColor(playerid, PlayerColors[playerid % sizeof PlayerColors]);
-
+	
+	if(ActivityStateID[playerid] != EVENT_TDM) {
+		SetPlayerColor(playerid, PlayerColors[playerid % sizeof PlayerColors]);
+	}
+	
 	switch(ActivityState[playerid])
 	{
 		case ACTIVITY_LOBBY: SendPlayerToLobby(playerid);
@@ -3496,6 +3498,7 @@ CMD:namechange(cmdid, playerid,params[])
 
 	Account[playerid][NameChanges]--;
 	SetPlayerName(playerid, params);
+	format(pName[playerid], MAX_PLAYER_NAME + 1, params);
 	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE Accounts SET Username = '%e' WHERE sqlid = %i", params, Account[playerid][SQLID]));
 	SendClientMessage(playerid, COLOR_LGREEN, "{31AEAA}Notice: {FFFFFF}You have successfully changed your username.");
 	return 1;
@@ -3622,7 +3625,7 @@ CMD:admins(cmdid, playerid, params[])
     foreach(new i: Player)
     {    
         if(Account[i][pAdminHide] && GetPlayerAdminLevel(playerid) == 0) continue;
-        if(Account[i][Admin] != 0)
+        if(Account[i][Admin] != 0 && Account[i][Admin] <= 6)
         {
             admin[0] = i;
             admin[1] = Account[i][Admin];
@@ -3642,7 +3645,7 @@ CMD:admins(cmdid, playerid, params[])
     for_list(i: adminlist)
     {
         iter_get_arr(i, admin);
-        SendClientMessage(playerid, COLOR_WHITE, sprintf("(Level %s Admin) %s (ID %i) {FF6347}%s", AdminNames[admin[1]][0], GetName(admin[0]), admin[0], Account[admin[0]][pAdminHide] == 1 ? "(HIDDEN)" : ""));
+        SendClientMessage(playerid, COLOR_WHITE, sprintf("(Level %s Admin) %s (ID %i) {FF6347}%s", AdminNames(admin[1]), GetName(admin[0]), admin[0], Account[admin[0]][pAdminHide] == 1 ? "(HIDDEN)" : ""));
     }
 	if(!GetPlayerAdminLevel(playerid)) SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{31AEAA}Admin Notice: {FFFFFF}%s has just typed /admins.", GetName(playerid)));
     list_delete(adminlist);
@@ -3846,7 +3849,7 @@ CMD:youtube(cmdid, playerid, params[])
 }
 CMD:donate(cmdid, playerid, params[])
 {
-	Dialog_Show(playerid, UPGRADE, DIALOG_STYLE_MSGBOX, "Want to donate?", "Donate via www.kokysdm.com/donate\nDonate any amount and you can spend it in-game via /usedonations.\nYou can then activate them via /upgrades.", "Okay", "Close");
+	Dialog_Show(playerid, UPGRADE, DIALOG_STYLE_MSGBOX, "Want to donate?", "Donate via www.kokysdm.net/donate\nDonate any amount and you can spend it in-game via /usedonations.\nYou can then activate them via /upgrades.", "Okay", "Close");
 	return 1;
 }
 
@@ -4127,11 +4130,13 @@ CMD:serverhub(cmdid, playerid)
 
 	inServerHub[playerid] = 1;
 
-	SetPlayerPosEx(playerid, 1710.433715, -1669.379272, 20.225049, 18, 0);
+	SetPlayerPosEx(playerid, 2417.0906, -1762.5278, 1034.6553, 18, 0);
 	SendClientMessage(playerid, COLOR_LIGHTRED, "Server Hub: {FFFFFF}Welcome to the Server Hub, here you can purchase rare skins and items.");
 
 	ReloadRareSkins();
 
+	DestroyAllPlayerObjects(playerid);
+	CreateServerHub(playerid);
 	return true;
 }
 CMD:setlanguage(cmdid, playerid, params[])

@@ -6,9 +6,11 @@ public OnPlayerFinishedDownloading(playerid, virtualworld)
 {
 	if(Account[playerid][LoggedIn] == 0)
 	{
+		new tmpName[MAX_PLAYER_NAME];
+		GetPlayerName(playerid, tmpName, sizeof tmpName);
 		TextDrawShowForPlayer(playerid, logintd);
 		SendClientMessage(playerid, COLOR_ORANGE, sprintf("%s [%s]", Server[Name], Server[Version]));
-		SendClientMessage(playerid, COLOR_WHITE, sprintf("Welcome to the server, %s.", GetName(playerid)));
+		SendClientMessage(playerid, COLOR_WHITE, sprintf("Welcome to the server, %s.", tmpName));
 
 		InfoBoxForPlayer(playerid, "== ~y~[Koky's Deathmatch]~w~==~n~Welcome to Koky's Deathmatch!");
 
@@ -17,8 +19,19 @@ public OnPlayerFinishedDownloading(playerid, virtualworld)
 
 		IP_Lookup(playerid);
 
-		await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT NULL FROM `Accounts` WHERE Username = '%e' LIMIT 1", GetName(playerid)));
-		if(cache_num_rows()) Login_Dialog(playerid);
+		await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT Username FROM `Accounts` WHERE Username = '%e' LIMIT 1", tmpName));
+		if(cache_num_rows())
+		{
+			new tmpUsername[MAX_PLAYER_NAME];
+			cache_get_value_name(0, "Username", tmpUsername);
+			if (strcmp(tmpUsername, GetName(playerid)))
+			{
+				SendClientMessage(playerid, COLOR_WHITE, sprintf("You registred your account as '%s', u must set your name to that (case-sensitive).", tmpUsername));
+				KickPlayer(playerid);
+			}
+			else
+				Login_Dialog(playerid);
+		}
 		else Register_Dialog(playerid);
 	}
 	return true;
@@ -27,16 +40,18 @@ public OnPlayerFinishedDownloading(playerid, virtualworld)
 forward ShowHelpMessage(playerid);
 public ShowHelpMessage(playerid)
 {
-	SendClientMessage(playerid, COLOR_LIGHTRED, "[ HELP MESSAGE ]");
-	SendClientMessage(playerid, COLOR_LIGHTRED, "Arenas: {FFFFFF}Please refer to -> {DADADA}/arenas{FFFFFF}.");
-	SendClientMessage(playerid, COLOR_LIGHTRED, "KDM Tokens: {FFFFFF}Please refer to -> {DADADA}/tokenhelp{FFFFFF}.");
-	SendClientMessage(playerid, COLOR_LIGHTRED, "Skin Roll: {FFFFFF}Please refer to -> /{DADADA}skinrollhelp{FFFFFF}.");
-	SendClientMessage(playerid, COLOR_LIGHTRED, "Crates: {FFFFFF}Please refer to -> {DADADA}/crateshelp{FFFFFF}.");
-	SendClientMessage(playerid, COLOR_LIGHTRED, "Donate: {FFFFFF}Please refer to -> {DADADA}/donate{FFFFFF}.");
-	SendClientMessage(playerid, COLOR_LIGHTRED, "Clan: {FFFFFF}Please refer to -> {DADADA}/clanhelp{FFFFFF}.");
-	SendClientMessage(playerid, COLOR_LIGHTRED, "Language: {FFFFFF}Please refer to -> {DADADA}/setlanguage{FFFFFF}.");
-	SendClientMessage(playerid, COLOR_LIGHTRED, "Other: {FFFFFF}Please refer to -> {DADADA}/help{FFFFFF}.");
-	SendClientMessage(playerid, COLOR_LIGHTRED, "NOTICE: You can now donate easily! Check out www.kokysdm.com/donate!");
+	if (GetPlayerAdminLevel(playerid) < 1) {
+		SendClientMessage(playerid, COLOR_LIGHTRED, "[ HELP MESSAGE ]");
+		SendClientMessage(playerid, COLOR_LIGHTRED, "Arenas: {FFFFFF}Please refer to -> {DADADA}/arenas{FFFFFF}.");
+		SendClientMessage(playerid, COLOR_LIGHTRED, "KDM Tokens: {FFFFFF}Please refer to -> {DADADA}/tokenhelp{FFFFFF}.");
+		SendClientMessage(playerid, COLOR_LIGHTRED, "Skin Roll: {FFFFFF}Please refer to -> /{DADADA}skinrollhelp{FFFFFF}.");
+		SendClientMessage(playerid, COLOR_LIGHTRED, "Crates: {FFFFFF}Please refer to -> {DADADA}/crateshelp{FFFFFF}.");
+		SendClientMessage(playerid, COLOR_LIGHTRED, "Donate: {FFFFFF}Please refer to -> {DADADA}/donate{FFFFFF}.");
+		SendClientMessage(playerid, COLOR_LIGHTRED, "Clan: {FFFFFF}Please refer to -> {DADADA}/clanhelp{FFFFFF}.");
+		SendClientMessage(playerid, COLOR_LIGHTRED, "Language: {FFFFFF}Please refer to -> {DADADA}/setlanguage{FFFFFF}.");
+		SendClientMessage(playerid, COLOR_LIGHTRED, "Other: {FFFFFF}Please refer to -> {DADADA}/help{FFFFFF}.");
+		SendClientMessage(playerid, COLOR_LIGHTRED, "NOTICE: You can now donate easily! Check out www.kokysdm.net/donate!");
+	}
 
 	return true;
 }
