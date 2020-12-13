@@ -72,7 +72,6 @@ public CheckJailsUnderIP(playerid, const ip[])
 			SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("Notice: {FFFFFF}You must serve your %i admin jail minutes on your %s account before playing on this account!", jail, username));
 			
 			SetTimerEx("FixKick", 8000, false, "i", playerid);
-			return 1;
 		}
 		else ShowHelpMessage(playerid);
 	}

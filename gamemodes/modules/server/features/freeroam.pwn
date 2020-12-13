@@ -64,25 +64,29 @@ new FreeroamWeapons[][FREEROAM_WEAPONS] =
 
 new FreeroamVehicle[MAX_PLAYERS] = {-1, ...};
 
-#include <pp-hooks>
-hook public OnPlayerConnect(playerid)
+forward OnFreeroamPlayerConnect(playerid);
+public OnFreeroamPlayerConnect(playerid)
 {
 	if(FreeroamVehicle[playerid] != -1) {
 		DestroyVehicle(FreeroamVehicle[playerid]);
 		FreeroamVehicle[playerid] = -1;
 	}
+	return false;
 }
 
 
-hook public OnPlayerDisconnect(playerid, reason)
+forward OnFreeroamPlayerDisconnect(playerid, reason);
+public OnFreeroamPlayerDisconnect(playerid, reason)
 {
 	if(FreeroamVehicle[playerid] != -1) {
 		DestroyVehicle(FreeroamVehicle[playerid]);
 		FreeroamVehicle[playerid] = -1;
 	}
+	return false;
 }
 
-hook public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+forward OnFreeroamPlayerKeyStateChange(playerid, newkeys, oldkeys);
+public OnFreeroamPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
 	if(ActivityState[playerid] == ACTIVITY_FREEROAM)
 	{
@@ -91,6 +95,7 @@ hook public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		if(PRESSED(KEY_NO))
 			cmd_flip(9999, playerid);
 	}
+	return false;
 }
 
 CMD<FRM>:tune(cmdid, playerid, params[])

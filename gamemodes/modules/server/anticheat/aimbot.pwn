@@ -17,21 +17,6 @@ static weaponstring[][] =
 	{"a Parachute"}, {" "}, {"WHATWEAPONISTHIS?"}, {"a Vehicle"}, {"Helicopter Blades"}, {"an Explosion"}
 };
 
-//
-#include <pp-hooks>
-
-static 
-	rangeWarrning[MAX_PLAYERS],
-	proWarrning[MAX_PLAYERS],
-	randomWarrning[MAX_PLAYERS];
-
-hook public OnPlayerConnect(playerid)
-{
-	rangeWarrning[playerid] =
-	proWarrning[playerid] =
-	randomWarrning[playerid] = 0;
-}
-
 //aimbot detection callback
 public OnPlayerSuspectedForAimbot(playerid, hitid, weaponid, warnings)
 {
@@ -40,22 +25,6 @@ public OnPlayerSuspectedForAimbot(playerid, hitid, weaponid, warnings)
 	{
 		new Float:distances[BUSTAIM_WSTATS_SHOTS];
 		BustAim::GetRangeStats(playerid, distances);
-
-		if (Account[playerid][Kills] < 500)
-		{
-			rangeWarrning[playerid] ++;
-			if (rangeWarrning[playerid] > 5)
-			{
-				SendAdminsMessage(1, COLOR_GRAY, sprintf("[GUARDIAN] %s has been banned by the anticheat for (greater distance than the weapon '%s' allows).", GetName(playerid), weaponstring[weaponid]));
-				SendAdminsMessage(1, COLOR_GRAY, sprintf("[GUARDIAN] Normal Range of %s: %.2f. Range of last three hits: %.2f meters, %.2f meters, %.2f meters.", weaponstring[weaponid], BustAim::GetNormalWeaponRange(weaponid), distances[0], distances[1], distances[2]));
-
-				DCC_SendChannelMessage(DCC_FindChannelByName("anti-cheat-logs"), sprintf("**[GUARDIAN]** %s has been banned by the anticheat for (greater distance than the weapon '%s' allows).", GetName(playerid), weaponstring[weaponid]));
-				
-				IssueBan(playerid, "Guardian", "out of range shoots");
-				KickPlayer(playerid);
-				return 1;
-			}
-		}
 
 		SendAdminsMessage(1, COLOR_GRAY, sprintf("[AIMBOT] %s (%i) has hit shots from a greater distance than their weapon (%s) allows.", GetName(playerid), playerid, weaponstring[weaponid]));
 		SendAdminsMessage(1, COLOR_GRAY, sprintf("[AIMBOT] Normal Range of %s: %.2f. Range of last three hits: %.2f meters, %.2f meters, %.2f meters.", weaponstring[weaponid], BustAim::GetNormalWeaponRange(weaponid), distances[0], distances[1], distances[2]));
@@ -68,22 +37,6 @@ public OnPlayerSuspectedForAimbot(playerid, hitid, weaponid, warnings)
 		BustAim::GetTeleportStats(playerid, distances);
 		GetPlayerPos(playa, x, y, z);
 
-		if (Account[playerid][Kills] < 500)
-		{
-			proWarrning[playerid] ++;
-			if (proWarrning[playerid] > 5)
-			{
-				SendAdminsMessage(1, COLOR_GRAY, sprintf("[GUARDIAN] %s has been banned by the anticheat for (Pro Aimbot).", GetName(playerid), weaponstring[weaponid]));
-				SendAdminsMessage(1, COLOR_GRAY, sprintf("[GUARDIAN] Range between %s and where their last 3 bullets hit: %.2f, %.2f, %.2f. Range between the player and %s: %.2f", GetName(playerid), distances[0], distances[1], distances[2], GetName(playa), GetPlayerDistanceFromPoint(playerid, x, y, z)));
-
-				DCC_SendChannelMessage(DCC_FindChannelByName("anti-cheat-logs"), sprintf("**[GUARDIAN]** %s has been banned by the anticheat for (Pro Aimbot).", GetName(playerid)));
-				
-				IssueBan(playerid, "Guardian", "Pro Aimbot");
-				KickPlayer(playerid);
-				return 1;
-			}
-		}
-
 		SendAdminsMessage(1, COLOR_GRAY, sprintf("[AIMBOT] %s (%i) has been suspected of using proaim. (A cheat that teleports an enemy in front of the player so they can spoof hitting them)", GetName(playerid), playerid));
 		SendAdminsMessage(1, COLOR_GRAY, sprintf("[AIMBOT] Range between %s and where their last 3 bullets hit: %.2f, %.2f, %.2f. Range between the player and %s: %.2f", GetName(playerid), distances[0], distances[1], distances[2], GetName(playa), GetPlayerDistanceFromPoint(playerid, x, y, z)));
 		DCC_SendChannelMessage(DCC_FindChannelByName("anti-cheat-logs"), sprintf("[AIMBOT] %s (%i) has been suspected of using proaim. (A cheat that teleports an enemy in front of the player so they can spoof hitting them)", GetName(playerid), playerid));
@@ -94,22 +47,6 @@ public OnPlayerSuspectedForAimbot(playerid, hitid, weaponid, warnings)
 	{
 		new Float:distances[BUSTAIM_WSTATS_SHOTS];
 		BustAim::GetRandomAimStats(playerid, distances);
-
-		if (Account[playerid][Kills] < 500)
-		{
-			randomWarrning[playerid] ++;
-			if (randomWarrning[playerid] > 5)
-			{
-				SendAdminsMessage(1, COLOR_GRAY, sprintf("[GUARDIAN] %s has been banned by the anticheat for (random aimbot).", GetName(playerid), weaponstring[weaponid]));
-				SendAdminsMessage(1, COLOR_GRAY, sprintf("[GUARDIAN] Offsets of the player's last 3 bullet hits: %.2f %.2f %.2f", distances[0], distances[1], distances[2]));
-
-				DCC_SendChannelMessage(DCC_FindChannelByName("anti-cheat-logs"), sprintf("**[GUARDIAN]** %s has been banned by the anticheat for (Random Aimbot).", GetName(playerid)));
-				
-				IssueBan(playerid, "Guardian", "Random Aimbot");
-				KickPlayer(playerid);
-				return 1;
-			}
-		}
 
 		SendAdminsMessage(1, COLOR_GRAY, sprintf("[AIMBOT] %s (%i) has been suspected of using 'random aim'. This is a cheat that corrects a player's bullet trajectory when they are aiming near someone but barely misses.", GetName(playerid), playerid));
 		SendAdminsMessage(1, COLOR_GRAY, sprintf("[AIMBOT] Offsets of the player's last 3 bullet hits: %.2f %.2f %.2f", distances[0], distances[1], distances[2]));

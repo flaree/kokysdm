@@ -1,4 +1,4 @@
-/** PawnPlus v1.2.1 by IllidanS4 **/
+/** PawnPlus v1.1-pre2 by IllidanS4 **/
 //github.com/IllidanS4/PawnPlus
 
 #if defined _inc_PawnPlus
@@ -14,7 +14,7 @@
 /*      Setup      */
 /*                 */
 
-const PP_VERSION = 0x120;
+const PP_VERSION = 0x110;
 
 #if defined PP_SYNTAX
 #define PP_SYNTAX_AMX_FORKED
@@ -31,8 +31,6 @@ const PP_VERSION = 0x120;
 #define PP_SYNTAX_AMX_PARALLEL
 #define PP_SYNTAX_ASYNC
 #define PP_SYNTAX_FOR_POOL
-#define PP_SYNTAX_ON_INIT
-#define PP_SYNTAX_ON_EXIT
 #endif
 
 #define ConstString String@Const
@@ -69,7 +67,7 @@ const PP_VERSION = 0x120;
 #define TagTag {TagTags}
 
 #if !defined PP_ALL_TAGS
-#define PP_ALL_TAGS _,bool,Float,VariantTags,StringTags,List,LinkedList,Map,Pool,IterTags,HandleTags,Task,Expression
+#define PP_ALL_TAGS _,bool,Float,VariantTags,StringTags,List,Map,IterTags,HandleTags,Task,Expression
 #if defined PP_ADDITIONAL_TAGS
 #define AnyTag {PP_ALL_TAGS,PP_ADDITIONAL_TAGS}
 #else
@@ -244,14 +242,6 @@ stock _pp_fake_cast(val)
 #define pawn_ref<%0>(%1) (Ref<%0>:_pp_fake_cast(_:_PP@CAST[%0](%1)))
 #define pawn_unref<%0>(%1) (%0:_pp_fake_cast(_:_PP@CAST[Ref<%0>](%1)))
 
-#endif
-
-#if defined PP_SYNTAX_ON_INIT
-#define pawn_on_init[%0] forward _pp@on_init@%0();public _pp@on_init@%0()
-#endif
-
-#if defined PP_SYNTAX_ON_EXIT
-#define pawn_on_exit[%0] forward _pp@on_exit@%0();public _pp@on_exit@%0()
 #endif
 
 /*                 */
@@ -588,16 +578,12 @@ native String:str_replace_list(ConstStringTag:str, const pattern[], List:replace
 native String:str_replace_list_s(ConstStringTag:str, ConstStringTag:pattern, List:replacement, &pos=0, regex_options:options=regex_default);
 native String:str_replace_func(ConstStringTag:str, const pattern[], const function[], &pos=0, regex_options:options=regex_default, const additional_format[]="", AnyTag:...);
 native String:str_replace_func_s(ConstStringTag:str, ConstStringTag:pattern, const function[], &pos=0, regex_options:options=regex_default, const additional_format[]="", AnyTag:...);
-native String:str_replace_expr(ConstStringTag:str, const pattern[], Expression:expr, &pos=0, regex_options:options=regex_default);
-native String:str_replace_expr_s(ConstStringTag:str, ConstStringTag:pattern, Expression:expr, &pos=0, regex_options:options=regex_default);
 native String:str_set_replace(StringTag:target, ConstStringTag:str, const pattern[], const replacement[], &pos=0, regex_options:options=regex_default);
 native String:str_set_replace_s(StringTag:target, ConstStringTag:str, ConstStringTag:pattern, ConstStringTag:replacement, &pos=0, regex_options:options=regex_default);
 native String:str_set_replace_list(StringTag:target, ConstStringTag:str, const pattern[], List:replacement, &pos=0, regex_options:options=regex_default);
 native String:str_set_replace_list_s(StringTag:target, ConstStringTag:str, ConstStringTag:pattern, List:replacement, &pos=0, regex_options:options=regex_default);
 native String:str_set_replace_func(StringTag:target, ConstStringTag:str, const pattern[], const function[], &pos=0, regex_options:options=regex_default, const additional_format[]="", AnyTag:...);
 native String:str_set_replace_func_s(StringTag:target, ConstStringTag:str, ConstStringTag:pattern, const function[], &pos=0, regex_options:options=regex_default, const additional_format[]="", AnyTag:...);
-native String:str_set_replace_expr(StringTag:target, ConstStringTag:str, const pattern[], Expression:expr, &pos=0, regex_options:options=regex_default);
-native String:str_set_replace_expr_s(StringTag:target, ConstStringTag:str, ConstStringTag:pattern, Expression:expr, &pos=0, regex_options:options=regex_default);
 
 #if defined PP_SYNTAX_@
 #define @ str_new_static
@@ -774,7 +760,6 @@ native list_count_var(List:list, ConstVariantTag:value);
 native list_count_if(List:list, Expression:pred);
 
 native list_sort(List:list, offset=0, size=-1, bool:reverse=false, bool:stable=true);
-native list_sort_expr(List:list, Expression:expr, bool:reverse=false, bool:stable=true);
 
 native list_tagof(List:list, index);
 native list_sizeof(List:list, index);
@@ -1647,7 +1632,6 @@ native expr_type_str(Expression:expr, type[], size=sizeof(type));
 native String:expr_type_str_s(Expression:expr);
 
 native Expression:expr_empty(Expression:...);
-native Expression:expr_void(Expression:expr);
 
 native Expression:expr_weak(Expression:expr);
 native Expression:expr_weak_set(Expression:weak, Expression:target);
@@ -1658,7 +1642,6 @@ native Expression:expr_const_str(const value[]);
 native Expression:expr_const_var(VariantTag:value);
 native Expression:expr_true();
 native Expression:expr_false();
-native Expression:expr_handle(HandleTag:handle);
 
 native Expression:expr_arr(Expression:...);
 
@@ -1744,24 +1727,21 @@ native expr_set_arr(Expression:expr, const AnyTag:value[], size=sizeof(value), T
 native expr_set_str(Expression:expr, const value[]);
 native expr_set_var(Expression:expr, ConstVariantTag:value);
 
-native expr_exec(Expression:expr);
-native expr_exec_multi(Expression:expr, List:output);
-
 enum parser_options (<<= 1)
 {
     parser_bare = 0,
-    parser_allow_unknown_symbols = 1,
-    parser_allow_debug_symbols,
-    parser_allow_natives,
-    parser_allow_publics,
-    parser_allow_pubvars,
-    parser_allow_constructions,
-    parser_allow_ranges,
-    parser_allow_arrays,
-    parser_allow_queries,
-    parser_allow_arguments,
-    parser_allow_environment,
-    parser_allow_casts,
+	parser_allow_unknown_symbols = 1,
+	parser_allow_debug_symbols,
+	parser_allow_natives,
+	parser_allow_publics,
+	parser_allow_pubvars,
+	parser_allow_constructions,
+	parser_allow_ranges,
+	parser_allow_arrays,
+	parser_allow_queries,
+	parser_allow_arguments,
+	parser_allow_environment,
+	parser_allow_casts,
     parser_allow_literals,
     parser_allow_intrinsics,
     parser_allow_strings,
@@ -1835,8 +1815,6 @@ native task_set_result_str(Task:task, const result[]);
 native task_set_result_var(Task:task, ConstVariantTag:result);
 native task_get_result(Task:task, offset=0);
 native task_get_result_arr(Task:task, AnyTag:result[], size=sizeof(result));
-native task_get_result_str(Task:task, result[], size=sizeof(result)) = task_get_result_arr;
-native String:task_get_result_str_s(Task:task);
 native Variant:task_get_result_var(Task:task);
 native bool:task_get_result_safe(Task:task, &AnyTag:result, offset=0, TagTag:tag_id=tagof(result));
 native task_get_result_arr_safe(Task:task, AnyTag:result[], size=sizeof(result), TagTag:tag_id=tagof(result));
@@ -2014,7 +1992,6 @@ stock operator~(PP@ts:arr[], count)
 /*       Math      */
 /*                 */
 
-native math_random_seed(seed);
 native math_random(min=0, max=cellmax);
 native math_random_unsigned(min=0, max=-1);
 native Float:math_random_float(Float:min=0.0, Float:max=1.0);
@@ -2022,10 +1999,6 @@ native math_round(Float:val);
 native math_floor(Float:val);
 native math_ceiling(Float:val);
 native math_truncate(Float:val);
-native bool:math_try_round(Float:val, &result);
-native bool:math_try_floor(Float:val, &result);
-native bool:math_try_ceiling(Float:val, &result);
-native bool:math_try_truncate(Float:val, &result);
 
 native math_iadd({_,signed}:a, {_,signed}:b);
 native math_iadd_ovf({_,signed}:a, {_,signed}:b);

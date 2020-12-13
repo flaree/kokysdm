@@ -1,8 +1,6 @@
 // WARNING: Maybe some of this is scripted bad. :(
 // 2 hours of sleep and pawn is not great.
 
-#include <pp-hooks>
-
 #define HOST_TEAM 1
 
 #define DUEL_MAP_LVPD 0
@@ -350,10 +348,12 @@ GetDuelTeamMates(hostid, const ret[], len = sizeof(ret))
 {
 	foreach(new i : DuelPlayers[hostid])
 	{
+		new duel_player_name[MAX_PLAYER_NAME];
+		GetPlayerName(i, duel_player_name, MAX_PLAYER_NAME);
 		if(DuelTeam[hostid][i] == HOST_TEAM)
 		{
-			if(!strlen(ret))  strcat(ret, sprintf("%s", GetName(i)), len);
-			else strcat(ret, sprintf(", %s", GetName(i)), len);
+			if(!strlen(ret))  strcat(ret, sprintf("%s", duel_player_name), len);
+			else strcat(ret, sprintf(", %s", duel_player_name), len);
 		}
 	}
 	return 1;
@@ -364,10 +364,12 @@ GetDuelEnemies(hostid, const ret[], len = sizeof(ret))
 {
 	foreach(new i : DuelPlayers[hostid])
 	{
+		new duel_player_name[MAX_PLAYER_NAME];
+		GetPlayerName(i, duel_player_name, MAX_PLAYER_NAME);
 		if(DuelTeam[hostid][i] != HOST_TEAM)
 		{
-			if(!strlen(ret)) strcat(ret, sprintf("%s", GetName(i)), len);
-			else strcat(ret, sprintf(", %s", GetName(i)), len);
+			if(!strlen(ret)) strcat(ret, sprintf("%s", duel_player_name), len);
+			else strcat(ret, sprintf(", %s", duel_player_name), len);
 		}
 	}
 	return 1;
@@ -428,8 +430,10 @@ ClearDuelVariables(playerid)
 }
 
 // -----------------------------------------------------------------------------
-hook public OnPlayerConnect(playerid)
+forward OnDuelPlayerConnect(playerid);
+public OnDuelPlayerConnect(playerid)
 {
+	
 	if(ActivityState[playerid] == ACTIVITY_DUEL) EndDuel(playerid, true);
 	if(DuelTimer[playerid] != -1) KillTimer(DuelTimer[playerid]);
 
@@ -447,28 +451,35 @@ hook public OnPlayerConnect(playerid)
 	Iter_Add(DuelWeapons[playerid], WEAPON_DEAGLE);
 
 	DuelTeam[playerid][playerid] = HOST_TEAM;
+	return false;
 }
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-hook public OnPlayerDisconnect(playerid, reason)
+forward OnDuelPlayerDisconnect(playerid);
+public OnDuelPlayerDisconnect(playerid)
 {
 	if(ActivityState[playerid] == ACTIVITY_DUEL) EndDuel(playerid, true);
 
 	new id = DuelInvite[playerid];
 	if(id != -1)
 	{
+		new duel_player_name[MAX_PLAYER_NAME];
+		GetPlayerName(playerid, duel_player_name, MAX_PLAYER_NAME);
+
 		foreach(new i : DuelPlayers[id])
 		{
-			SendClientMessage(i, -1, sprintf("{31AEAA}Duel: {%06x}%s {FFFFFF}has left the server. Duel cancelled.", GetPlayerColor(playerid) >>> 8, GetName(i)));
+			SendClientMessage(i, -1, sprintf("{31AEAA}Duel: {%06x}%s {FFFFFF}has left the server. Duel cancelled.", GetPlayerColor(playerid) >>> 8, duel_player_name));
 			DuelInvite[i] = -1;
 		}
 		ClearDuelVariables(id);
 	}
+	return false;
 }
 
 // -----------------------------------------------------------------------------
-hook public OnDialogResponse(playerid, dialogid, response, listitem, const inputtext[])
+forward OnDuelDialogResponse(playerid, dialogid, response, listitem, const inputtext[]);
+public OnDuelDialogResponse(playerid, dialogid, response, listitem, const inputtext[])
 {
 	switch(dialogid)
 	{
@@ -520,6 +531,7 @@ hook public OnDialogResponse(playerid, dialogid, response, listitem, const input
 					GetDuelTeamMates(playerid, team_mates);
 					GetDuelEnemies(playerid, enemies);
 					GetDuelWeapons(playerid, weapons);
+					new duel_player_name[MAX_PLAYER_NAME];
 
 					AlliesCount[playerid] = 0;
 					EnemyCount[playerid] = 0;
@@ -527,9 +539,10 @@ hook public OnDialogResponse(playerid, dialogid, response, listitem, const input
 					foreach(new i : DuelPlayers[playerid])
 					{
 						new id = DuelInvite[playerid];
-						if((id != -1 && id != playerid) || (ActivityState[playerid] == ACTIVITY_DUEL || ActivityState[playerid] == ACTIVITY_DUEL_PREP))
+						if((id != -1 && id != playerid) || ActivityState[i] == ACTIVITY_DUEL )
 						{
-							return SendClientMessage(playerid, -1, sprintf("{31AEAA}Duel: {%06x}%s {FFFFFF}is already invited to another duel or is in one.", GetPlayerColor(playerid) >>> 8, GetName(i)));
+							GetPlayerName(i, duel_player_name, MAX_PLAYER_NAME);
+							return SendClientMessage(playerid, -1, sprintf("{31AEAA}Duel: {%06x}%s {FFFFFF}is already invited to another duel or is in one.", GetPlayerColor(playerid) >>> 8, duel_player_name));
 						}
 
 						if(DuelTeam[playerid][i] == HOST_TEAM)
@@ -548,13 +561,14 @@ hook public OnDialogResponse(playerid, dialogid, response, listitem, const input
 						return ShowDuelSettingsDialog(playerid);
 					}
 
+					GetPlayerName(playerid, duel_player_name, MAX_PLAYER_NAME);
 					foreach(new i : DuelPlayers[playerid])
 					{
 						if(i != playerid)
 						{
 							DuelInvite[i] = playerid;
 							SendClientMessage(i, COLOR_LIGHTRED, "==== [DUEL INVITE] ====");
-							SendClientMessage(i, COLOR_LIGHTRED, sprintf("{%06x}%s {FFFFFF}has invited you to a duel. ({31AEAA}%i {FFFFFF}v {31AEAA}%i)", GetPlayerColor(playerid) >>> 8, GetName(playerid), AlliesCount[playerid], EnemyCount[playerid]));
+							SendClientMessage(i, COLOR_LIGHTRED, sprintf("{%06x}%s {FFFFFF}has invited you to a duel. ({31AEAA}%i {FFFFFF}v {31AEAA}%i)", GetPlayerColor(playerid) >>> 8, duel_player_name, AlliesCount[playerid], EnemyCount[playerid]));
 							SendClientMessage(i, COLOR_LIGHTRED, sprintf("Map: {F07D00}%s", DuelMaps[DuelMap[playerid]]));
 							SendClientMessage(i, COLOR_LIGHTRED, sprintf("Team 1: {8df000}%s", team_mates));
 							SendClientMessage(i, COLOR_LIGHTRED, sprintf("Team 2: {f03000}%s", enemies));
@@ -752,7 +766,10 @@ CMD:duel(cmdid, playerid, params[])
 {
 	if(IsPlayerInLobby(playerid))
 	{
-		if(ActivityState[playerid] == ACTIVITY_DUEL || ActivityState[playerid] == ACTIVITY_DUEL_PREP)
+		new duel_player_name[MAX_PLAYER_NAME];
+		GetPlayerName(playerid, duel_player_name, MAX_PLAYER_NAME);
+
+		if(ActivityState[playerid] == ACTIVITY_DUEL)
 			return SendClientMessage(playerid, -1, "{31AEAA}Duel: {FFFFFF}You are currently in a duel. Do \"/leaveduel\" to leave the duel before you use this command.");
 
 		// Accepted the duel.
@@ -760,15 +777,15 @@ CMD:duel(cmdid, playerid, params[])
 		{
 			new id = DuelInvite[playerid];
 
-			SendClientMessage(id, -1, sprintf("{31AEAA}Duel: {%06x}%s {FFFFFF}has accepted your duel request.", GetPlayerColor(playerid) >>> 8, GetName(playerid)));
+			SendClientMessage(id, -1, sprintf("{31AEAA}Duel: {%06x}%s {FFFFFF}has accepted your duel request.", GetPlayerColor(playerid) >>> 8, duel_player_name));
 
 			foreach(new i : DuelPlayers[id])
 			{
-				SendClientMessage(i, -1, sprintf("{31AEAA}Duel: {%06x}%s {FFFFFF}has accepted their duel invite.", GetPlayerColor(playerid) >>> 8, GetName(playerid)));
+				SendClientMessage(i, -1, sprintf("{31AEAA}Duel: {%06x}%s {FFFFFF}has accepted their duel invite.", GetPlayerColor(playerid) >>> 8, duel_player_name));
 			}
 
 			PlayersAccepted[id]++;
-			ActivityState[playerid] = ACTIVITY_DUEL_PREP;
+			ActivityState[playerid] = ACTIVITY_DUEL;
 			ActivityStateID[playerid] = id;
 
 			if(PlayersAccepted[id] >= Iter_Count(DuelPlayers[id]))
@@ -790,7 +807,7 @@ CMD:duel(cmdid, playerid, params[])
 			new id = DuelInvite[playerid];
 			foreach(new i : DuelPlayers[id])
 			{
-				SendClientMessage(i, -1, sprintf("{31AEAA}Duel: {%06x}%s {FFFFFF}has cancelled their duel invite. Duel is cancelled.", GetPlayerColor(playerid) >>> 8, GetName(playerid)));
+				SendClientMessage(i, -1, sprintf("{31AEAA}Duel: {%06x}%s {FFFFFF}has cancelled their duel invite. Duel is cancelled.", GetPlayerColor(playerid) >>> 8, duel_player_name));
 				DuelInvite[i] = -1;
 			}
 

@@ -13,21 +13,22 @@ enum _:REPORT_DATA
 new Pool:Reports;
 
 //hooks
-#include <pp-hooks>
-hook public OnPlayerDisconnect(playerid, reason)
+forward OnReportedPlayerDisconnect(playerid, reason);
+public OnReportedPlayerDisconnect(playerid, reason)
 {
-	if(pool_valid(Reports))
+	if(!pool_valid(Reports)) return false;
+
+	new Iter:i = pool_iter(Reports);
+	while(iter_inside(i))
 	{
-		new Iter:i = pool_iter(Reports);
-		while(iter_inside(i))
-		{
-			if(iter_get(i, ReportedPlayer) == playerid) iter_erase(i);
-			else iter_move_next(i);
-		}
+		if(iter_get(i, ReportedPlayer) == playerid) iter_erase(i);
+		else iter_move_next(i);
 	}
+	return false;
 }
 
 //commands
+
 CMD:report(cmdid, playerid, params[])
 {
 	new target = -1, info[200];
@@ -100,17 +101,12 @@ CMD<AD1>:handlereport(cmdid, playerid, params[])
 	new reporter = report[ReportingPlayer], target = report[ReportedPlayer];
 
 	pool_remove(Reports, reportindex);
-	if (GetPlayerAdminHidden(playerid))
-		SendClientMessage(reporter, COLOR_LIGHTRED, sprintf("{31AEAA}Reports:{FFFFFF} An admin is now looking into your report on %s (%i). They will contact you if any further information is required.", GetName(target), target));
-	else
-		SendClientMessage(reporter, COLOR_LIGHTRED, sprintf("{31AEAA}Reports:{FFFFFF} Admin %s is now looking into your report on %s (%i). They will contact you if any further information is required.", GetName(playerid), GetName(target), target));
+	SendClientMessage(reporter, COLOR_LIGHTRED, sprintf("{31AEAA}Reports:{FFFFFF} Admin %s is now looking into your report on %s (%i). They will contact you if any further information is required.", GetName(playerid), GetName(target), target));
 	SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("{31AEAA}Reports:{FFFFFF} You are now handling report %i.", reportindex));
 	SendAdminsMessage(1, COLOR_INDIANRED, sprintf("{31AEAA}Reports:{FFFFFF} %s is handling report %i.", GetName(playerid), reportindex));
 	DCC_SendChannelMessage(DCC_FindChannelByName("in-game-reports"), sprintf("**Reports:** %s is handling report %i by %s.", GetName(playerid), reportindex, GetName(reporter)));
 	return true;
 }
-ALT:hr = CMD:handlereport;
-
 CMD<AD1>:denyreport(cmdid, playerid, params[])
 {
 	if(!pool_valid(Reports)) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reports:{FFFFFF}  There are currently no reports.");
@@ -124,17 +120,12 @@ CMD<AD1>:denyreport(cmdid, playerid, params[])
 	new reporter = report[ReportingPlayer], target = report[ReportedPlayer];
 
 	pool_remove(Reports, id);
-	if (GetPlayerAdminHidden(playerid))
-		SendClientMessage(reporter, COLOR_LIGHTRED, sprintf("{31AEAA}Reports:{FFFFFF} An admin has denied your report on %s (%i)! Reason: %s", GetName(target), target, reason));
-	else 
-		SendClientMessage(reporter, COLOR_LIGHTRED, sprintf("{31AEAA}Reports:{FFFFFF} Admin %s has denied your report on %s (%i)! Reason: %s", GetName(playerid), GetName(target), target, reason));
+	SendClientMessage(reporter, COLOR_LIGHTRED, sprintf("{31AEAA}Reports:{FFFFFF} Admin %s has denied your report on %s (%i)! Reason: %s", GetName(playerid), GetName(target), target, reason));
 	SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("{31AEAA}Reports:{FFFFFF} You have denied report %i for the reason \"%s\"", id, reason));
 	SendAdminsMessage(1, COLOR_INDIANRED, sprintf("{31AEAA}Reports:{FFFFFF} %s has denied report %i for the reason \"%s\"", GetName(playerid), id, reason));
-	DCC_SendChannelMessage(DCC_FindChannelByName("in-game-reports"), sprintf("**Reports:** %s has denied report %i, reason: %s", GetName(playerid), id, reason));
+	DCC_SendChannelMessage(DCC_FindChannelByName("in-game-reports"), sprintf("**Reports:** %s has denied report %i, reason: %s, GetName(playerid), id, reason"));
 	return true;
 }
-ALT:dr = CMD:denyreport;
-
 CMD<AD1>:clearreports(cmdid, playerid, params[])
 {	
 	if(!pool_valid(Reports)) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reports:{FFFFFF}  There are currently no reports.");

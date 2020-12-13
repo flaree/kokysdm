@@ -13,7 +13,6 @@ CMD<CLN>:createclan(cmdid, playerid, params[]) // ADD -125K PRICE!!
 
 	Account[playerid][ClanID] = cache_insert_id();
 	Account[playerid][OfficialClan] = 0;
-	Account[playerid][ClanRank] = 4;
 	format(Account[playerid][ClanName], 64, params);
 
 	SendClientMessage(playerid, -1, sprintf("{31AEAA}Clan: {FFFFFF}You have created an unofficial clan. {31AEAA}(%s - clan id: %d)", Account[playerid][ClanName], Account[playerid][ClanID]));
@@ -82,8 +81,6 @@ CMD<CLN>:deleteclanconfirm(cmdid, playerid, params[])
 }
 CMD<CLN>:transferownership(cmdid, playerid, params[])
 {
-	if (Account[playerid][ClanRank] != 4)
-		return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Error: {FFFFFF}U can not use this command!");
 	new pid;
 	if(sscanf(params, "u", pid)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /transferownership [playerid/playername]");
 	if(!IsPlayerConnected(pid)) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Error: {FFFFFF}This player is not connected!");

@@ -3,8 +3,8 @@ static SpectatingPlayer[MAX_PLAYERS] = {-1, ...};
 static pSpecLimit[MAX_PLAYERS];
 
 //hooks
-#include <pp-hooks>
-hook public OnPlayerDeathFinished(playerid)
+forward OnSpectateDeathFinished(playerid);
+public OnSpectateDeathFinished(playerid)
 {
 	foreach(new i: Player)
 	{
@@ -14,9 +14,10 @@ hook public OnPlayerDeathFinished(playerid)
 			else PlayerSpectatePlayer(i, playerid);
 		}
 	}
+	return false;
 }
-
-hook public OnPlayerDisconnect(playerid, reason)
+forward OnSpectatePlayerDisconnect(playerid, reason);
+public OnSpectatePlayerDisconnect(playerid, reason)
 {
 	SpectatingPlayer[playerid] = -1;
 	pSpecLimit[playerid] = 0;
@@ -29,9 +30,10 @@ hook public OnPlayerDisconnect(playerid, reason)
 			StopSpectating(i);
 		}
 	}
+	return false;
 }
-
-hook public OnPlayerStateChange(playerid, newstate, oldstate)
+forward OnSpectatePlayerStateChange(playerid, newstate, oldstate);
+public OnSpectatePlayerStateChange(playerid, newstate, oldstate)
 {
 	if(newstate == PLAYER_STATE_ONFOOT)
 	{
@@ -54,9 +56,11 @@ hook public OnPlayerStateChange(playerid, newstate, oldstate)
 			}
 		}
 	}
+	return false;
 }
 
-hook public OnPlayerUpdate(playerid)
+forward OnSpectatePlayerUpdate(playerid);
+public OnSpectatePlayerUpdate(playerid)
 {
 	//scroll spectate system, lets players press their arrow keys to switch between players
 	new keys, updown, leftright;
@@ -100,7 +104,7 @@ hook public OnPlayerUpdate(playerid)
 						if(i == -1) i = MAX_PLAYERS-1;
 					}
 				}
-				SendClientMessage(playerid, -1, sprintf("{31AEAA}Spectating: {FFFFFF}You are now spectating %s(%i). Player Mode: %s. Press SPRINT key to sync.", GetName(i), i, ReturnActivityDescription(i)));
+				SendClientMessage(playerid, -1, sprintf("{31AEAA}Spectating: {FFFFFF}You are now spectating %s(%i). Press SPRINT key to sync.", GetName(i), i));
 				SpectatePlayer(playerid, i);
 
 				if(ActivityState[i] == ACTIVITY_TDM)
@@ -111,6 +115,7 @@ hook public OnPlayerUpdate(playerid)
 		}
 		else pSpecLimit[playerid] = 0; // If not holding, reset limit to allow tapping
 	}
+	return false;
 }
 
 //commands
@@ -132,7 +137,6 @@ CMD<AD1>:spec(cmdid, playerid, params[])
 	SendClientMessage(playerid, -1, sprintf("{1E90FF}(Spectate):{dadada} You are now spectating %s(%i). Player Mode: %s. Press SPRINT key to sync.", GetName(target), target, ReturnActivityDescription(target)));
 	return true;
 }
-
 CMD<AD1>:specoff(cmdid, playerid, params[])
 {
 	if(SpectatingPlayer[playerid] == -1) return SendClientMessage( playerid, -1, "{31AEAA}Spectating: {FFFFFF}You are not spectating anyone.");
@@ -161,7 +165,6 @@ SpectatePlayer(playerid, target)
 	SetTimerEx("DelayedSpectate", 200, false, "ii", playerid, target);
 	return true;
 }
-
 StopSpectating(playerid)
 {
 	SpectatingPlayer[playerid] = -1;
