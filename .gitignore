@@ -2,3 +2,4 @@ crashdetectinfo.txt
 server_log.txt
 logs/*
 *.amx
+compile.bat
