@@ -154,38 +154,24 @@ CMD<AD4>:setskin(cmdid, playerid, params[])
 }
 CMD<AD1>:adminskin(cmdid, playerid, params[])
 {
-    if(!IsPlayerConnected(player)) return SendErrorMessage(playerid, ERROR_OPTION);
-    SetPlayerSkinEx(player, 20067);
+    if(!IsPlayerConnected(playerid)) return SendErrorMessage(playerid, ERROR_OPTION);
+    SetPlayerSkinEx(playerid, 20067);
     return 1;
 }
-CMD<AD1>:ip(cmdid, playerid, params[])
-{
-	new pID;
-	if(sscanf(params, "u", pID)) return SendClientMessage(playerid, COLOR_GREY, "USAGE: /ip [id]");
-	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid, ERROR_OPTION);
 
-	new countryname[40], countryregion[40], playerisp[40], ipaddress[18];
-	GetPlayerIp(pID, ipaddress, 18);
-	GetPlayerCountry(pID, countryname);
-	GetPlayerRegion(pID, countryregion);
-	GetPlayerISP(pID, playerisp);
-	SendClientMessage(playerid, COLOR_WHITE, sprintf("IP Address: %s, Country: %s, Area: %s", ipaddress, countryname, countryregion));
-	SendClientMessage(playerid, COLOR_WHITE, sprintf("Server Latency: %ims, ISP: %s", GetPlayerPing(pID), playerisp));
-	return 1;
-}
 CMD<AD1>:whois(cmdid, playerid, params[])
 {
 	new id, ip[16], country[64], isp[256], url[128];
 
 
-	if(sscanf(params, "u", id)) return
-		SendUsageMessage(playerid, "/whois [ID/name]");
+	if(sscanf(params, "u", id)) 
+		return SendUsageMessage(playerid, "/whois [ID/name]");
 
-	if(!IsPlayerConnected(id)) return
-		SendErrorMessage(playerid, "Invalid player specified.");
+	if(!IsPlayerConnected(id)) 
+		return SendErrorMessage(playerid, "Invalid player specified.");
 
-	if(Account[id][Admin] > 0 && Account[playerid][Admin] < 6) return // only allows level 6 admins to check other admins whois info
-		SendErrorMessage(playerid, "You cannot check that player's whois info.");
+	if(Account[id][Admin] > 0 && Account[playerid][Admin] < 6) 
+		return SendErrorMessage(playerid, "You cannot check that player's whois info.");
 
 
 
@@ -404,7 +390,7 @@ CMD<AD1>:mute(cmdid, playerid, params[])
 	if(sscanf(params, "uis[64]", pID, time, reason)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /mute [id] [minutes] [reason]");
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid, ERROR_OPTION);
 
-	Account[pID][Muted] = time;
+	Account[pID][Muted] = gettime() + time*60;
 	Account[pID][Mutes]++;
 
 	SendClientMessageToAll(COLOR_LIGHTRED, sprintf("PUNISHMENT: Admin %s has muted %s for %i minutes. Reason: %s", GetName(playerid), GetName(pID), time, reason));
@@ -1056,3 +1042,862 @@ CMD<AD4>:sslap(cmdid, playerid, params[])
 	}
 	return 1;
 }
+
+// - Server Administrator (Level 1)
+
+CMD<AD1>:acmds(cmdid, playerid, params[])
+{
+	new info[1000];
+	strcat(info, "{FF0000}Server administrator (Level 1):{FFFFFF}\n");
+	strcat(info, "/tempban, /ban, /fakeban, /kick, /goto, /get, /rw, /shp, /sarm, /explode, /setweather, /ann, /ip, /suicide\n");
+	strcat(info, "/aduty, /flip, /schp, /spec, /ar, /dr, /slap, /fr, /unfr, /afix, /anos, /mute, /unmute, /muted\n");
+	strcat(info, "/vcolor, /weaps, /forceteam, /amove, /asay, /sv, /countdown, /undercover, /reports, /settime\n");
+  	strcat(info, "{FFFF00}Use @ symbol for admin chat.\n\n");
+	if (GetPlayerAdminLevel(playerid) >= 2)
+	{
+		strcat(info, "{FF0000}Senior administrator (Level 2):{FFFFFF}\n");
+  		strcat(info, "/sskin, /bringall, /watchpm, /jetpack, /freezeall, /unfreezeall, /clearchat, /copyweaps, /vget, \n");
+  		strcat(info, "/ainject, /setinterior, /gotopos, /giveweapon, /giveallweapon, /datasave, /changename, /area\n\n");
+	}
+	if (GetPlayerAdminLevel(playerid) >= 3)
+	{
+		strcat(info, "{FF0000}Lead Administrator (Level 3):{FFFFFF}\n");
+		strcat(info, "/setadmin, /sethelper, /unsethelper, /agivemoney, /setworld, /spawncars, /healall, /armourall\n");
+		strcat(info, "/astream, /giveallmoney /givecar\n\n");
+		strcat(info, "{FFFF00}Use # symbol for lead admin chat.\n\n");
+	}
+	if (GetPlayerAdminLevel(playerid) >= 4)
+	{
+		strcat(info, "{FF0000}Manager (Level 4):{FFFFFF}\n");
+		strcat(info, "/lserv, /ulserv, /vehicle, /restart, /setmoney, /fakecmd, /fakechat\n\n");
+	}
+	Dialog_Show(playerid, DIALOG_ACMDS, DIALOG_STYLE_MSGBOX, "Administrative Commands:", info, "Close", "");
+	return 1;
+}
+
+CMD<AD1>:undercover(cmdid, playerid) // Hide from admin list
+{
+	if(Account[playerid][pAdminHide] != 0)
+	{
+		Account[playerid][pAdminHide] = 1;
+	    SendClientMessage(playerid, COLOR_RED, "[AdmCmd]: You are now hidden from admin list.");
+	}
+	else if(Account[playerid][pAdminHide])
+	{
+	    Account[playerid][pAdminHide] = 0;
+	    SendClientMessage(playerid, COLOR_LIGHTGREEN, "[AdmCmd]: You are now visible on admin list.");
+	}
+	return 1;
+}
+
+CMD<AD1>:amove(cmdid, playerid, params[])
+{
+	new targetid, amount;
+	if(sscanf(params, "uI(5)", targetid, amount)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /amove [player id] [amount(optional)]");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+	if(amount > 100) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: Value cannot be greater than 100!");
+	if(GetPlayerAdminLevel(playerid) < Account[targetid][Admin]) return SendClientMessage(playerid, COLOR_RED, NOLEVEL);
+	new Float:pos[3];
+	GetPlayerPos(targetid, pos[0], pos[1], pos[2]);
+	GetXYInFrontOfPlayer(targetid, pos[0], pos[1], amount);
+ 	SetPlayerPos(targetid, pos[0], pos[1], pos[2]);
+	new adminmsg[150];
+	format(adminmsg, sizeof(adminmsg), "You have moved %s(%i).", GetName(targetid), targetid);
+	SendClientMessage(playerid, COLOR_RED, adminmsg);
+	return 1;
+}
+CMD<AD1>:forceteam(cmdid, playerid, params[])
+{
+	new targetid;
+	if(sscanf(params, "u", targetid)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /forceteam [player]");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+    if(GetPlayerAdminLevel(playerid) < Account[targetid][Admin]) return SendClientMessage(playerid, COLOR_RED, NOLEVEL);
+	ForceClassSelection(targetid);
+	SetPlayerHealth(targetid, 0.0);
+	PlayerPlaySound(targetid, 1057, 0.0, 0.0, 0.0);
+	PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);
+	new buf[150];
+	format(buf, sizeof(buf), "[AdmCmd]: Admin [%i] %s has forced you to class selection.", playerid, GetName(playerid));
+	SendClientMessage(targetid, COLOR_RED, buf);
+	format(buf, sizeof(buf), "You have forced [%i] %s to class selection.", GetName(targetid), targetid);
+	SendClientMessage(playerid, COLOR_RED, buf);
+	return 1;
+}
+CMD<AD1>:weps(cmdid, playerid, params[])
+{
+	new targetid;
+	if(sscanf(params, "u", targetid)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /weaps [playerid]");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+    new weapons[13][2], weaponname[35], string[40], count=0;
+	format(string, sizeof(string), "[AdmCmd]: %s's Weapons:", GetName(targetid));
+	SendClientMessage(playerid, COLOR_RED, string);
+	for (new i = 0; i <= 12; i++)
+	{
+	    GetPlayerWeaponData(targetid, i, weapons[i][0], weapons[i][1]);
+	    if(weapons[i][0] != 0)
+	    {
+	        count++;
+    		GetWeaponName(weapons[i][0], weaponname, sizeof(weaponname));
+		    format(string, sizeof(string), "Weapon: %s (%d ammo)", weaponname, weapons[i][1]);
+		    SendClientMessage(playerid, COLOR_GRAY, string);
+	    }
+	}
+	if(!count)
+	{
+	    SendClientMessage(playerid, COLOR_GRAY, "None.");
+	}
+	return 1;
+}
+CMD<AD1>:vcolor(cmdid, playerid, params[])
+{
+	if(!IsPlayerInAnyVehicle(playerid)) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You must be in a vehicle to use this command.");
+	new color1, color2;
+	if(sscanf(params, "iI(-1)", color1, color2)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /vcolor [color1] [*color2]");
+	ChangeVehicleColor(GetPlayerVehicleID(playerid), color1, color2);
+	PlayerPlaySound(playerid, 1133, 0.0, 0.0, 0.0);
+	new buf[128];
+	format(buf, sizeof(buf), "You have changed your vehicle's color to %i & %i.", color1, color2);
+	SendClientMessage(playerid, COLOR_RED, buf);
+	return 1;
+}
+CMD<AD1>:muted(cmdid, playerid)
+{
+	new string[64], count = 0;
+	SendClientMessage(playerid, COLOR_GRAY, "Muted players:");
+	foreach (new i : Player)
+	{
+		if (Account[i][LoggedIn] && Account[i][Muted] > 0)
+		{
+			format(string, sizeof(string), "[%d] %s (%d seconds remaining)", i, GetName(i), Account[i][Muted]-gettime());
+			SendClientMessage(playerid, COLOR_RED, string);
+			count++;
+		}
+	}
+	if(!count) SendClientMessage(playerid,COLOR_RED,"There are currently no muted players.");
+	return 1;
+}
+
+CMD<AD1>:nos(cmdid, playerid, params[])
+{
+	if (!IsPlayerInAnyVehicle(playerid)) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You must be in a vehicle to use this command.");
+	if(adminDuty[playerid] != true) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You can't use this command off admin duty.");
+	new vehicle = GetPlayerVehicleID(playerid);
+	switch (GetVehicleModel(vehicle))
+	{
+		case 448,461,462,463,468,471,509,510,521,522,523,581,586,449:
+		{
+			return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You cannot add nitros to this vehicle.");
+		}
+	}
+	AddVehicleComponent(vehicle, 1010);
+    SendClientMessage(playerid, COLOR_RED, "[AdmCmd]: You have added nitros (10x) to your vehicle.");
+	return 1;
+}
+
+CMD<AD1>:countdown(cmdid, playerid, params[])
+{
+    new amount;
+	if(sscanf(params, "i", amount)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /countdown [seconds]");
+	if(amount > 30) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: Value cannot be greater than 30!");
+	new buf[45];
+	format(buf, sizeof(buf), "You have started a %d second countdown", amount);
+	SendClientMessage(playerid, COLOR_LIMEGREEN, buf);
+	Countdown = amount+1;
+	CountdownTimer = SetTimer("Count", 850, true);
+	return 1;
+}
+
+CMD<AD1>:tempban(cmdid, playerid, params[])
+{
+	new targetid, hours, reason[45];
+	if(sscanf(params, "uis[45]", targetid, hours, reason) || isnull(params)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /ban [player id] [hours] [reason]");
+    if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+	if(targetid == playerid) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You can't use this command on yourself.");
+	if(Account[targetid][Admin] > 1) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You cannot ban an admin.");
+	new string[100], query[300], Player_IP[16];
+	GetPlayerIp(targetid, Player_IP, 16);
+    mysql_format(SQL_CONNECTION, query, sizeof(query), "INSERT INTO `bandata` (`User`, `BannedBy`,`ExpiresOn`,`BannedOn`,`BanReason`,`IPAddress`) VALUES ('%e','%e', DATE_ADD(NOW(), INTERVAL '%d' HOUR), NOW(), '%e', '%e');", GetName(targetid), GetName(playerid), hours, reason, Player_IP);
+	mysql_tquery(SQL_CONNECTION, query, "", "");
+	format(string, sizeof(string), "[AdmCmd]: %s has banned %s for %d hours. Reason: %s", GetName(playerid), GetName(targetid), hours, reason);
+	SendClientMessageToAll(COLOR_RED, string);
+	SetTimerEx("KickPlayer",500,false,"i",targetid);// Kicks player in 500ms
+	return 1;
+}
+
+CMD<AD1>:fakeban(cmdid, playerid, params[])
+{
+	new targetid, reason[45];
+	if(sscanf(params, "us[40]", targetid, reason) || isnull(params)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /fakeban [player id] [reason]");
+    if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+	if(targetid == playerid) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You can't use this command on yourself.");
+	if(Account[targetid][Admin] > 1) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You cannot ban an admin.");
+	new string[100];
+	format(string, sizeof(string), "[AdmCmd]: %s has banned %s. Reason: %s", GetName(targetid), GetName(playerid), reason);
+	SendClientMessageToAll(COLOR_RED, string);
+	return 1;
+}
+
+CMD<AD1>:get(cmdid, playerid, params[])
+{
+	new targetid;
+	if(sscanf(params, "u", targetid)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /get [player id]");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+	if(GetPlayerState(targetid) == PLAYER_STATE_SPECTATING) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: The specified player is not spawned.");
+	if(GetPlayerAdminLevel(playerid) < Account[targetid][Admin]) return SendClientMessage(playerid, COLOR_RED, NOLEVEL);
+	if(targetid == playerid) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You can't get yourself.");
+	SetPlayerInterior(targetid, GetPlayerInterior(playerid));
+	SetPlayerVirtualWorld(targetid, GetPlayerVirtualWorld(playerid));
+	new Float:x, Float:y, Float:z;
+	GetPlayerPos(playerid, x, y, z);
+	if (GetPlayerState(targetid) == PLAYER_STATE_DRIVER)
+	{
+	    new vehicleid = GetPlayerVehicleID(targetid);
+		SetVehiclePos(vehicleid, x, y + 2.5, z+1);
+		LinkVehicleToInterior(vehicleid, GetPlayerInterior(playerid));
+		SetVehicleVirtualWorld(vehicleid, GetPlayerVirtualWorld(playerid));
+	}
+	else
+	{
+		SetPlayerPos(targetid, x, y + 2.0, z+1);
+	}
+	new buf[85];
+	format(buf, sizeof(buf), "[AdmCmd]: Administrator %s has teleported you to his position.", GetName(playerid));
+	SendClientMessage(targetid, COLOR_RED, buf);
+	format(buf, sizeof(buf), "[AdmCmd]: You have teleported %s to your position.", GetName(targetid));
+	SendClientMessage(playerid, COLOR_RED, buf);
+	return 1;
+}
+CMD<AD1>:rw(cmdid, playerid, params[])
+{
+	new targetid;
+	if(sscanf(params, "u", targetid)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /rw [player]");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+    if(GetPlayerAdminLevel(playerid) < Account[targetid][Admin]) return SendClientMessage(playerid, COLOR_RED, NOLEVEL);
+	ResetPlayerWeapons(targetid);
+	PlayerPlaySound(targetid, 1057, 0.0, 0.0, 0.0);
+	PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);
+	new buf[150];
+	format(buf, sizeof(buf), "Admin %s has disarmed you.", GetName(playerid), playerid);
+	SendClientMessage(targetid, COLOR_RED, buf);
+	format(buf, sizeof(buf), "You have disarmed %s.", GetName(targetid), targetid);
+	SendClientMessage(playerid, COLOR_RED, buf);
+	return 1;
+}
+CMD<AD1>:shp(cmdid, playerid, params[])
+{
+	new targetid, amount;
+    if(sscanf(params, "ui", targetid, amount)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /shp [playerid] [amount]");
+    if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+	SetPlayerHealth(targetid, amount);
+	new buf[150];
+	format(buf, sizeof(buf), "You have set %s's health to %d.", GetName(targetid), amount);
+	SendClientMessage(playerid, COLOR_RED, buf);
+	return 1;
+}
+CMD<AD1>:sarm(cmdid, playerid, params[])
+{
+	new targetid, amount;
+    if(sscanf(params, "ui", targetid, amount)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /sarm [playerid] [amount]");
+    if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+	SetPlayerArmour(targetid, amount);
+	new buf[150];
+	format(buf, sizeof(buf), "You have set %s's armour to %d.", GetName(targetid), amount);
+	SendClientMessage(playerid, COLOR_RED, buf);
+	return 1;
+}
+CMD<AD1>:explode(cmdid, playerid, params[])
+{
+	new targetid;
+	if(sscanf(params, "u", targetid)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /explode [player]");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+    if(GetPlayerAdminLevel(playerid) < Account[targetid][Admin]) return SendClientMessage(playerid, COLOR_RED, NOLEVEL);
+	new Float:x, Float:y, Float:z;
+	GetPlayerPos(targetid, x, y, z);
+	CreateExplosion(x, y, z, 7, 10.00);
+	PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);
+	new buf[150];
+	format(buf, sizeof(buf), "You have made an explosion on %s(%i)'s position.", GetName(targetid), targetid);
+	SendClientMessage(playerid, COLOR_RED, buf);
+	return 1;
+}
+
+CMD<AD1>:ip(cmdid, playerid, params[])
+{
+	new targetid;
+	if(sscanf(params, "u", targetid)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /ip [playerid]");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+	if(GetPlayerAdminLevel(playerid) < Account[targetid][Admin]) return SendClientMessage(playerid, COLOR_RED, NOLEVEL);
+	new string[800], info[128];
+	strcat(string, "\n{FFCC66}Current internet lookup information on user:{FFFFFF}\n");
+	new country[30], region[30], city[30], isp[30], timezone[30];
+	GetPlayerCountry(targetid, country);
+	GetPlayerRegion(targetid, region);
+	GetPlayerCity(targetid, city);
+	GetPlayerISP(targetid, isp);
+	GetPlayerTimezone(targetid, timezone);
+	new Player_IP[16];	GetPlayerIp(targetid, Player_IP, 16);
+	format(info, sizeof(info), "{FF5733}IP Address: {FFFFFF}%s\n", Player_IP); strcat(string, info);
+	format(info, sizeof(info), "{FF5733}Country: {FFFFFF}%s\n", country); strcat(string, info);
+	format(info, sizeof(info), "{FF5733}Region: {FFFFFF}%s\n", region); strcat(string, info);
+	format(info, sizeof(info), "{FF5733}City: {FFFFFF}%s\n", city); strcat(string, info);
+	format(info, sizeof(info), "{FF5733}Internet provider: {FFFFFF}%s\n", isp); strcat(string, info);
+	format(info, sizeof(info), "{FF5733}Timezone: {FFFFFF}%s\n", timezone); strcat(string, info);
+	Dialog_Show(playerid, DIALOG_IP, DIALOG_STYLE_MSGBOX, "IP Address lookup", string, "OK", ""); // Show Help-dialog
+	return 1;
+}
+CMD<AD1>:suicide(cmdid, playerid, params[])
+{
+	new targetid;
+	if(sscanf(params, "u", targetid)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /suicide [player id]");
+    if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(!Account[targetid][LoggedIn]) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+	if(GetPlayerAdminLevel(playerid) < Account[targetid][Admin]) return SendClientMessage(playerid, COLOR_RED, NOLEVEL);
+	SetPlayerHealth(targetid, 0);
+	return 1;
+}
+
+CMD<AD1>:schp(cmdid, playerid, params[])
+{
+	new targetid, health;
+	if(sscanf(params, "ui", targetid, health)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /schp [playerid] [car health]");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+	if(GetPlayerState(targetid) != PLAYER_STATE_DRIVER) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: That player is not in a vehicle.");
+	new vehicleid = GetPlayerVehicleID(targetid), string[128];
+	SetVehicleHealth(vehicleid, health);
+	if(health >= 1000)
+	    RepairVehicle(vehicleid);
+	format(string, sizeof(string), "You have set %s's vehicle health to %d", GetName(targetid), health);
+	SendClientMessage(playerid, COLOR_RED, string);
+	return 1;
+}
+
+// Senior Administrator (Level 2)
+CMD<AD2>:area(cmdid, playerid, params[])
+{
+    new subcommand[10], SendClientMessaged_params[28];
+    if(sscanf(params, "s[15]S()[35]", subcommand, SendClientMessaged_params)) return SendClientMessage(playerid, COLOR_RED, "/area [heal/armour/weap/veh/freeze/unfreeze/skin/nos/disarm]");
+
+    if(!strcmp(subcommand, "heal", true))
+    {
+        new range, string[128];
+        if(sscanf(SendClientMessaged_params, "I(30)", range)) return SendClientMessage(playerid, COLOR_RED, "/area heal [range(optional)]");
+  		foreach(new i : Player)
+		{
+		    if(Account[i][LoggedIn] && IsPlayerNearPlayer(i, playerid, range))
+		    {
+			    SetPlayerHealth(i, 100);
+			    GameTextForPlayer(i, "~g~healed", 5000, 5);
+		    }
+		}
+		format(string, sizeof(string), "You have healed players in range of %d.", range);
+		SendClientMessage(playerid, COLOR_RED, string);
+    }
+    else if(!strcmp(subcommand, "armour", true))
+    {
+        new range, string[128];
+        if(sscanf(SendClientMessaged_params, "I(30)", range)) return SendClientMessage(playerid, COLOR_RED, "/area armour [range(optional)]");
+  		foreach(new i : Player)
+		{
+		    if(Account[i][LoggedIn] && IsPlayerNearPlayer(i, playerid, range))
+		    {
+			    SetPlayerArmour(i, 100);
+			    GameTextForPlayer(i, "~g~armoured", 5000, 5);
+		    }
+		}
+		format(string, sizeof(string), "You have armoured players in range of %d.", range);
+		SendClientMessage(playerid, COLOR_RED, string);
+    }
+    else if(!strcmp(subcommand, "weap", true))
+    {
+        new range, weaponname[15], ammo, string[128];
+        if(sscanf(SendClientMessaged_params, "s[15]iI(30)", weaponname, ammo, range)) return SendClientMessage(playerid, COLOR_RED, "/area weap [weapon name] [ammo] [range(optional)]");
+
+		new GetID = GetWeaponIDFromName(weaponname);
+		if (!(GetID > 0 && GetID < 19 || GetID > 21 && GetID < 47)) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: Invalid weapon name.");
+        GetWeaponName(GetID, weaponname, sizeof(weaponname));
+        format(string, sizeof(string), "~g~weapon ~r~%s ~g~given", weaponname);
+		foreach(new i : Player)
+		{
+		    if(Account[i][LoggedIn] && IsPlayerNearPlayer(i, playerid, range))
+		    {
+				GivePlayerWeapon(i, GetID, ammo);
+			    GameTextForPlayer(i, string, 5000, 5);
+		    }
+		}
+		format(string, sizeof(string), "You gave weapon %s with %d ammo players in range of %d.", weaponname, ammo, range);
+		SendClientMessage(playerid, COLOR_RED, string);
+    }
+    else if(!strcmp(subcommand, "veh", true))
+    {
+        new range, carname[30], color1, color2, string[128];
+        if(sscanf(SendClientMessaged_params, "s[30]I(-1)I(-1)I(30)", carname, color1, color2, range)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /area veh [Vehicle name/ID] [color1] [color2] (range)");
+		if(GetModelVehicle(carname) < 400 || GetModelVehicle(carname) > 611) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: Invalid vehicle model.");
+
+		format(string, sizeof(string), "~g~vehicle ~r~%s ~g~spawned", VehicleNames[GetModelVehicle(carname) - 400]);
+		new Float:X, Float:Y, Float:Z;
+		foreach(new i : Player)
+		{
+		    if(Account[i][LoggedIn] && IsPlayerNearPlayer(i, playerid, range))
+		    {
+		        if(IsPlayerInAnyVehicle(i))
+		        	RemovePlayerFromVehicle(i);
+                GetPlayerPos(i, X, Y, Z);
+				CreateVehicle(GetModelVehicle(carname), X, Y, Z, 0.0, color1, color2, 180000, 0);
+				SetPlayerPos(i, X, Y, Z + 5);
+			    GameTextForPlayer(i, string, 5000, 5);
+		    }
+		}
+		format(string, sizeof(string), "You have spawned vehicle %s to players in range of %d.", VehicleNames[GetModelVehicle(carname) - 400],  range);
+		SendClientMessage(playerid, COLOR_RED, string);
+    }
+    else if(!strcmp(subcommand, "freeze", true))
+    {
+        new range, string[128];
+        if(sscanf(SendClientMessaged_params, "I(30)", range)) return SendClientMessage(playerid, COLOR_RED, "/area freeze [range(optional)]");
+  		foreach(new i : Player)
+		{
+		    if(Account[i][LoggedIn] && IsPlayerNearPlayer(i, playerid, range))
+		    {
+			    TogglePlayerControllable(i, 0);
+			    GameTextForPlayer(i, "~r~frozen", 5000, 5);
+		    }
+		}
+		format(string, sizeof(string), "You have frozen players in range of %d.", range);
+		SendClientMessage(playerid, COLOR_RED, string);
+    }
+    else if(!strcmp(subcommand, "unfreeze", true))
+    {
+        new range, string[128];
+        if(sscanf(SendClientMessaged_params, "I(30)", range)) return SendClientMessage(playerid, COLOR_RED, "/area unfreeze [range(optional)]");
+  		foreach(new i : Player)
+		{
+		    if(Account[i][LoggedIn] && IsPlayerNearPlayer(i, playerid, range))
+		    {
+			    TogglePlayerControllable(i, 1);
+			    GameTextForPlayer(i, "~g~unfrozen", 5000, 5);
+		    }
+		}
+		format(string, sizeof(string), "You have unfrozen players in range of %d.", range);
+		SendClientMessage(playerid, COLOR_RED, string);
+    }
+    else if(!strcmp(subcommand, "skin", true))
+    {
+        new range, skin, string[128];
+        if(sscanf(SendClientMessaged_params, "iI(30)", skin, range)) return SendClientMessage(playerid, COLOR_RED, "/area skin [skinid] [range(optional)]");
+        if(skin < 0 || skin == 74 || skin > 311) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: Invalid skin ID, must be b/w 0 - 311 (except 74).");
+  		foreach(new i : Player)
+		{
+		    if(Account[i][LoggedIn] && IsPlayerNearPlayer(i, playerid, range))
+		    {
+	    		SetPlayerSkin(i, skin);
+				PlayerPlaySound(i, 1057, 0.0, 0.0, 0.0);
+			    GameTextForPlayer(i, "~p~skin changed", 5000, 5);
+		    }
+		}
+		format(string, sizeof(string), "You have changed players skin in range of %d.", range);
+		SendClientMessage(playerid, COLOR_RED, string);
+    }
+    else if(!strcmp(subcommand, "nos", true))
+    {
+        new range, string[128];
+        if(sscanf(SendClientMessaged_params, "I(30)", range)) return SendClientMessage(playerid, COLOR_RED, "/area nos [range(optional)]");
+  		foreach(new i : Player)
+		{
+		    if(Account[i][LoggedIn] && IsPlayerNearPlayer(i, playerid, range) && IsPlayerInAnyVehicle(i))
+		    {
+	    		AddVehicleComponent(GetPlayerVehicleID(i), 1010);
+				PlayerPlaySound(i, 1057, 0.0, 0.0, 0.0);
+			    GameTextForPlayer(i, "~b~nos added", 5000, 5);
+		    }
+		}
+		format(string, sizeof(string), "You have added nos to players in range of %d.", range);
+		SendClientMessage(playerid, COLOR_RED, string);
+    }
+    else if(!strcmp(subcommand, "disarm", true))
+    {
+        new range, string[128];
+        if(sscanf(SendClientMessaged_params, "I(30)", range)) return SendClientMessage(playerid, COLOR_RED, "/area disarm [range(optional)]");
+  		foreach(new i : Player)
+		{
+		    if(Account[i][LoggedIn] && IsPlayerNearPlayer(i, playerid, range))
+		    {
+				PlayerPlaySound(i, 1057, 0.0, 0.0, 0.0);
+				ResetPlayerWeapons(i);
+			    GameTextForPlayer(i, "~r~disarmed", 5000, 5);
+		    }
+		}
+		format(string, sizeof(string), "You have disarmed players in range of %d.", range);
+		SendClientMessage(playerid, COLOR_RED, string);
+    }
+    return 1;
+}
+
+CMD<AD2>:datasave(cmdid, playerid, params[])
+{
+	new string[70];
+	format(string, sizeof(string), "Administrator %s has saved all online users accounts.", GetName(playerid));
+	SendClientMessage(playerid, COLOR_WHITE, "Data is being auto saved. This command to be used only before shutting down the server (Not /restart)");
+    SendClientMessage(playerid, COLOR_WHITE, "* Give the server about 30 seconds time before shutting down.");
+	SendClientMessageToAll(COLOR_RED, string);
+	foreach (new i : Player)
+	{
+        Character_Save(i);
+	}
+	return 1;
+}
+CMD<AD2>:ainject(cmdid, playerid, params[])
+{
+	new targetid, seatid, vehicle;
+	if (sscanf(params, "ui", targetid, seatid)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /ainject [playerid] [seatid]");
+	if (!IsPlayerInAnyVehicle(playerid)) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You must be in a vehicle to use this command.");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+	if(playerid == targetid) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You can't use this command on yourself.");
+    vehicle = GetPlayerVehicleID(playerid);
+	PutPlayerInVehicle(targetid, vehicle, seatid);
+
+	new buf[65];
+	format(buf, sizeof(buf), "[AdmCmd]: You have injected %s into your vehicle.", GetName(targetid));
+	SendClientMessage(playerid, COLOR_RED, buf);
+	return 1;
+}
+CMD<AD2>:setinterior(cmdid, playerid, params[])
+{
+	new targetid, interiorid;
+	if(sscanf(params, "ui", targetid, interiorid)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /setinterior [playerid] [ID]");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+
+	SetPlayerInterior(targetid, interiorid);
+
+	new buf[150];
+	format(buf, sizeof(buf), "Admin %s has set your interior to %d.", GetName(playerid), interiorid);
+	SendClientMessage(targetid, COLOR_RED, buf);
+	format(buf, sizeof(buf), "You have set %s's interior to %d.", GetName(targetid), interiorid);
+	SendClientMessage(playerid, COLOR_RED, buf);
+	return 1;
+}
+
+CMD<AD2>:giveallweapon(cmdid, playerid, params[])
+{
+	new weaponname[15], ammo;
+	if (sscanf(params, "s[15]i", weaponname, ammo)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /giveallweapon [weapon name] [ammo]");
+
+    new GetID = GetWeaponIDFromName(weaponname);
+	if (!(GetID > 0 && GetID < 19 || GetID > 21 && GetID < 47)) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: Invalid weapon name.");
+	foreach (new i : Player)
+	{
+        GivePlayerWeapon(i, GetID, ammo);
+	}
+    GetWeaponName(GetID, weaponname, sizeof(weaponname));
+	new string[128];
+	format(string, sizeof(string), "Administrator %s gave all players weapon %s with %d ammo.", GetName(playerid), weaponname, ammo);
+	SendClientMessageToAll(COLOR_ORANGE, string);
+	return 1;
+}
+CMD<AD2>:vget(cmdid, playerid, params[])
+{
+	new targetid;
+	if(sscanf(params, "i", targetid)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /vget [vehicle id]");
+	SetPlayerInterior(playerid, GetPlayerInterior(targetid));
+	SetPlayerVirtualWorld(playerid, GetPlayerVirtualWorld(targetid));
+	new Float:x, Float:y, Float:z;
+	GetPlayerPos(playerid, x, y, z);
+	SetVehiclePos(targetid, x, y , z);
+	LinkVehicleToInterior(targetid, GetPlayerInterior(playerid));
+	SetVehicleVirtualWorld(targetid, GetPlayerVirtualWorld(playerid));
+	new buf[70];
+	format(buf, sizeof(buf), "[AdmCmd]: You have teleported teleported vehicle ID %d to youself.", GetName(targetid), targetid);
+	SendClientMessage(playerid, COLOR_RED, buf);
+	return 1;
+}
+
+CMD<AD2>:copyweaps(cmdid, playerid, params[])
+{
+	new targetid, toid;
+	if(sscanf(params, "uu", targetid, toid)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /copyweaps [from] [to]");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+	if(!IsPlayerConnected(toid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[toid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+    new weapons[13][2], string[90];
+    ResetPlayerWeapons(toid);
+	for (new i = 0; i <= 12; i++)
+	{
+	    GetPlayerWeaponData(targetid, i, weapons[i][0], weapons[i][1]);
+	    if(weapons[i][0] != 0)
+	    {
+		    GivePlayerWeapon(toid, weapons[i][0], weapons[i][1]);
+	    }
+	}
+ 	format(string, sizeof(string), "[AdmCmd]: Weapons have been copied from %s to %s.", GetName(targetid), GetName(toid));
+  	SendClientMessage(playerid, COLOR_RED, string);
+	return 1;
+}
+CMD<AD2>:clearchat(cmdid, playerid, params[])
+{
+	for (new i; i < 100; i++)
+	{
+		SendClientMessageToAll(-1, " ");
+	}
+	return 1;
+}
+CMD<AD2>:jetpack(cmdid, playerid, params[])
+{
+	if(adminDuty[playerid] == false) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You can't use this command while off admin duty!");
+	SetPlayerSpecialAction(playerid, SPECIAL_ACTION_USEJETPACK);
+	SendClientMessage(playerid, COLOR_RED, "[AdmCmd]: You have spawned a jetpack.");
+	return 1;
+}
+CMD<AD2>:unfreezeall(cmdid, playerid, params[])
+{
+	foreach(new i : Player)
+	{
+	    if(IsPlayerConnected(i) && Account[i][LoggedIn])
+	        TogglePlayerControllable(i, true);
+	}
+	new string[128];
+	format(string, sizeof(string), "Administrator %s has unfreezed all players.", GetName(playerid));
+	SendClientMessageToAll(COLOR_RED, string);
+	return 1;
+}
+CMD<AD2>:freezeall(cmdid, playerid, params[])
+{
+	foreach(new i : Player)
+	{
+	    if(IsPlayerConnected(i) && Account[i][LoggedIn])
+	        TogglePlayerControllable(i, false);
+
+	}
+	new string[128];
+	format(string, sizeof(string), "Administrator %s has freezed all players.", GetName(playerid));
+	SendClientMessageToAll(COLOR_RED, string);
+	return 1;
+}
+CMD<AD2>:sskin(cmdid, playerid, params[])
+{
+	new targetid, skin;
+	if(sscanf(params, "ui", targetid, skin)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /sskin [player id] [skin id]");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+
+	if(GetPlayerAdminLevel(playerid) < Account[targetid][Admin]) return SendClientMessage(playerid, COLOR_RED, "[ERROR] You cannot use this command on higher level admin.");
+	if(skin < 0 || skin == 74 || skin > 311) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: Invalid skin ID, must be b/w 0 - 311 (except 74).");
+
+	SetPlayerSkin(targetid, skin);
+    TogglePlayerControllable(targetid, true);
+	PlayerPlaySound(targetid, 1057, 0.0, 0.0, 0.0);
+	PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);
+	new buf[150];
+	format(buf, sizeof(buf), "Admin %s(%i) has set your skin id to %i.", GetName(playerid), playerid, skin);
+	SendClientMessage(targetid, COLOR_RED, buf);
+	format(buf, sizeof(buf), "You have set %s(%i)'s skin id to %i.", GetName(targetid), targetid, skin);
+	SendClientMessage(playerid, COLOR_RED, buf);
+	return 1;
+}
+CMD<AD2>:bringall(cmdid, playerid)
+{
+	new count = 0;
+	foreach (new i : Player)
+	{
+		if(Account[i][LoggedIn])
+		{
+		    if(i == playerid) continue;
+			new Float:x, Float:y, Float:z;
+			GetPlayerPos(playerid, x, y, z);
+			SetPlayerPos(i, x, y, z);
+			count++;
+		}
+	}
+	if (count == 0) return SendClientMessage(playerid,COLOR_RED,"[ERROR]: There are currently no players online.");
+	new string[128];
+	format(string, sizeof(string), "Administrator %s has teleported all players to his position.", GetName(playerid));
+	SendClientMessageToAll(COLOR_LIGHTBLUE, string);
+	return 1;
+}
+
+CMD<AD2>:watchpm(cmdid, playerid, params[])
+{
+	if(AdminPMRead[playerid] == false)
+	{
+	    SendClientMessage(playerid, COLOR_LIGHTGREEN, "You will now see the player's messages.");
+		AdminPMRead[playerid] = true;
+	}
+	else if(AdminPMRead[playerid])
+	{
+	    SendClientMessage(playerid, COLOR_RED, "You will no longer see player's messages.");
+    	AdminPMRead[playerid] = false;
+	}
+	return 1;
+}
+
+// Lead Administrator (Level 3)
+CMD<AD3>:giveallmoney(cmdid, playerid, params[])
+{
+	new amount;
+	if (sscanf(params, "i", amount)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /giveallmoney [amount]");
+	if(amount > 50000) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You can't give more than 50.000$ per time!");
+	foreach (new i : Player)
+	{
+		Account[i][Cash] += amount;
+	}
+	new buf[150];
+	format(buf, sizeof(buf), "Admin %s(%i) has given all players $%i.", GetName(playerid), playerid, amount);
+	SendClientMessageToAll(COLOR_RED, buf);
+	return 1;
+}
+CMD<AD3>:healall(cmdid, playerid, params[])
+{
+	foreach (new i : Player)
+	{
+		SetPlayerHealth(i, 100.0);
+		PlayerPlaySound(i, 1057, 0.0, 0.0, 0.0);
+	}
+
+    new buf[150];
+	format(buf, sizeof(buf), "Admin %s(%i) has healed all players.", GetName(playerid), playerid);
+    SendClientMessageToAll(COLOR_RED, buf);
+	return 1;
+}
+CMD<AD3>:armourall(cmdid, playerid, params[])
+{
+	foreach (new i : Player)
+	{
+		SetPlayerArmour(i, 100.0);
+		PlayerPlaySound(i, 1057, 0.0, 0.0, 0.0);
+	}
+
+	new buf[150];
+	format(buf, sizeof(buf), "Admin %s(%i) has armoured all players.", GetName(playerid), playerid);
+    SendClientMessageToAll(COLOR_RED, buf);
+	return 1;
+}
+CMD<AD3>:astream(cmdid, playerid, params[])
+{
+    new link[150];
+    if (sscanf(params, "s[150]", link)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /astream [mp3 link]");
+
+   	new string[128];
+	format(string, sizeof(string), "DJ %s has started an audio stream.", GetName(playerid));
+	SendClientMessageToAll(COLOR_LIGHTBLUE, string);
+
+	foreach (new i : Player)
+    {
+     	PlayAudioStreamForPlayer(i, link);
+    }
+    return 1;
+}
+CMD<AD3>:agivemoney(cmdid, playerid, params[])
+{
+	new targetid, amount;
+	if(sscanf(params, "ui", targetid, amount)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /agivemoney [id] [amount]");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+    if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+	if(amount > 1000000) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You can't give more than 1.000.000$ per time!");
+	Account[targetid][Cash]+=amount;
+	new buf[150];
+	format(buf, sizeof(buf), "Admininistrator %s gave you %d$ cash.", GetName(playerid), amount);
+	SendClientMessage(targetid, COLOR_RED, buf);
+	format(buf, sizeof(buf), "You gave %s %d$ cash.", GetName(targetid), amount);
+	SendClientMessage(playerid, COLOR_RED, buf);
+	return 1;
+}
+
+CMD<AD3>:setworld(cmdid, playerid, params[])
+{
+	new targetid, id;
+	if(sscanf(params, "ui", targetid, id))	return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /setworld [player id] [world id]");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+	if(GetPlayerAdminLevel(playerid) < Account[targetid][Admin]) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You cannot use this command on higher level admin.");
+	SetPlayerVirtualWorld(targetid, id);
+	PlayerPlaySound(targetid, 1057, 0.0, 0.0, 0.0);
+	PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);
+	new buf[150];
+	format(buf, sizeof(buf), "Admin %s(%i) has set your virtual world id to %i.", GetName(playerid), playerid, id);
+	SendClientMessage(targetid, COLOR_RED, buf);
+	format(buf, sizeof(buf), "You have set %s(%i)'s virtual world id to %i.", GetName(targetid), targetid, id);
+	SendClientMessage(playerid, COLOR_RED, buf);
+	return 1;
+}
+CMD<AD3>:spawncars(cmdid, playerid)
+{
+	SendClientMessageToAll(COLOR_LIGHTGREEN, "SERVER: All unoccupied vehicles will be respawned in 20 seconds!");
+	cmd_ann(cid_ann, playerid, "~y~vehicles respawning in ~r~ 20 ~y~secs.");
+	SetTimer("RespawnCars", 20000, false); // (20 seconds)
+	return 1;
+}
+
+// Manager (Level 4)
+CMD<AD4>:fakecmd(cmdid, playerid, params[])
+{
+	new targetid, cmd[20], cmdparams[20], finalcmd[128];
+	if(sscanf(params, "us[20]s[20]", targetid, cmd, cmdparams)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /fakecmd [playerid] [command] [params]");
+    if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+	if(targetid == playerid) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You can't use this command on yourself.");
+	format(finalcmd, sizeof(finalcmd), "cmd_%s", cmd);
+    CallLocalFunction(finalcmd, "us[20]", targetid, cmdparams);
+    SendClientMessage(playerid, COLOR_RED, "Fake command sent.");
+	return 1;
+}
+CMD<AD4>:fakechat(cmdid, playerid, params[])
+{
+	new targetid, text[128], string[128];
+	if(sscanf(params, "us[128]", targetid, text)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /fakechat [playerid] [message]");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+	if(targetid == playerid) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You can't use this command on yourself.");
+
+	format(string, sizeof(string), "[%d] %s: {FFFFFF}%s", targetid, GetName(targetid), text);
+	SendClientMessageToAll(GetPlayerColor(targetid), string);
+	return 1;
+}
+CMD<AD4>:setmoney(cmdid, playerid, params[])
+{
+	new targetid, amount;
+	if(sscanf(params, "ui", targetid, amount)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /setmoney [id] [amount]");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+	Account[targetid][Cash] = amount;
+	new buf[150];
+	format(buf, sizeof(buf), "Admininistrator %s set your cash to %d$.", GetName(playerid), amount);
+	SendClientMessage(targetid, COLOR_RED, buf);
+	format(buf, sizeof(buf), "You have set %s's cash to %d$.", GetName(targetid), amount);
+	SendClientMessage(playerid, COLOR_RED, buf);
+	return 1;
+}
+CMD<AD4>:restart(cmdid, playerid, params[])
+{
+	SendRconCommand("gmx");
+	return 1;
+}
+
+CMD<AD4>:lserv(cmdid, playerid, params[])
+{
+	new password[50], string[128];
+	if(sscanf(params, "s[50]", password)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /lserv [password]");
+	format(string, sizeof(string), "password %s", password);
+	SendRconCommand(string);
+	SendClientMessage(playerid, COLOR_RED, "Server password has been set.");
+	return 1;
+}
+CMD<AD4>:ulserv(cmdid, playerid, params[])
+{
+	SendRconCommand("password 0");
+	SendClientMessage(playerid, COLOR_GREEN, "Server password has been removed.");
+	return 1;
+}
+// END OF SCRIPT

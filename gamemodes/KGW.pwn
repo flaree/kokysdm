@@ -17,10 +17,16 @@ Losers -> BanksDM - LSDM - CarnageTDM!
 
 */
 #include <a_samp>
-#include "/modules/server/defines.pwn"
+#include "modules/server/defines.pwn"
 #include <fixes>
 #include <SKY>
 #include <BustAim>
+
+#pragma warning disable 239
+#pragma warning disable 218
+#pragma warning disable 214
+
+#include <nex-ac>
 
 #define WC_CUSTOM_VENDING_MACHINES false
 #include <weapon-config>
@@ -50,6 +56,8 @@ Losers -> BanksDM - LSDM - CarnageTDM!
 
 //#include <mSelection>
 
+new Countdown, CountdownTimer;
+
 new countdowntime[MAX_PLAYERS];
 new countdowntimer[MAX_PLAYERS];
 new dmessage[MAX_PLAYERS];
@@ -62,6 +70,7 @@ new List:DialogOptions[MAX_PLAYERS];
 new HitmarkerTimer[MAX_PLAYERS];
 new PlayerSecondTimer[MAX_PLAYERS];
 new pName[MAX_PLAYERS][MAX_PLAYER_NAME + 1];
+new bool:AdminPMRead[MAX_PLAYERS];
 
 //antispam stuff
 new MessageAmount[MAX_PLAYERS]; //how many chat messages a player has sent, decrements by 2 every second
@@ -150,7 +159,12 @@ new AllCarColors[256] = {
 
 #define MPH_KMH 1.609344
 
-
+// - ERROR MESSAGES
+#define AUTHMSG 	"[ERROR]: You aren't authorized to use this command!"
+#define NOPLAYER 	"[ERROR]: Player isn't connected!"
+#define NOLEVEL 	"[ERROR]: You cannot use this command on higher level admins than you."
+#define NOCMD		"[ERROR]: The command you have tried to use does not exist."
+#define NOTLOGGEDIN "[ERROR]: Player isn't logged in!"
 
 //==============================================================================
 //          -- > Enums
@@ -1027,6 +1041,8 @@ new VehicleNames[][] =
 #include "modules/player/sessiontds.pwn"
 #include "modules/player/networktds.pwn"
 #include "modules/player/settings.pwn"
+
+new bool: adminDuty[MAX_PLAYERS];
 
 //admin
 #include "modules/server/admin/admincmds.pwn"
@@ -3571,6 +3587,7 @@ CMD:pm(cmdid, playerid, params[])
 	if(!AllowPMS{pID} && GetPlayerAdminLevel(playerid) == 0) return SendClientMessage(playerid, -1, "{31AEAA}Notice: {FFFFFF}This player has disabled his private messages!");
 	if(!GetPlayerAdminLevel(playerid) && ChatLocked) return SendClientMessage(playerid, -1, "{31AEAA}Notice: {FFFFFF}The chat is currently locked by an administrator.");
 	SendClientMessage(pID, COLOR_WHITE, sprintf("{FF8C00}Private Message from %s(%d):{FFFFFF} %s",GetName(playerid), playerid, pmmsg));
+	SendAdminPM(playerid, pID, pmmsg);
 	PlayerPlaySound(pID, 1085, 0.0, 0.0, 0.0);
 	SendClientMessage(playerid, COLOR_WHITE, sprintf("{FF8C00}Private Message sent to %s(%d):{FFFFFF} %s",GetName(pID), pID, pmmsg));
 	PMReply[pID] = playerid;
@@ -3654,15 +3671,6 @@ CMD:admins(cmdid, playerid, params[])
 ALT:staff = CMD:admins;
 ALT:mods = CMD:admins;
 ALT:moderators = CMD:admins;
-
-CMD:muted(cmdid, playerid, params[])
-{
-	foreach(new i: Player) if(Account[i][Muted] > 0)
-	{
-		SendClientMessage(playerid, COLOR_GRAY, sprintf("%s", GetName(i)));
-	}
-	return 1;
-}
 
 CMD:opencrate(cmdid, playerid, params[])
 {
@@ -4361,4 +4369,51 @@ CreateVehicleEx(model, Float:x, Float:y, Float:z, Float:a, col1, col2, r_delay, 
 	if(strlen(numberplate) == 0) format(numberplate, 32, "KDM %i", id);
 	SetVehicleNumberPlate(id, numberplate);
 	return id;
+}
+
+IsPlayerNearPlayer(playerid, targetid, Float:radius)
+{
+	new Float:x, Float:y, Float:z;
+	GetPlayerPos(targetid, x, y, z);
+	if(IsPlayerInRangeOfPoint(playerid, radius ,x, y, z))
+	{
+	    return 1;
+	}
+	return 0;
+}
+
+GetModelVehicle(vname[]) // fuction getmodelvehicle in the names
+{
+    for(new i = 0; i < 211; i++)
+    {
+        if(strfind(VehicleNames[i], vname, true) != -1)
+        return i + 400;
+    }
+    return false;
+}
+
+forward Count();
+public Count()
+{
+	Countdown--;
+	new string[4];
+	format(string, sizeof(string), "%d", Countdown);
+	if (Countdown > 0)
+	{
+    	foreach(new i : Player)
+		{
+			GameTextForPlayer(i, string, 2000, 5);
+			PlayerPlaySound(i, 1056, 0, 0, 0);
+		}
+	}
+ 	if(Countdown == 0)
+    {
+        foreach(new i : Player)
+        {
+			GameTextForPlayer(i, "~g~GO!", 2000, 5);
+        	PlayerPlaySound(i, 3200, 0, 0, 0);
+		}
+		KillTimer(CountdownTimer);
+    }
+    return 1;
 }

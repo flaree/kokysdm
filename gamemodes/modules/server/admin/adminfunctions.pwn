@@ -96,3 +96,19 @@ public SendToAJail(playerid)
 	SetPlayerSkin(playerid, 20051);
 	return 1;
 }
+
+GetUserName(playerid) {
+	new name[24];
+	GetPlayerName(playerid, name, 24);
+	return name;
+}
+
+SendAdminPM(from, to, msg[]) {
+	new string[256];
+	foreach (new i : Player) {
+		if(AdminPMRead[i] == true && GetPlayerAdminLevel(i) > 1) {
+			format(string, 256, "PM (%s->%s): %s", GetUserName(from), GetUserName(to), msg);
+		}
+	}
+	return 1;
+}

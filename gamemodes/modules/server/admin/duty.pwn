@@ -1,8 +1,6 @@
 // admin duty
 #include <pp-hooks>
 
-new bool: adminDuty[MAX_PLAYERS];
-
 hook public OnPlayerConnect(playerid)
 {
 	adminDuty[playerid] = false;
