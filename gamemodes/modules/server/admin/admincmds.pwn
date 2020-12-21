@@ -763,10 +763,10 @@ CMD<AD6>:giveevent(cmdid, playerid,params[])
 	SendClientMessage(playerid, -1, sprintf("{1E90FF}(Admin Notice):{dadada} You have given yourself an event and have now have %d events.", Account[playerid][PlayerEvents]));
 	return 1;
 }
-CMD<AD5>:setlevel(cmdid, playerid, params[])
+CMD<AD5>:setadmin(cmdid, playerid, params[])
 {
 	new TargetPlayer, level;
-	if(sscanf(params, "ui", TargetPlayer, level)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: setlevel [id] [level]");
+	if(sscanf(params, "ui", TargetPlayer, level)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: setadmin [id] [level]");
 	if(!IsPlayerConnected(TargetPlayer)) return SendErrorMessage(playerid, ERROR_OPTION);
 	if(Account[TargetPlayer][Admin] > Account[playerid][Admin]) return SendClientMessage(playerid, COLOR_GRAY, "You cannot set an admin level to a person who is a higher rank than you.");
 	if(level > Account[playerid][Admin]) return SendClientMessage(playerid, COLOR_GRAY, "You cannot set a person's admin level to a higher level than your own!");
@@ -775,10 +775,10 @@ CMD<AD5>:setlevel(cmdid, playerid, params[])
 	Account[TargetPlayer][Admin] = level;
 	return 1;
 }
-CMD<AD5>:osetlevel(cmdid, playerid, params[])
+CMD<AD5>:osetadmin(cmdid, playerid, params[])
 {
 	new PlayerName[MAX_PLAYER_NAME + 1], level;
-	if(sscanf(params, "s[26]i", PlayerName, level)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /osetlevel [name] [level]");
+	if(sscanf(params, "s[26]i", PlayerName, level)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /osetadmin [name] [level]");
 
 	yield 1;
 	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT Admin FROM Accounts WHERE Username = '%e'", PlayerName));
@@ -795,7 +795,7 @@ CMD<AD5>:osetlevel(cmdid, playerid, params[])
 CMD<AD6>:osetclanmanagement(cmdid, playerid, params[])
 {
 	new PlayerName[MAX_PLAYER_NAME + 1], level;
-	if(sscanf(params, "s[26]i" , PlayerName, level)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /osetlevel [name] [level]");
+	if(sscanf(params, "s[26]i" , PlayerName, level)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /osetclanmanagement [name] [level]");
 
 	yield 1;
 	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT ClanManagement FROM Accounts WHERE Username = '%e'", PlayerName));
@@ -1728,7 +1728,7 @@ CMD<AD2>:bringall(cmdid, playerid)
 	return 1;
 }
 
-CMD<AD2>:watchpm(cmdid, playerid, params[])
+CMD<AD3>:watchpmall(cmdid, playerid, params[])
 {
 	if(AdminPMRead[playerid] == false)
 	{
@@ -1740,6 +1740,18 @@ CMD<AD2>:watchpm(cmdid, playerid, params[])
 	    SendClientMessage(playerid, COLOR_RED, "You will no longer see player's messages.");
     	AdminPMRead[playerid] = false;
 	}
+	return 1;
+}
+
+CMD<AD2>:watchpm(cmdid, playerid, params[])
+{
+	new iTargetID;
+	if(!sscanf(params, "u", iTargetID)) {
+		WatchPM[playerid][iTargetID] = !WatchPM[playerid][iTargetID];
+		new szString[144];
+		format(szString, 144, "You are %s watching %s's PMs.", (WatchPM[playerid][iTargetID])?"now":"no longer", GetName(iTargetID));
+		SendClientMessage(playerid, COLOR_LIGHTBLUE, szString);
+	} else SendClientMessage(playerid, COLOR_RED, "/watchpm [ID]")
 	return 1;
 }
 

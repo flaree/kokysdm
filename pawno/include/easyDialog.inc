@@ -47,7 +47,7 @@ stock Dialog_Close(playerid)
 	return ShowPlayerDialog(playerid, -1, DIALOG_STYLE_MSGBOX, " ", " ", " ", "");
 }
 
-stock Dialog_Open(playerid, const function[], style, const caption[], const info[], const button1[], const button2[], {Float,_}:...)
+stock Dialog_Open(playerid, function[], style, caption[], info[], button1[], button2[], {Float,_}:...)
 {
 	static
 	    string[4096],
@@ -95,7 +95,7 @@ stock Dialog_Open(playerid, const function[], style, const caption[], const info
 
 	return 1;
 }
-stock Dialog_OpenStr(playerid, const function[], style, String:caption, String:info, String:button1, String:button2)
+stock Dialog_OpenStr(playerid, function[], style, String:caption, String:info, String:button1, String:button2)
 {
 	new caption_buffer[256];
 	new info_buffer[8192];

@@ -108,6 +108,10 @@ SendAdminPM(from, to, msg[]) {
 	foreach (new i : Player) {
 		if(AdminPMRead[i] == true && GetPlayerAdminLevel(i) > 1) {
 			format(string, 256, "PM (%s->%s): %s", GetUserName(from), GetUserName(to), msg);
+			SendClientMessage(i, COLOR_YELLOW, string);
+		} else if(WatchPM[i][from] == true && GetPlayerAdminLevel(i) > 1 || WatchPM[i][to] == true && GetPlayerAdminLevel(i) > 1) {
+			format(string, 256, "PM (%s->%s): %s", GetUserName(from), GetUserName(to), msg);
+			SendClientMessage(i, COLOR_YELLOW, string);
 		}
 	}
 	return 1;
