@@ -12,7 +12,7 @@
 ==============================================================================================================
 Update K:DM 0.43
 Memorial Developers -> Koky ~ TommyB ~ J0sh ES ~ Graber
-Developers -> SimoSbara ~ Davis ~ westham ~ Bauer ~ josef 
+Developers -> SimoSbara ~ Davis ~ westham ~ Bauer ~ josef
 Losers -> BanksDM - LSDM - CarnageTDM!
 
 */
@@ -87,34 +87,34 @@ new MessageAmount[MAX_PLAYERS]; //how many chat messages a player has sent, decr
 new LastMessage[MAX_PLAYERS][180 char]; //the last chat message a player sent
 
 new PlayerColors[200] = {
-	0xFF8C13FF, 0xC715FFFF, 0x20B2AAFF, 0xDC143CFF, 0x6495EDFF, 0xf0e68cFF, 0x778899FF, 0xFF1493FF, 0xF4A460FF, 
-	0xEE82EEFF, 0xFFD720FF, 0x8b4513FF, 0x4949A0FF, 0x148b8bFF, 0x14ff7fFF, 0x556b2fFF, 0x0FD9FAFF, 0x10DC29FF, 
-	0x534081FF, 0x0495CDFF, 0xEF6CE8FF, 0xBD34DAFF, 0x247C1BFF, 0x0C8E5DFF, 0x635B03FF, 0xCB7ED3FF, 0x65ADEBFF, 
-	0x5C1ACCFF, 0xF2F853FF, 0x11F891FF, 0x7B39AAFF, 0x53EB10FF, 0x54137DFF, 0x275222FF, 0xF09F5BFF, 0x3D0A4FFF, 
-	0x22F767FF, 0xD63034FF, 0x9A6980FF, 0xDFB935FF, 0x3793FAFF, 0x90239DFF, 0xE9AB2FFF, 0xAF2FF3FF, 0x057F94FF, 
-	0xB98519FF, 0x388EEAFF, 0x028151FF, 0xA55043FF, 0x0DE018FF, 0x93AB1CFF, 0x95BAF0FF, 0x369976FF, 0x18F71FFF, 
-	0x4B8987FF, 0x491B9EFF, 0x829DC7FF, 0xBCE635FF, 0xCEA6DFFF, 0x20D4ADFF, 0x2D74FDFF, 0x3C1C0DFF, 0x12D6D4FF, 
-	0x48C000FF, 0x2A51E2FF, 0xE3AC12FF, 0xFC42A8FF, 0x2FC827FF, 0x1A30BFFF, 0xB740C2FF, 0x42ACF5FF, 0x2FD9DEFF, 
-	0xFAFB71FF, 0x05D1CDFF, 0xC471BDFF, 0x94436EFF, 0xC1F7ECFF, 0xCE79EEFF, 0xBD1EF2FF, 0x93B7E4FF, 0x3214AAFF, 
-	0x184D3BFF, 0xAE4B99FF, 0x7E49D7FF, 0x4C436EFF, 0xFA24CCFF, 0xCE76BEFF, 0xA04E0AFF, 0x9F945CFF, 0xDCDE3DFF, 
-	0x10C9C5FF, 0x70524DFF, 0x0BE472FF, 0x8A2CD7FF, 0x6152C2FF, 0xCF72A9FF, 0xE59338FF, 0xEEDC2DFF, 0xD8C762FF, 
-	0xD8C762FF, 0xFF8C13FF, 0xC715FFFF, 0x20B2AAFF, 0xDC143CFF, 0x6495EDFF, 0xf0e68cFF, 0x778899FF, 0xFF1493FF, 
-	0xF4A460FF, 0xEE82EEFF, 0xFFD720FF, 0x8b4513FF, 0x4949A0FF, 0x148b8bFF, 0x14ff7fFF, 0x556b2fFF, 0x0FD9FAFF, 
-	0x10DC29FF, 0x534081FF, 0x0495CDFF, 0xEF6CE8FF, 0xBD34DAFF, 0x247C1BFF, 0x0C8E5DFF, 0x635B03FF, 0xCB7ED3FF, 
-	0x65ADEBFF, 0x5C1ACCFF, 0xF2F853FF, 0x11F891FF, 0x7B39AAFF, 0x53EB10FF, 0x54137DFF, 0x275222FF, 0xF09F5BFF, 
-	0x3D0A4FFF, 0x22F767FF, 0xD63034FF, 0x9A6980FF, 0xDFB935FF, 0x3793FAFF, 0x90239DFF, 0xE9AB2FFF, 0xAF2FF3FF, 
-	0x057F94FF, 0xB98519FF, 0x388EEAFF, 0x028151FF, 0xA55043FF, 0x0DE018FF, 0x93AB1CFF, 0x95BAF0FF, 0x369976FF, 
-	0x18F71FFF, 0x4B8987FF, 0x491B9EFF, 0x829DC7FF, 0xBCE635FF, 0xCEA6DFFF, 0x20D4ADFF, 0x2D74FDFF, 0x3C1C0DFF, 
-	0x12D6D4FF, 0x48C000FF, 0x2A51E2FF, 0xE3AC12FF, 0xFC42A8FF, 0x2FC827FF, 0x1A30BFFF, 0xB740C2FF, 0x42ACF5FF, 
-	0x2FD9DEFF, 0xFAFB71FF, 0x05D1CDFF, 0xC471BDFF, 0x94436EFF, 0xC1F7ECFF, 0xCE79EEFF, 0xBD1EF2FF, 0x93B7E4FF, 
-	0x3214AAFF, 0x184D3BFF, 0xAE4B99FF, 0x7E49D7FF, 0x4C436EFF, 0xFA24CCFF, 0xCE76BEFF, 0xA04E0AFF, 0x9F945CFF, 
-	0xDCDE3DFF, 0x10C9C5FF, 0x70524DFF, 0x0BE472FF, 0x8A2CD7FF, 0x6152C2FF, 0xCF72A9FF, 0xE59338FF, 0xEEDC2DFF, 
+	0xFF8C13FF, 0xC715FFFF, 0x20B2AAFF, 0xDC143CFF, 0x6495EDFF, 0xf0e68cFF, 0x778899FF, 0xFF1493FF, 0xF4A460FF,
+	0xEE82EEFF, 0xFFD720FF, 0x8b4513FF, 0x4949A0FF, 0x148b8bFF, 0x14ff7fFF, 0x556b2fFF, 0x0FD9FAFF, 0x10DC29FF,
+	0x534081FF, 0x0495CDFF, 0xEF6CE8FF, 0xBD34DAFF, 0x247C1BFF, 0x0C8E5DFF, 0x635B03FF, 0xCB7ED3FF, 0x65ADEBFF,
+	0x5C1ACCFF, 0xF2F853FF, 0x11F891FF, 0x7B39AAFF, 0x53EB10FF, 0x54137DFF, 0x275222FF, 0xF09F5BFF, 0x3D0A4FFF,
+	0x22F767FF, 0xD63034FF, 0x9A6980FF, 0xDFB935FF, 0x3793FAFF, 0x90239DFF, 0xE9AB2FFF, 0xAF2FF3FF, 0x057F94FF,
+	0xB98519FF, 0x388EEAFF, 0x028151FF, 0xA55043FF, 0x0DE018FF, 0x93AB1CFF, 0x95BAF0FF, 0x369976FF, 0x18F71FFF,
+	0x4B8987FF, 0x491B9EFF, 0x829DC7FF, 0xBCE635FF, 0xCEA6DFFF, 0x20D4ADFF, 0x2D74FDFF, 0x3C1C0DFF, 0x12D6D4FF,
+	0x48C000FF, 0x2A51E2FF, 0xE3AC12FF, 0xFC42A8FF, 0x2FC827FF, 0x1A30BFFF, 0xB740C2FF, 0x42ACF5FF, 0x2FD9DEFF,
+	0xFAFB71FF, 0x05D1CDFF, 0xC471BDFF, 0x94436EFF, 0xC1F7ECFF, 0xCE79EEFF, 0xBD1EF2FF, 0x93B7E4FF, 0x3214AAFF,
+	0x184D3BFF, 0xAE4B99FF, 0x7E49D7FF, 0x4C436EFF, 0xFA24CCFF, 0xCE76BEFF, 0xA04E0AFF, 0x9F945CFF, 0xDCDE3DFF,
+	0x10C9C5FF, 0x70524DFF, 0x0BE472FF, 0x8A2CD7FF, 0x6152C2FF, 0xCF72A9FF, 0xE59338FF, 0xEEDC2DFF, 0xD8C762FF,
+	0xD8C762FF, 0xFF8C13FF, 0xC715FFFF, 0x20B2AAFF, 0xDC143CFF, 0x6495EDFF, 0xf0e68cFF, 0x778899FF, 0xFF1493FF,
+	0xF4A460FF, 0xEE82EEFF, 0xFFD720FF, 0x8b4513FF, 0x4949A0FF, 0x148b8bFF, 0x14ff7fFF, 0x556b2fFF, 0x0FD9FAFF,
+	0x10DC29FF, 0x534081FF, 0x0495CDFF, 0xEF6CE8FF, 0xBD34DAFF, 0x247C1BFF, 0x0C8E5DFF, 0x635B03FF, 0xCB7ED3FF,
+	0x65ADEBFF, 0x5C1ACCFF, 0xF2F853FF, 0x11F891FF, 0x7B39AAFF, 0x53EB10FF, 0x54137DFF, 0x275222FF, 0xF09F5BFF,
+	0x3D0A4FFF, 0x22F767FF, 0xD63034FF, 0x9A6980FF, 0xDFB935FF, 0x3793FAFF, 0x90239DFF, 0xE9AB2FFF, 0xAF2FF3FF,
+	0x057F94FF, 0xB98519FF, 0x388EEAFF, 0x028151FF, 0xA55043FF, 0x0DE018FF, 0x93AB1CFF, 0x95BAF0FF, 0x369976FF,
+	0x18F71FFF, 0x4B8987FF, 0x491B9EFF, 0x829DC7FF, 0xBCE635FF, 0xCEA6DFFF, 0x20D4ADFF, 0x2D74FDFF, 0x3C1C0DFF,
+	0x12D6D4FF, 0x48C000FF, 0x2A51E2FF, 0xE3AC12FF, 0xFC42A8FF, 0x2FC827FF, 0x1A30BFFF, 0xB740C2FF, 0x42ACF5FF,
+	0x2FD9DEFF, 0xFAFB71FF, 0x05D1CDFF, 0xC471BDFF, 0x94436EFF, 0xC1F7ECFF, 0xCE79EEFF, 0xBD1EF2FF, 0x93B7E4FF,
+	0x3214AAFF, 0x184D3BFF, 0xAE4B99FF, 0x7E49D7FF, 0x4C436EFF, 0xFA24CCFF, 0xCE76BEFF, 0xA04E0AFF, 0x9F945CFF,
+	0xDCDE3DFF, 0x10C9C5FF, 0x70524DFF, 0x0BE472FF, 0x8A2CD7FF, 0x6152C2FF, 0xCF72A9FF, 0xE59338FF, 0xEEDC2DFF,
 	0xD8C762FF, 0xD8C762FF
 };
 
 //hitmarker
 new Text:HitMark_centre = Text:INVALID_TEXT_DRAW;
-new Text:logintd; 
+new Text:logintd;
 
 new bool:ChatLocked = false;
 
@@ -551,7 +551,7 @@ stock AdminNames(const level)
 	new adminName[24];
 	switch(level)
 	{
-		case 1..6: 
+		case 1..6:
 			format(adminName, sizeof adminName, "%i", level);
 		default:
 			format(adminName, sizeof adminName, "None");
@@ -1251,7 +1251,7 @@ ShowStatsForPlayer(playerid, clickedplayerid)
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Kills: {FFFFFF}%d{808080} | Deaths: {FFFFFF}%d{808080} | Headshots: {FFFFFF}%d{808080} | K/D Ratio: {FFFFFF}%.2f", Kill, Death, Account[clickedplayerid][Headshots], KD));
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Premium Keys: {FFFFFF}%d{808080} | Events: {FFFFFF}%d{808080} | Crates Opened: {FFFFFF}%d{808080} | Events Started: {FFFFFF}%d{808080}", Account[clickedplayerid][PlayerKeys], Account[clickedplayerid][PlayerEvents], Account[clickedplayerid][OpenedCrates], Account[clickedplayerid][EventsStarted]));
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Events Won: {FFFFFF}%d{808080} | Verified User: {FFFFFF}%s{808080}", Account[clickedplayerid][EventsWon], VerifiedCheck(clickedplayerid)));
-	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Hours: {FFFFFF}%d{808080} | Minutes: {FFFFFF}%d{808080} | Seconds: {FFFFFF}%d{808080}", Account[clickedplayerid][Hours], Account[clickedplayerid][Minutes], Account[clickedplayerid][Seconds]));	
+	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Hours: {FFFFFF}%d{808080} | Minutes: {FFFFFF}%d{808080} | Seconds: {FFFFFF}%d{808080}", Account[clickedplayerid][Hours], Account[clickedplayerid][Minutes], Account[clickedplayerid][Seconds]));
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Mutes: {FFFFFF}%d{808080} | Kicks: {FFFFFF}%d{808080} | Forced Rules: {FFFFFF}%d{808080}", Account[clickedplayerid][Mutes], Account[clickedplayerid][Kicks], Account[clickedplayerid][ForcedRules]));
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}KDM Tokens: {FFFFFF}%d{808080} | Rare Skins: {FFFFFF}%d{808080} | Rare Items: {FFFFFF}%d{808080}", Account[clickedplayerid][Tokens], Account[clickedplayerid][RareSkins], Account[clickedplayerid][RareItems]));
 	if(GetPlayerAdminLevel(playerid) > 0) SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Admin Hours: {FFFFFF}%d{808080} | Admin Actions: {FFFFFF}%d{808080}", Account[clickedplayerid][AdminHours], Account[clickedplayerid][AdminActions]));
@@ -1590,7 +1590,7 @@ public OnPlayerConnect(playerid)
     //GetPlayerIp(playerid, ip, sizeof(ip));
 
 	//SendClientMessageToAll(COLOR_RED, sprintf("IP: %s", ip));
-	
+
     //format(url, sizeof(url), "check.getipintel.net/check.php?ip=%s&contact=cataplasia@protonmail.ch", ip);
 	//SendClientMessageToAll(COLOR_RED, url);
     //HTTP(playerid, HTTP_GET, url, "", "HttpResponse");
@@ -1634,7 +1634,7 @@ public HttpResponse(playerid, responseCode, data[])
 		SendClientMessageToAll(COLOR_RED, sprintf("connect failed %d", responseCode));
 		SendClientMessageToAll(COLOR_RED, data);
 	}
-	return 1; 
+	return 1;
 }
 
 Unban_Dialog(playerid)
@@ -1800,7 +1800,7 @@ public SecondCheck()
 			format(timerMsg, sizeof(timerMsg), "%d seconds left until game starts.", copchaseTimer);
 			SendCopchaseMessage(timerMsg);
 		}*/
-		
+
 		if(copchaseTimer <= 0)
 		{
 			StartCopchase();
@@ -2576,7 +2576,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 			}
 
 			if(random(10000) == 5000)
-			{	
+			{
 				Account[killerid][Tokens]++;
 				SendClientMessageToAll(pCOLOR_PINK, sprintf("ANNOUNCEMENT: PLAYER %s HAS JUST RECEIVED A KDM TOKEN FROM KILLING %S! (1/10000 CHANCE)", GetName(killerid), GetName(playerid)));
 			}
@@ -2644,7 +2644,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 				HandleLobbyTransition(playerid);
 				StartCopchase(); // actually i'm terminating it in here.
 			}
-			
+
 			// The dead player was a cop
 			if(Account[playerid][pCopchase] == 2)
 			{
@@ -3075,7 +3075,7 @@ public OnPlayerGiveDamageActor(playerid, damaged_actorid, Float:amount, weaponid
 GetVehicleSpeed( vehicleid )
 {
 	// Function: GetVehicleSpeed( vehicleid )
-	
+
 	new
 	    Float:x,
 	    Float:y,
@@ -3216,7 +3216,7 @@ public OnPlayerText(playerid, const text[])
 	}
 	else
 	{
-		format(str, sizeof( str), "~{FFFFFF} {%06x}%s(%i):{FFFFFF} %s", GetPlayerColor(playerid) >>> 8, GetName(playerid), playerid, text);	
+		format(str, sizeof( str), "~{FFFFFF} {%06x}%s(%i):{FFFFFF} %s", GetPlayerColor(playerid) >>> 8, GetName(playerid), playerid, text);
 	}
 
 	ChatSend(Account[playerid][pLanguage], str);
@@ -3232,7 +3232,7 @@ ChatSend(language, const str[])
 	{
 		SendClientMessage(i, -1, str);
 	}
-	
+
 	return 1;
 }
 
@@ -3501,11 +3501,11 @@ public OnPlayerSpawn(playerid)
 	CheckUpgrade(playerid);
 	MuteCheck(playerid);
 	RemoveRestrictedArenaSkin(playerid);
-	
+
 	if(ActivityStateID[playerid] != EVENT_TDM) {
 		SetPlayerColor(playerid, PlayerColors[playerid % sizeof PlayerColors]);
 	}
-	
+
 	switch(ActivityState[playerid])
 	{
 		case ACTIVITY_LOBBY: SendPlayerToLobby(playerid);
@@ -3760,7 +3760,7 @@ CMD:admins(cmdid, playerid, params[])
 {
     new List:adminlist = list_new(), admin[2];
     foreach(new i: Player)
-    {    
+    {
         if(Account[i][pAdminHide] && GetPlayerAdminLevel(playerid) == 0) continue;
         if(Account[i][Admin] != 0 && Account[i][Admin] <= 6)
         {
@@ -3855,7 +3855,7 @@ MSelectCreate:skins(playerid)
 {
 	new skin[310], count = 0;
 
-	for (new i = 1; i < 312; i++) 
+	for (new i = 1; i < 312; i++)
 	{
 		if (i == 74) continue;
 
@@ -3984,7 +3984,7 @@ CMD:donate(cmdid, playerid, params[])
 CMD:freeroam(cmdid, playerid)
 {
 	if(!IsPlayerInLobby(playerid)) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Notice: {FFFFFF}You must be in the lobby to use this command.");
-	
+
 	SendPlayerToFreeroam(playerid);
 	InfoBoxForPlayer(playerid, "Welcome to freeroam, use /freeroamhelp for more information.");
 	return 1;
@@ -3992,7 +3992,7 @@ CMD:freeroam(cmdid, playerid)
 
 CMD:rules(cmdid, playerid, params[])
 {
-	Dialog_Show(playerid, RULES, DIALOG_STYLE_MSGBOX, "Rules", "1. {FFFFFF}No third party modifications\n2. {FFFFFF}No bug abuse(c-roll, c-bug, c-shoot-c)\n3. {FFFFFF}No racism\n4. {FFFFFF}English only\n5. {FFFFFF}Abuse of commands (/lobby to avoid death)", "Okay", "Close");
+	Dialog_Show(playerid, RULES, DIALOG_STYLE_MSGBOX, "Rules", "1. {FFFFFF}No third party modifications\n2. {FFFFFF}No bug/samp physic abuse(c-roll, c-bug, c-shoot-c)\n3. {FFFFFF}No chat spam and no racism\n4. {FFFFFF}English only\n5. {FFFFFF}Abuse of commands (/lobby to avoid death)\n6.No External Advertisements\n7. Always maintain common courtesy\n8. No trading virtual goods for real life currency\n9. No spawn killing.", "Okay", "Close");
 	return 1;
 }
 
@@ -4011,7 +4011,7 @@ CMD:me(cmdid, playerid, params[])
 			if(IsPlayerInRangeOfPoint(i, 10, x, y, z))
 			{
 				SendClientMessage(i, -1, str);
-			}	
+			}
 		}
 	}
 	return 1;
@@ -4057,9 +4057,9 @@ CMD:do(cmdid, playerid, params[])
 			if(IsPlayerInRangeOfPoint(i, 10, x, y, z))
 			{
 				SendClientMessage(i, -1, str);
-			}	
+			}
 		}
-	}	
+	}
 	return 1;
 }
 
@@ -4289,27 +4289,27 @@ Dialog:SELECTLANGUAGE(playerid, response, listitem, inputtext[])
 			case 1:
 			{
 				SendClientMessage(playerid, COLOR_LIGHTRED, "Language Selection: {FFFFFF}You have selected Turkish as your language. You will now only speak with Turkish players in the public chat.");
-				Account[playerid][pLanguage] = LANGUAGE_TURKISH;				
+				Account[playerid][pLanguage] = LANGUAGE_TURKISH;
 			}
 			case 2:
 			{
 				SendClientMessage(playerid, COLOR_LIGHTRED, "Language Selection: {FFFFFF}You have selected French as your language. You will now only speak with French players in the public chat.");
-				Account[playerid][pLanguage] = LANGUAGE_FRENCH;				
+				Account[playerid][pLanguage] = LANGUAGE_FRENCH;
 			}
 			case 3:
 			{
 				SendClientMessage(playerid, COLOR_LIGHTRED, "Language Selection: {FFFFFF}You have selected Portuguese as your language. You will now only speak with Portuguese players in the public chat.");
-				Account[playerid][pLanguage] = LANGUAGE_PORTUGUESE;				
+				Account[playerid][pLanguage] = LANGUAGE_PORTUGUESE;
 			}
 			case 4:
 			{
 				SendClientMessage(playerid, COLOR_LIGHTRED, "Language Selection: {FFFFFF}You have selected Espanol as your language. You will now only speak with Espanol players in the public chat.");
-				Account[playerid][pLanguage] = LANGUAGE_ESPANOL;				
+				Account[playerid][pLanguage] = LANGUAGE_ESPANOL;
 			}
 			case 5:
 			{
 				SendClientMessage(playerid, COLOR_LIGHTRED, "Language Selection: {FFFFFF}You have selected other as your language. You will now only speak with other players in the public chat.");
-				Account[playerid][pLanguage] = LANGUAGE_OTHER;				
+				Account[playerid][pLanguage] = LANGUAGE_OTHER;
 			}
 		}
 		return 0;
@@ -4439,7 +4439,7 @@ CreateServerTextDraws()
 	TextDrawSetOutline(HitMark_centre, 1);
 	TextDrawSetShadow(HitMark_centre, 0);
 
-	//login 
+	//login
 	logintd = TextDrawCreate(183.5000, -41.0000, "mdl-1087:Koky_DM");
 	TextDrawFont(logintd, 4);
 	TextDrawLetterSize(logintd, 0.6399, 2.4999);
