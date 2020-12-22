@@ -1,4 +1,4 @@
-/** PawnPlus v1.2.1 by IllidanS4 **/
+/** PawnPlus v1.3.2 by IllidanS4 **/
 //github.com/IllidanS4/PawnPlus
 
 #if defined _inc_PawnPlus
@@ -14,7 +14,7 @@
 /*      Setup      */
 /*                 */
 
-const PP_VERSION = 0x120;
+const PP_VERSION = 0x132;
 
 #if defined PP_SYNTAX
 #define PP_SYNTAX_AMX_FORKED
@@ -683,7 +683,7 @@ native bool:var_not(ConstVariantTag:var);
 native Variant:var_call_op(VariantTag:var, tag_op:tag_op, AnyTag:...);
 native Variant:var_call_op_raw(VariantTag:var, tag_op:tag_op, AnyTag:...);
 
-native Iter:var_iter(VariantTag:value);
+native Iter:var_iter(VariantTag:value, count=1);
 
 
 /*                 */
@@ -837,7 +837,7 @@ native Iter:list_iter(List:list, index=0);
 
 const Map:INVALID_MAP = Map:0;
 
-native Map:map_new();
+native Map:map_new(bool:ordered=false);
 native Map:map_new_args_t(TagTag:key_tag_id=tagof(arg0), TagTag:value_tag_id=tagof(arg1), AnyTag:arg0, AnyTag:arg1, AnyTag:...) = map_new_args;
 native Map:map_new_args_packed(ArgTag:...);
 /*
@@ -1222,7 +1222,7 @@ native Iter:linked_list_iter(LinkedList:linked_list, index=0);
 
 const Pool:INVALID_POOL = Pool:0;
 
-native Pool:pool_new(capacity=-1);
+native Pool:pool_new(capacity=-1, bool:ordered=false);
 native bool:pool_valid(Pool:pool);
 native pool_delete(Pool:pool);
 native pool_delete_deep(Pool:pool);
@@ -1343,11 +1343,12 @@ native Iter:iter_release(IterTag:iter);
 native iter_delete(IterTag:iter);
 native bool:iter_linked(IterTag:iter);
 native bool:iter_inside(IterTag:iter);
+native bool:iter_empty(IterTag:iter);
 native iter_type(IterTag:iter);
 native iter_type_str(IterTag:iter, type[], size=sizeof(type));
 native String:iter_type_str_s(IterTag:iter);
-native Iter:iter_erase(IterTag:iter);
-native Iter:iter_erase_deep(IterTag:iter);
+native Iter:iter_erase(IterTag:iter, bool:stay=false);
+native Iter:iter_erase_deep(IterTag:iter, bool:stay=false);
 native Iter:iter_reset(IterTag:iter);
 native Iter:iter_clone(IterTag:iter);
 native Iter:iter_move_next(IterTag:iter, steps=1);
@@ -1611,6 +1612,8 @@ native bool:handle_eq(HandleTag:handle1, HandleTag:handle2);
 native handle_tagof(HandleTag:handle);
 native handle_sizeof(HandleTag:handle);
 
+native Iter:handle_iter(HandleTag:handle, count=1);
+
 #if defined PP_SYNTAX_GENERIC
 
 #define handle_new<%0>(%1) (Handle<%0>:handle_new(_PP@CAST[%0](%1)))
@@ -1750,18 +1753,18 @@ native expr_exec_multi(Expression:expr, List:output);
 enum parser_options (<<= 1)
 {
     parser_bare = 0,
-    parser_allow_unknown_symbols = 1,
-    parser_allow_debug_symbols,
-    parser_allow_natives,
-    parser_allow_publics,
-    parser_allow_pubvars,
-    parser_allow_constructions,
-    parser_allow_ranges,
-    parser_allow_arrays,
-    parser_allow_queries,
-    parser_allow_arguments,
-    parser_allow_environment,
-    parser_allow_casts,
+	parser_allow_unknown_symbols = 1,
+	parser_allow_debug_symbols,
+	parser_allow_natives,
+	parser_allow_publics,
+	parser_allow_pubvars,
+	parser_allow_constructions,
+	parser_allow_ranges,
+	parser_allow_arrays,
+	parser_allow_queries,
+	parser_allow_arguments,
+	parser_allow_environment,
+	parser_allow_casts,
     parser_allow_literals,
     parser_allow_intrinsics,
     parser_allow_strings,
@@ -2328,6 +2331,7 @@ PP_VARIANT_LOG_UN_OP(!, var_not);
 
 native bool:operator==(Iter:arg1, Iter:arg2) = iter_eq;
 stock bool:operator!=(Iter:arg1, Iter:arg2) return !(arg1 == arg2);
+native bool:operator!(Iter:arg) = iter_empty;
 
 native bool:operator==(Handle:arg1, Handle:arg2) = handle_eq;
 stock bool:operator!=(Handle:arg1, Handle:arg2) return !(arg1 == arg2);
