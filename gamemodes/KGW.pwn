@@ -17,6 +17,8 @@ Losers -> BanksDM - LSDM - CarnageTDM!
 
 */
 #include <a_samp>
+#include <crashdetect>
+
 #include "modules/server/defines.pwn"
 #include <fixes>
 #include <SKY>
