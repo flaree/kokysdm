@@ -39,7 +39,7 @@ AdminJailCheck(playerid)
 	new ip[18];
 	GetPlayerIp(playerid, ip, sizeof(ip));
 
-	mysql_pquery_s(SQL_CONNECTION, str_format("SELECT * FROM Accounts WHERE LatestIP = '%e' AND Username != '%e'", ip, GetName(playerid)), "CheckJailsUnderIP", "is", playerid, ip);	
+	mysql_pquery_s(SQL_CONNECTION, str_format("SELECT * FROM Accounts WHERE LatestIP = '%e' AND Username != '%e'", ip, GetName(playerid)), "CheckJailsUnderIP", "is", playerid, ip);
 
 	if(Account[playerid][AJailTime] > 0)
 	{
@@ -70,7 +70,7 @@ public CheckJailsUnderIP(playerid, const ip[])
 
 			SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("Notice: {FFFFFF}You must serve your %i admin jail minutes on your %s account before playing on this account!", jail, username));
 			SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("Notice: {FFFFFF}You must serve your %i admin jail minutes on your %s account before playing on this account!", jail, username));
-			
+
 			SetTimerEx("FixKick", 8000, false, "i", playerid);
 			return 1;
 		}
@@ -92,7 +92,7 @@ forward SendToAJail(playerid);
 public SendToAJail(playerid)
 {
 	CreateLobby(playerid);
-	SetPlayerPosEx(playerid, 2518.7590, 602.5683, 45.2066, 0, 0);
+	SetPlayerPosEx(playerid, 2577.2522,2695.4265,22.9507, 0, 0);
 	SetPlayerSkin(playerid, 20051);
 	return 1;
 }

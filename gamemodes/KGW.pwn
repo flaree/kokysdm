@@ -1074,6 +1074,7 @@ new bool: WatchPM[MAX_PLAYERS][MAX_PLAYERS];
 #include "modules/server/admin/adminfunctions.pwn"
 #include "modules/server/admin/duty.pwn"
 #include "modules/server/discord.pwn"
+#include "modules/server/features/spectating.pwn"
 //#include "modules/server/admin/adminnotes.pwn"
 
 //clanmanagement
@@ -4520,16 +4521,6 @@ IsPlayerNearPlayer(playerid, targetid, Float:radius)
 	return 0;
 }
 
-GetModelVehicle(vname[]) // fuction getmodelvehicle in the names
-{
-    for(new i = 0; i < 211; i++)
-    {
-        if(strfind(VehicleNames[i], vname, true) != -1)
-        return i + 400;
-    }
-    return false;
-}
-
 forward Count();
 public Count()
 {
@@ -4563,7 +4554,7 @@ stock sendFormatMessage(playerid, color, const str[], {Float,_}:...)
         start,
         end,
         string[256]
-    ; 
+    ;
     #emit LOAD.S.pri 8
     #emit STOR.pri args
 
@@ -10212,7 +10203,7 @@ createMap() {
     tmpobjid = CreateDynamicObjectEx(874, -2700.582519, 1117.947753, 41.000869, 5.600000, 8.899998, 90.000000, 300.00, 300.00);
     tmpobjid = CreateDynamicObjectEx(874, -2682.739257, 1121.044555, 37.299404, 5.600000, 8.899998, 90.000000, 300.00, 300.00);
     tmpobjid = CreateDynamicObjectEx(874, -2679.925781, 1137.274902, 35.482826, 6.500000, -6.199999, 180.000000, 300.00, 300.00);
-    
+
     // DUEL MAP
     CreateDynamicObject(985, 2658.97021, 1223.53833, 27.63396,   0.00000, 0.00000, 270.00000);
     CreateDynamicObject(985, 2658.98682, 1215.67554, 27.63396,   0.00000, 0.00000, 270.00000);
@@ -10265,7 +10256,7 @@ createMap() {
 
     DuelDoors[0] = CreateDynamicObject(988, 2646.2058, 1230.0742, 26.9624, 0.0000, 0.0000, 0.0000);
     DuelDoors[1] = CreateDynamicObject(988, 2646.165771, 1191.811157, 26.957216, 0.0000, 0.0000, 180.0001);
-    
+
     // Special Forces Base
     tmpobjid = CreateDynamicObject(5708, -1465.100219, 413.248992, 16.840963, 0.000000, 0.000000, 540.000000, -1, -1, -1, 300.00, 300.00);
 	SetDynamicObjectMaterial(tmpobjid, 0, 17075, "cuntwlandwest", "mountainskree_stones256", 0xFFD3D3D3);
@@ -11622,7 +11613,7 @@ createMap() {
 	tmpobjid = CreateDynamicObject(3795, -1404.924804, 389.081268, 10.546875, -0.000003, -0.000014, -15.000145, -1, -1, -1, 300.00, 300.00);
 	tmpobjid = CreateDynamicObject(10770, -1403.768798, 436.451263, 38.679687, -0.000014, 0.000007, 90.000015, -1, -1, -1, 300.00, 300.00);
 	tmpobjid = CreateDynamicObject(11237, -1403.768798, 436.501190, 38.679687, -0.000014, 0.000007, 90.000015, -1, -1, -1, 300.00, 300.00);
-	
+
 	// War Town
 	tmpobjid = CreateDynamicObject(19791, -1434.557861, 2607.125000, 44.701293, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00);
     SetDynamicObjectMaterial(tmpobjid, 0, 5069, "ctscene_las", "ruffroadlas", 0x00000000);
@@ -12006,7 +11997,7 @@ createMap() {
     tmpobjid = CreateDynamicObject(3594, -1531.130615, 2667.528320, 55.266815, 0.000000, 0.000000, 94.700012, -1, -1, -1, 300.00, 300.00);
     tmpobjid = CreateDynamicObject(3594, -1509.058593, 2674.391113, 55.266815, 0.000000, 0.000000, 94.700012, -1, -1, -1, 300.00, 300.00);
     tmpobjid = CreateDynamicObject(760, -1507.103027, 2660.169189, 55.024181, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00);
-    
+
     // Sewer
 	tmpobjid = CreateDynamicObject(18808, 2468.516601, -390.098358, 1004.711120, 0.000000, 90.000000, 90.000000, -1, -1, -1, 300.00, 300.00);
     SetDynamicObjectMaterial(tmpobjid, 0, 18250, "cw_junkbuildcs_t", "Was_scrpyd_bodywk_edge", 0xFF808080);
@@ -12531,7 +12522,7 @@ createMap() {
     tmpobjid = CreateDynamicObject(365, 2458.273925, -439.260345, 1002.904052, 0.000000, 0.000000, 133.700027, -1, -1, -1, 300.00, 300.00);
     tmpobjid = CreateDynamicObject(18981, 2438.207519, -427.783660, 1003.438293, 0.000000, 0.000000, 180.000000, -1, -1, -1, 300.00, 300.00);
     tmpobjid = CreateDynamicObject(18748, 2468.255371, -434.233856, 998.221313, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00);
-    
+
     // MIRAGE
 	tmpobjid = CreateDynamicObject(19445, 1706.717529, 1486.995483, 1048.701171, 0.000000, 90.000000, 0.000000, -1, -1, -1, 300.00, 300.00);
     SetDynamicObjectMaterial(tmpobjid, 0, 6487, "councl_law2", "rodeo3sjm", 0xFFFFFFFF);
@@ -13909,7 +13900,7 @@ createMap() {
     tmpobjid = CreateDynamicObject(17096, 1499.478881, 1572.975341, 1033.745483, 0.000000, 0.000000, -90.000000, -1, -1, -1, 300.00, 300.00);
     tmpobjid = CreateDynamicObject(791, 1858.825317, 1482.616699, 1088.689208, 0.000000, 0.000014, 179.999816, -1, -1, -1, 300.00, 300.00);
     tmpobjid = CreateDynamicObject(791, 1857.837036, 1531.347045, 1087.248535, -0.000003, -0.000014, 18.500082, -1, -1, -1, 300.00, 300.00);
-    
+
     // Zone 1 (Bombvad Mapping)
     tmpobjid = CreateDynamicObject(10016, -2199.729980, 893.203002, 81.000000, 0.000009, 0.000000, -0.000009, -1, -1, -1, 300.00, 300.00);
     SetDynamicObjectMaterial(tmpobjid, 1, 3866, "dem1_sfxrf", "ws_demolishwall3small", 0x00000000);
@@ -15697,7 +15688,7 @@ createMap() {
     tmpobjid = CreateDynamicObject(735, -2569.880859, 1088.565673, 46.081722, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00);
     tmpobjid = CreateDynamicObject(735, -2558.680419, 1053.936157, 56.311721, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00);
     tmpobjid = CreateDynamicObject(735, -2572.800292, 1032.955932, 56.311721, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00);
-    
+
     // Zone 3 (Bombvad Mapping)
     tmpobjid = CreateDynamicObject(3826, -2628.439941, 271.718994, 8.132804, 0.000000, 0.000000, -0.000009, -1, -1, -1, 300.00, 300.00);
     SetDynamicObjectMaterial(tmpobjid, 0, 10891, "bakery_sfse", "ws_altz_wall4", 0x00000000);
@@ -18464,7 +18455,7 @@ public UpdateNameTag(playerid, fps) {
 				format(szString, 256, "%s (%d)\n{FFFFFF}({FF0000}%.1f{FFFFFF}/{AAAAAA}%.1f{FFFFFF})\nFPS: %d", GetName(playerid), playerid, GetHealth(playerid), GetArmour(playerid), fps);
 				new color;
 				if(adminDuty[playerid] == true) color = 0xFF0000FF;
-				color = GetPlayerColor(playerid) >>> 8 + 0x000000FF;				
+				color = GetPlayerColor(playerid) >>> 8 + 0x000000FF;
                 UpdatePlayer3DTextLabelText(i, WallHackTag[i][playerid], color, szString);
 				NameTagNeedsUpdating{playerid} = 0;
 			}

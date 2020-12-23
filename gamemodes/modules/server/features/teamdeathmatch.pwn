@@ -81,7 +81,7 @@ hook public OnPlayerDisconnect(playerid, reason)
 		if(GetPlayerTeam(playerid) > 100)
 		{
 			cancapture[playerid] = 0;
-			inAmmunation[playerid] = 0;	
+			inAmmunation[playerid] = 0;
 
 			SetPlayerTeam(playerid, NO_TEAM);
 			GangZoneHideForPlayer(playerid, igsturf);
@@ -145,7 +145,7 @@ InitTDM()
 	SetTimer("LimitTeams", 5000, true);
 
 	for(new i; i < sizeof(tdmVehicles); i++)
-	{	
+	{
 		SetVehicleVirtualWorld(i, WORLD_TDM);
 	}
 
@@ -221,7 +221,7 @@ hook public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 		}
 		if(!ispassenger)
 		{
-			if(GetVehicleDriver(vehicleid) != -1)
+			if(GetVehicleDriver(vehicleid) != -1 && ActivityStateID[playerid] == ActivityStateID[GetVehicleDriver(vehicleid)])
 			{
 				new Float:x, Float:y, Float:z;
 				GetPlayerPos(playerid, x, y, z);
@@ -322,7 +322,7 @@ ShowTeamSelectionDialog(playerid)
 		ActivityStateID[playerid] = teamchoice;
 		SendPlayerToTDM(playerid, ActivityStateID[playerid]);
 		CreateTDMMapping(playerid);
-		SendClientMessage(playerid, COLOR_LIGHTRED, "Use /tc [text] to speak with your teammates.");			
+		SendClientMessage(playerid, COLOR_LIGHTRED, "Use /tc [text] to speak with your teammates.");
 	}
 	if(teamchoice == 6 && Account[playerid][Admin] > 0)
 	{
@@ -340,7 +340,7 @@ IsPlayerInArea(playerid, Float:MinX, Float:MinY, Float:MaxX, Float:MaxY)
 	new Float:X, Float:Y, Float:Z;
 
 	GetPlayerPos(playerid, X, Y, Z);
-	if(X >= MinX && X <= MaxX && Y >= MinY && Y <= MaxY) 
+	if(X >= MinX && X <= MaxX && Y >= MinY && Y <= MaxY)
 	{
 		return 1;
 	}
@@ -521,12 +521,12 @@ GiveTDMAmmunation(playerid)
 	{
 		GivePlayerWeapon(playerid, WEAPON_PARACHUTE, 1);
 	}
-	
+
 	if(turfholder == ActivityStateID[playerid])
 	{
 		SetPlayerArmour(playerid, 100);
 		GivePlayerWeapon(playerid, WEAPON_M4, 125);
-		SendClientMessage(playerid, -1, "{31AEAA}Turf: {FFFFFF}You have been given 100 armour and an M4 as your team holds the turf.");	
+		SendClientMessage(playerid, -1, "{31AEAA}Turf: {FFFFFF}You have been given 100 armour and an M4 as your team holds the turf.");
 	}
 
 	Account[playerid][CopChaseDead] = 0;
@@ -561,13 +561,13 @@ Menu:AMMUNATION(playerid, response, listitem)
 CMD<TDM>:buy(cmdid, playerid, params[])
 {
 	if(inAmmunation[playerid] == 1)
-	{	
-	    ShowPlayerMenu(playerid, AMMUNATION, "Weapons Menu"); 
-	    AddPlayerMenuItem(playerid, "Sniper", "Lethal weapon, will cost you $40,000 per 10 bullets!"); 
-	    AddPlayerMenuItem(playerid, "Grenade", "Lethal weapon, will cost you $10,000 per grenade!"); 
-	    AddPlayerMenuItem(playerid, "Molotov Cocktail", "Lethal weapon, will cost you $10,000 per molotov!"); 
+	{
+	    ShowPlayerMenu(playerid, AMMUNATION, "Weapons Menu");
+	    AddPlayerMenuItem(playerid, "Sniper", "Lethal weapon, will cost you $40,000 per 10 bullets!");
+	    AddPlayerMenuItem(playerid, "Grenade", "Lethal weapon, will cost you $10,000 per grenade!");
+	    AddPlayerMenuItem(playerid, "Molotov Cocktail", "Lethal weapon, will cost you $10,000 per molotov!");
 	    AddPlayerMenuItem(playerid, "M4", "Weapon, will cost you $25,000 per 100 bullets!");
-	    AddPlayerMenuItem(playerid, "Health & Armour", "Medical, will cost you $10,000 per refill!"); 
+	    AddPlayerMenuItem(playerid, "Health & Armour", "Medical, will cost you $10,000 per refill!");
 
 	    TogglePlayerControllable(playerid, false);
 
@@ -575,7 +575,7 @@ CMD<TDM>:buy(cmdid, playerid, params[])
 	    SendClientMessage(playerid, COLOR_LIGHTRED, "SHOP: {FFFFFF}Press SPACE to purchase an item.");
 	    SendClientMessage(playerid, COLOR_LIGHTRED, "SHOP: {FFFFFF}Press ENTER to CLOSE the shop.");
 	}
-    return 1; 
+    return 1;
 }
 CMD<TDM>:tdm(cmdid, playerid, params[])
 {

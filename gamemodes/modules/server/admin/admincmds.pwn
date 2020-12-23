@@ -186,13 +186,13 @@ CMD<AD1>:whois(cmdid, playerid, params[])
 	new id, ip[16], country[64], isp[256], url[128];
 
 
-	if(sscanf(params, "u", id)) 
+	if(sscanf(params, "u", id))
 		return SendUsageMessage(playerid, "/whois [ID/name]");
 
-	if(!IsPlayerConnected(id)) 
+	if(!IsPlayerConnected(id))
 		return SendErrorMessage(playerid, "Invalid player specified.");
 
-	if(Account[id][Admin] > 0 && Account[playerid][Admin] < 6) 
+	if(Account[id][Admin] > 0 && Account[playerid][Admin] < 6)
 		return SendErrorMessage(playerid, "You cannot check that player's whois info.");
 
 
@@ -491,7 +491,7 @@ CMD<AD1>:ajail(cmdid, playerid, params[])
 
 	CreateLobby(target);
 	SetPlayerSkin(target, 20051);
-	SetPlayerPosEx(target, 2518.7590, 602.5683, 45.2066, 0, 0);
+	SetPlayerPosEx(target, 2577.2522,2695.4265,22.9507, 0, 0);
 
 	SendClientMessageToAll(COLOR_LIGHTRED, sprintf("PUNISHMENT: Admin %s has a-jailed %s for %d minutes! Reason: %s", GetName(playerid), GetName(target), time, reason));
 	SendAdminsMessage(1, COLOR_GRAY, sprintf("{31AEAA}Admin Notice: {FFFFFF}%s a-jailed %s! Reason: %s", GetName(playerid), GetName(target), reason));
@@ -865,7 +865,6 @@ CMD<AD3>:achangename(cmdid, playerid, params[])
 	new player, NewName[24];
 	if(!sscanf(params, "u", player) && strcmp(GetName(playerid), Account[playerid][Name]))
 	{
-		SendClientMessage(playerid, COLOR_LGREEN, "{31AEAA}Notice: {FFFFFF}The player's name has been restored.");
 		SetPlayerName(player, Account[playerid][Name]);
 		format(pName[player], MAX_PLAYER_NAME + 1, Account[playerid][Name]);
 		return 1;
@@ -1746,7 +1745,7 @@ CMD<AD2>:watchpm(cmdid, playerid, params[])
 		new szString[144];
 		format(szString, 144, "You are %s watching %s's PMs.", (WatchPM[playerid][iTargetID])?"now":"no longer", GetName(iTargetID));
 		SendClientMessage(playerid, COLOR_LIGHTBLUE, szString);
-	} else SendClientMessage(playerid, COLOR_RED, "/watchpm [ID]")
+	} else SendClientMessage(playerid, COLOR_RED, "/watchpm [ID]");
 	return 1;
 }
 
