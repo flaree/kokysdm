@@ -44,7 +44,7 @@ public OnGameModeExit()
 	#endif
 }
 
-stock AwaitAsyncDialog(playerid, dialog_response[e_DIALOG_RESPONSE_INFO], style, const caption[], const info[], const button1[], const button2[])
+stock AwaitAsyncDialog(playerid, dialog_response[e_DIALOG_RESPONSE_INFO], style, caption[], info[], button1[], button2[])
 {
 	ShowPlayerDialog(playerid, PAWN_PLUS_DIALOG_ID, style, caption, info, button1, button2);
 	if(PlayerDialogTasks[playerid])

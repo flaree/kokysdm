@@ -64,29 +64,25 @@ new FreeroamWeapons[][FREEROAM_WEAPONS] =
 
 new FreeroamVehicle[MAX_PLAYERS] = {-1, ...};
 
-forward OnFreeroamPlayerConnect(playerid);
-public OnFreeroamPlayerConnect(playerid)
+#include <pp-hooks>
+hook public OnPlayerConnect(playerid)
 {
 	if(FreeroamVehicle[playerid] != -1) {
 		DestroyVehicle(FreeroamVehicle[playerid]);
 		FreeroamVehicle[playerid] = -1;
 	}
-	return false;
 }
 
 
-forward OnFreeroamPlayerDisconnect(playerid, reason);
-public OnFreeroamPlayerDisconnect(playerid, reason)
+hook public OnPlayerDisconnect(playerid, reason)
 {
 	if(FreeroamVehicle[playerid] != -1) {
 		DestroyVehicle(FreeroamVehicle[playerid]);
 		FreeroamVehicle[playerid] = -1;
 	}
-	return false;
 }
 
-forward OnFreeroamPlayerKeyStateChange(playerid, newkeys, oldkeys);
-public OnFreeroamPlayerKeyStateChange(playerid, newkeys, oldkeys)
+hook public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
 	if(ActivityState[playerid] == ACTIVITY_FREEROAM)
 	{
@@ -95,7 +91,6 @@ public OnFreeroamPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		if(PRESSED(KEY_NO))
 			cmd_flip(9999, playerid);
 	}
-	return false;
 }
 
 CMD<FRM>:tune(cmdid, playerid, params[])
@@ -173,7 +168,7 @@ CMD<FRM>:god(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{31AEAA}Freeroam:{FFFFFF} Godmode %s. Use /god to disable it.", Account[playerid][PreventDamage] ? "enabled" : "disabled"));
 	return true;
 }
-CMD<FRM>:veh(cmdid, playerid, params[])
+CMD<FRMTDM>:veh(cmdid, playerid, params[])
 {
 	new vehicleid[20], color1, color2, State = GetPlayerState(playerid);
 	if(GetPlayerVirtualWorld(playerid) < 2) return SendErrorMessage(playerid, "You cannot spawn a vehicle in this virutal world.");
@@ -200,7 +195,7 @@ CMD<FRM>:veh(cmdid, playerid, params[])
 	PutPlayerInVehicle(playerid, FreeroamVehicle[playerid], 0);
 	SetVehicleNumberPlate(FreeroamVehicle[playerid], "Koky's DM");
 	SetVehicleParamsEx(FreeroamVehicle[playerid], 1, 1, 0, 0, 0, 0, 0);
-	SendClientMessage(playerid, COLOR_GRAY, sprintf("{31AEAA}Freeroam:{FFFFFF} You have successfully spawned a %s.", vehNames[vID-400]));
+	SendClientMessage(playerid, 0xFF0000FF, sprintf("You have successfully spawned a %s.", vehNames[vID-400]));
 	return 1;
 }
 CMD<FRM>:world(cmdid, playerid, params[])

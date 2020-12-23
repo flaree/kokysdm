@@ -39,7 +39,7 @@ AdminJailCheck(playerid)
 	new ip[18];
 	GetPlayerIp(playerid, ip, sizeof(ip));
 
-	mysql_pquery_s(SQL_CONNECTION, str_format("SELECT * FROM Accounts WHERE LatestIP = '%e' AND Username != '%e'", ip, GetName(playerid)), "CheckJailsUnderIP", "is", playerid, ip);	
+	mysql_pquery_s(SQL_CONNECTION, str_format("SELECT * FROM Accounts WHERE LatestIP = '%e' AND Username != '%e'", ip, GetName(playerid)), "CheckJailsUnderIP", "is", playerid, ip);
 
 	if(Account[playerid][AJailTime] > 0)
 	{
@@ -70,8 +70,9 @@ public CheckJailsUnderIP(playerid, const ip[])
 
 			SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("Notice: {FFFFFF}You must serve your %i admin jail minutes on your %s account before playing on this account!", jail, username));
 			SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("Notice: {FFFFFF}You must serve your %i admin jail minutes on your %s account before playing on this account!", jail, username));
-			
+
 			SetTimerEx("FixKick", 8000, false, "i", playerid);
+			return 1;
 		}
 		else ShowHelpMessage(playerid);
 	}
@@ -91,7 +92,27 @@ forward SendToAJail(playerid);
 public SendToAJail(playerid)
 {
 	CreateLobby(playerid);
-	SetPlayerPosEx(playerid, 2518.7590, 602.5683, 45.2066, 0, 0);
+	SetPlayerPosEx(playerid, 2577.2522,2695.4265,22.9507, 0, 0);
 	SetPlayerSkin(playerid, 20051);
+	return 1;
+}
+
+GetUserName(playerid) {
+	new name[24];
+	GetPlayerName(playerid, name, 24);
+	return name;
+}
+
+SendAdminPM(from, to, msg[]) {
+	new string[256];
+	foreach (new i : Player) {
+		if(AdminPMRead[i] == true && GetPlayerAdminLevel(i) > 1) {
+			format(string, 256, "PM (%s->%s): %s", GetUserName(from), GetUserName(to), msg);
+			SendClientMessage(i, COLOR_YELLOW, string);
+		} else if(WatchPM[i][from] == true && GetPlayerAdminLevel(i) > 1 || WatchPM[i][to] == true && GetPlayerAdminLevel(i) > 1) {
+			format(string, 256, "PM (%s->%s): %s", GetUserName(from), GetUserName(to), msg);
+			SendClientMessage(i, COLOR_YELLOW, string);
+		}
+	}
 	return 1;
 }

@@ -68,8 +68,9 @@ new ammudata[][] =
 	{WEAPON_MOLTOV, 1, -10000},
 	{WEAPON_M4, 100, -25000}
 };
-forward OnTDMPlayerDisconnect(playerid, reason);
-public OnTDMPlayerDisconnect(playerid, reason)
+
+#include <pp-hooks>
+hook public OnPlayerDisconnect(playerid, reason)
 {
 	if(ActivityState[playerid] == ACTIVITY_TDM)
 	{
@@ -80,7 +81,7 @@ public OnTDMPlayerDisconnect(playerid, reason)
 		if(GetPlayerTeam(playerid) > 100)
 		{
 			cancapture[playerid] = 0;
-			inAmmunation[playerid] = 0;	
+			inAmmunation[playerid] = 0;
 
 			SetPlayerTeam(playerid, NO_TEAM);
 			GangZoneHideForPlayer(playerid, igsturf);
@@ -90,8 +91,8 @@ public OnTDMPlayerDisconnect(playerid, reason)
 			SendPlayerToLobby(playerid);
 		}
 	}
-	return false;
 }
+
 InitTDM()
 {
 	Iter_Init(TDMPlayers);
@@ -144,33 +145,35 @@ InitTDM()
 	SetTimer("LimitTeams", 5000, true);
 
 	for(new i; i < sizeof(tdmVehicles); i++)
-	{	
+	{
 		SetVehicleVirtualWorld(i, WORLD_TDM);
 	}
 
 	return true;
 }
-forward OnTDMPlayerKeyStateChange(playerid, newkeys, oldkeys);
-public OnTDMPlayerKeyStateChange(playerid, newkeys, oldkeys)
+
+hook public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
-	if(PRESSED(KEY_SECONDARY_ATTACK))
+	if (ActivityState[playerid] == ACTIVITY_TDM)
 	{
-		if(IsPlayerInRangeOfPoint(playerid, 5.0, 1367.9875, -1279.7437, 13.5469))
+		if(PRESSED(KEY_SECONDARY_ATTACK))
 		{
-			inAmmunation[playerid] = 1;
-			SetPlayerPosEx(playerid, 286.148986, -40.644397, 1001.515625, 1, WORLD_TDM);
-			SendClientMessage(playerid, COLOR_LIGHTRED, "Ammunation: Welcome to ammunation, use /buy to purchase ammunation.");
-		}
-		if(IsPlayerInRangeOfPoint(playerid, 5.0, 286.148986, -40.644397, 1001.515625))
-		{
-			inAmmunation[playerid] = 0;
-			SetPlayerPosEx(playerid, 1367.9875, -1279.7437, 13.5469, 0, WORLD_TDM);
+			if(IsPlayerInRangeOfPoint(playerid, 5.0, 1367.9875, -1279.7437, 13.5469))
+			{
+				inAmmunation[playerid] = 1;
+				SetPlayerPosEx(playerid, 286.148986, -40.644397, 1001.515625, 1, WORLD_TDM);
+				SendClientMessage(playerid, COLOR_LIGHTRED, "Ammunation: Welcome to ammunation, use /buy to purchase ammunation.");
+			}
+			if(IsPlayerInRangeOfPoint(playerid, 5.0, 286.148986, -40.644397, 1001.515625))
+			{
+				inAmmunation[playerid] = 0;
+				SetPlayerPosEx(playerid, 1367.9875, -1279.7437, 13.5469, 0, WORLD_TDM);
+			}
 		}
 	}
 	return false;
 }
-forward OnPlayerEnterTDMCheckpoint(playerid);
-public OnPlayerEnterTDMCheckpoint(playerid)
+hook public OnPlayerEnterCheckpoint(playerid)
 {
 	if(ActivityState[playerid] == ACTIVITY_TDM && cancapture[playerid])
 	{
@@ -189,23 +192,21 @@ public OnPlayerEnterTDMCheckpoint(playerid)
 	}
 	return false;
 }
-forward OnTDMPlayerUpdate(playerid);
-public OnTDMPlayerUpdate(playerid)
+hook public OnPlayerUpdate(playerid)
 {
 	if(ActivityState[playerid] == ACTIVITY_TDM && capturingturf[playerid] == 1)
 	{
 		if(!IsPlayerInArea(playerid, TDM_TURFPOS))
 		{
-			capturingturf[playerid] = 0;
 			SendTDMMessage(COLOR_LIGHTRED, sprintf("TURF: {%06x}%s {ffffff}has left the turf while capturing. The turf is now available for capture!", GetPlayerColor(playerid) >>> 8, GetName(playerid)));
 			KillTimer(capturingtimer[playerid]);
+			capturingturf[playerid] = 0;
+			beingcaptured = -1;
 			GangZoneStopFlashForAll(igsturf);
 		}
 	}
-	return false;
 }
-forward OnPlayerEnterTDMVehicle(playerid, vehicleid, ispassenger);
-public OnPlayerEnterTDMVehicle(playerid, vehicleid, ispassenger)
+hook public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 {
 	if(ActivityState[playerid] == ACTIVITY_TDM)
 	{
@@ -214,12 +215,13 @@ public OnPlayerEnterTDMVehicle(playerid, vehicleid, ispassenger)
 			SendTDMMessage(COLOR_LIGHTRED, sprintf("TURF: {%06x}%s {ffffff}has entered a vehicle while capturing the turf. The turf is now available for capture!",
 				GetPlayerColor(playerid) >>> 8, GetName(playerid)));
 			KillTimer(capturingtimer[playerid]);
-			GangZoneStopFlashForAll(igsturf);
+			capturingturf[playerid] = 0;
 			beingcaptured = -1;
+			GangZoneStopFlashForAll(igsturf);
 		}
 		if(!ispassenger)
 		{
-			if(GetVehicleDriver(vehicleid) != -1)
+			if(GetVehicleDriver(vehicleid) != -1 && ActivityStateID[playerid] == ActivityStateID[GetVehicleDriver(vehicleid)])
 			{
 				new Float:x, Float:y, Float:z;
 				GetPlayerPos(playerid, x, y, z);
@@ -230,7 +232,6 @@ public OnPlayerEnterTDMVehicle(playerid, vehicleid, ispassenger)
 			}
 		}
 	}
-	return false;
 }
 
 OfficialClanSelection(playerid)
@@ -321,7 +322,7 @@ ShowTeamSelectionDialog(playerid)
 		ActivityStateID[playerid] = teamchoice;
 		SendPlayerToTDM(playerid, ActivityStateID[playerid]);
 		CreateTDMMapping(playerid);
-		SendClientMessage(playerid, COLOR_LIGHTRED, "Use /tc [text] to speak with your teammates.");			
+		SendClientMessage(playerid, COLOR_LIGHTRED, "Use /tc [text] to speak with your teammates.");
 	}
 	if(teamchoice == 6 && Account[playerid][Admin] > 0)
 	{
@@ -339,7 +340,7 @@ IsPlayerInArea(playerid, Float:MinX, Float:MinY, Float:MaxX, Float:MaxY)
 	new Float:X, Float:Y, Float:Z;
 
 	GetPlayerPos(playerid, X, Y, Z);
-	if(X >= MinX && X <= MaxX && Y >= MinY && Y <= MaxY) 
+	if(X >= MinX && X <= MaxX && Y >= MinY && Y <= MaxY)
 	{
 		return 1;
 	}
@@ -395,7 +396,6 @@ public CapturingTurf(playerid, team)
 	allowcapture = 0;
 	beingcaptured = -1;
 	capturingturf[playerid] = 0;
-	beingcaptured = -1;
 	return true;
 }
 GangZoneFlashForTDM(color)
@@ -521,12 +521,12 @@ GiveTDMAmmunation(playerid)
 	{
 		GivePlayerWeapon(playerid, WEAPON_PARACHUTE, 1);
 	}
-	
+
 	if(turfholder == ActivityStateID[playerid])
 	{
 		SetPlayerArmour(playerid, 100);
 		GivePlayerWeapon(playerid, WEAPON_M4, 125);
-		SendClientMessage(playerid, -1, "{31AEAA}Turf: {FFFFFF}You have been given 100 armour and an M4 as your team holds the turf.");	
+		SendClientMessage(playerid, -1, "{31AEAA}Turf: {FFFFFF}You have been given 100 armour and an M4 as your team holds the turf.");
 	}
 
 	Account[playerid][CopChaseDead] = 0;
@@ -561,13 +561,13 @@ Menu:AMMUNATION(playerid, response, listitem)
 CMD<TDM>:buy(cmdid, playerid, params[])
 {
 	if(inAmmunation[playerid] == 1)
-	{	
-	    ShowPlayerMenu(playerid, AMMUNATION, "Weapons Menu"); 
-	    AddPlayerMenuItem(playerid, "Sniper", "Lethal weapon, will cost you $40,000 per 10 bullets!"); 
-	    AddPlayerMenuItem(playerid, "Grenade", "Lethal weapon, will cost you $10,000 per grenade!"); 
-	    AddPlayerMenuItem(playerid, "Molotov Cocktail", "Lethal weapon, will cost you $10,000 per molotov!"); 
+	{
+	    ShowPlayerMenu(playerid, AMMUNATION, "Weapons Menu");
+	    AddPlayerMenuItem(playerid, "Sniper", "Lethal weapon, will cost you $40,000 per 10 bullets!");
+	    AddPlayerMenuItem(playerid, "Grenade", "Lethal weapon, will cost you $10,000 per grenade!");
+	    AddPlayerMenuItem(playerid, "Molotov Cocktail", "Lethal weapon, will cost you $10,000 per molotov!");
 	    AddPlayerMenuItem(playerid, "M4", "Weapon, will cost you $25,000 per 100 bullets!");
-	    AddPlayerMenuItem(playerid, "Health & Armour", "Medical, will cost you $10,000 per refill!"); 
+	    AddPlayerMenuItem(playerid, "Health & Armour", "Medical, will cost you $10,000 per refill!");
 
 	    TogglePlayerControllable(playerid, false);
 
@@ -575,7 +575,7 @@ CMD<TDM>:buy(cmdid, playerid, params[])
 	    SendClientMessage(playerid, COLOR_LIGHTRED, "SHOP: {FFFFFF}Press SPACE to purchase an item.");
 	    SendClientMessage(playerid, COLOR_LIGHTRED, "SHOP: {FFFFFF}Press ENTER to CLOSE the shop.");
 	}
-    return 1; 
+    return 1;
 }
 CMD<TDM>:tdm(cmdid, playerid, params[])
 {

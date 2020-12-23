@@ -1,13 +1,12 @@
 static CSlideTick[MAX_PLAYERS];
 
-forward OnSlidePlayerConnect(playerid);
-public OnSlidePlayerConnect(playerid)
+#include <pp-hooks>
+hook public OnPlayerConnect(playerid)
 {
 	CSlideTick[playerid] = 0;
-	return false;
 }
-forward OnPlayerCSlide(playerid);
-public OnPlayerCSlide(playerid)
+
+hook public OnPlayerUpdate(playerid)
 {
 	if(ActivityState[playerid] != ACTIVITY_LOBBY && GetPlayerAnimationIndex(playerid) == 1161 && GetWalkingSpeed(playerid) > 8)
 	{
@@ -20,8 +19,8 @@ public OnPlayerCSlide(playerid)
 		}
 	}
 	else CSlideTick[playerid] = 0;
-	return false;
 }
+
 GetWalkingSpeed(playerid)
 {
 	new Float:Px, Float:Py, Float:Pz, Float:Speed;

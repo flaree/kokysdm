@@ -12,7 +12,7 @@
 
 // Print debug messages to the console but not the chat
 #if !defined WC_DEBUG_SILENT
-	#define WC_DEBUG_SILENT false
+	#define WC_DEBUG_SILENT true
 #endif
 
 // Max number of rejected hits (GetRejectedHit)

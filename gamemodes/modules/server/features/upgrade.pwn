@@ -51,7 +51,7 @@ Dialog:USEMYDONATIONS(playerid, response, listitem, inputtext[])
 					SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("Notice: {ffffff}You have purchased a Bronze Package, use /upgrades to activate it. (You have EURO %.2f left.)", Account[playerid][DonationAmount]));
 					return 1;
 				}
-				else SendClientMessage(playerid, COLOR_LIGHTRED, "Error: You don't have enough money. You can donate via www.kokysdm.com/donate.");
+				else SendClientMessage(playerid, COLOR_LIGHTRED, "Error: You don't have enough money. You can donate via www.kokysdm.net/donate.");
 			}
 			case 1:
 			{
@@ -64,7 +64,7 @@ Dialog:USEMYDONATIONS(playerid, response, listitem, inputtext[])
 					SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("Notice: {ffffff}You have purchased a Silver Package, use /upgrades to activate it. (You have EURO %.2f left.)", Account[playerid][DonationAmount]));
 					return 1;
 				}
-				else SendClientMessage(playerid, COLOR_LIGHTRED, "Error: You don't have enough money. You can donate via www.kokysdm.com/donate.");
+				else SendClientMessage(playerid, COLOR_LIGHTRED, "Error: You don't have enough money. You can donate via www.kokysdm.net/donate.");
 			}
 			case 2:
 			{
@@ -77,7 +77,7 @@ Dialog:USEMYDONATIONS(playerid, response, listitem, inputtext[])
 					SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("Notice: {ffffff}You have purchased a Gold Package, use /upgrades to activate it. (You have EURO %.2f left.)", Account[playerid][DonationAmount]));
 					return 1;
 				}
-				else SendClientMessage(playerid, COLOR_LIGHTRED, "Error: You don't have enough money. You can donate via www.kokysdm.com/donate.");
+				else SendClientMessage(playerid, COLOR_LIGHTRED, "Error: You don't have enough money. You can donate via www.kokysdm.net/donate.");
 			}
 			case 3:
 			{
@@ -90,7 +90,7 @@ Dialog:USEMYDONATIONS(playerid, response, listitem, inputtext[])
 					SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("Notice: {ffffff}You have purchased a Diamond Package, use /upgrades to activate it. (You have EURO %.2f left.)", Account[playerid][DonationAmount]));
 					return 1;
 				}
-				else SendClientMessage(playerid, COLOR_LIGHTRED, "Error: You don't have enough money. You can donate via www.kokysdm.com/donate.");
+				else SendClientMessage(playerid, COLOR_LIGHTRED, "Error: You don't have enough money. You can donate via www.kokysdm.net/donate.");
 			}
 			case 4:
 			{
@@ -103,7 +103,7 @@ Dialog:USEMYDONATIONS(playerid, response, listitem, inputtext[])
 					SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("Notice: {ffffff}You have purchased a Name Change Package, use /upgrades to activate it. (You have EURO %.2f left.)", Account[playerid][DonationAmount]));
 					return 1;
 				}
-				else SendClientMessage(playerid, COLOR_LIGHTRED, "Error: You don't have enough money. You can donate via www.kokysdm.com/donate.");
+				else SendClientMessage(playerid, COLOR_LIGHTRED, "Error: You don't have enough money. You can donate via www.kokysdm.net/donate.");
 			}
 			case 5:
 			{
@@ -116,7 +116,7 @@ Dialog:USEMYDONATIONS(playerid, response, listitem, inputtext[])
 					SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("Notice: {ffffff}You have purchased a Premium Key Package, use /upgrades to activate it. (You have EURO %.2f left.)", Account[playerid][DonationAmount]));
 					return 1;
 				}
-				else SendClientMessage(playerid, COLOR_LIGHTRED, "Error: You don't have enough money. You can donate via www.kokysdm.com/donate.");
+				else SendClientMessage(playerid, COLOR_LIGHTRED, "Error: You don't have enough money. You can donate via www.kokysdm.net/donate.");
 			}
 			case 6:
 			{
@@ -129,7 +129,7 @@ Dialog:USEMYDONATIONS(playerid, response, listitem, inputtext[])
 					SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("Notice: {ffffff}You have purchased a Skin Pack Unlocker, use /upgrades to activate it. (You have EURO %.2f left.)", Account[playerid][DonationAmount]));
 					return 1;
 				}
-				else SendClientMessage(playerid, COLOR_LIGHTRED, "Error: You don't have enough money. You can donate via www.kokysdm.com/donate.");
+				else SendClientMessage(playerid, COLOR_LIGHTRED, "Error: You don't have enough money. You can donate via www.kokysdm.net/donate.");
 			}
 			case 7:
 			{
@@ -141,7 +141,7 @@ Dialog:USEMYDONATIONS(playerid, response, listitem, inputtext[])
 					SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("Notice: {ffffff}You have purchased $100,000 cash, it has been activated. (You have EURO %.2f left.)", Account[playerid][DonationAmount]));
 					return 1;
 				}
-				else SendClientMessage(playerid, COLOR_LIGHTRED, "Error: You don't have enough money. You can donate via www.kokysdm.com/donate.");
+				else SendClientMessage(playerid, COLOR_LIGHTRED, "Error: You don't have enough money. You can donate via www.kokysdm.net/donate.");
 			}
 			case 8:
 			{
@@ -153,7 +153,7 @@ Dialog:USEMYDONATIONS(playerid, response, listitem, inputtext[])
 					SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("Notice: {ffffff}You have purchased a KDM Token, use /upgrades to activate it. (You have EURO %.2f left.)", Account[playerid][DonationAmount]));
 					return 1;
 				}
-				else SendClientMessage(playerid, COLOR_LIGHTRED, "Error: You don't have enough money. You can donate via www.kokysdm.com/donate.");
+				else SendClientMessage(playerid, COLOR_LIGHTRED, "Error: You don't have enough money. You can donate via www.kokysdm.net/donate.");
 			}
 		}
 	}

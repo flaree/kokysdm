@@ -276,17 +276,19 @@ CMD:copchase(cmdid, playerid)
 		return 1;
 	}
 
-	if(ActivityState[playerid] != ACTIVITY_LOBBY) return
-		SendErrorMessage(playerid, "You can't do this now. Use /lobby to return to lobby.");
+	if(ActivityState[playerid] != ACTIVITY_LOBBY) 
+		return SendErrorMessage(playerid, "You can't do this now. Use /lobby to return to lobby.");
 
-	if(Account[playerid][pCopchase] == 2 || Account[playerid][pCopchase] == 3) return
-		SendErrorMessage(playerid, "You're already playing copchase.");
+	if(Account[playerid][pCopchase] == 2 || Account[playerid][pCopchase] == 3) 
+		return SendErrorMessage(playerid, "You're already playing copchase.");
 
-	if(copchaseStatus) { Account[playerid][pCopchase] = 0; return
-		SendErrorMessage(playerid, "Copchase is already started."); }
+	if(copchaseStatus) { 
+		Account[playerid][pCopchase] = 0; 
+		return SendErrorMessage(playerid, "Copchase is already started."); 
+	}
 
-	if(GetCopchaseTotalPlayers() >= MAX_COPCHASE_PLAYERS) return
-		SendErrorMessage(playerid, "Copchase is full and it will start soon.");
+	if(GetCopchaseTotalPlayers() >= MAX_COPCHASE_PLAYERS) 
+		return SendErrorMessage(playerid, "Copchase is full and it will start soon.");
 
 	Account[playerid][pCopchase] = 1;
 	ActivityState[playerid] = ACTIVITY_COPCHASE;
@@ -295,7 +297,7 @@ CMD:copchase(cmdid, playerid)
 	if(GetCopchaseTotalPlayers() == 1){
 		format(msg, sizeof(msg), "{%06x}%s{FFFFFF} started copchase! Use /copchase to join.", GetPlayerColor(playerid) >>> 8, GetName(playerid));
 		SendCopchaseGlobalMessage(msg);
-	}else{
+	} else {
 		format(msg, sizeof(msg), "{%06x}%s{FFFFFF} joined copchase! [%d/%d]", GetPlayerColor(playerid) >>> 8, GetName(playerid), GetCopchaseTotalPlayers(), MAX_COPCHASE_PLAYERS);
 		SendCopchaseMessage(msg);
 	}
@@ -310,16 +312,17 @@ CMD:radio(cmdid, playerid, params[])
 {
 	new message[256];
 
-	if(sscanf(params, "s[256]", message)) return
-		SendUsageMessage(playerid, "/radio [message]");
+	if(sscanf(params, "s[256]", message)) 
+		return SendUsageMessage(playerid, "/radio [message]");
 
 	SendPoliceRadioMessage(sprintf("{%06x}%s (%d):{FFFFFF} %s", GetPlayerColor(playerid) >>> 8, GetName(playerid), playerid, message));
 
 	return 1;
 }
+
 //hooks
-forward OnCCPlayerDisconnect(playerid, reason);
-public OnCCPlayerDisconnect(playerid, reason)
+#include <pp-hooks>
+hook public OnPlayerDisconnect(playerid, reason)
 {
 	if(Account[playerid][pCopchase] == 2){
 		new msg[128];
@@ -341,10 +344,8 @@ public OnCCPlayerDisconnect(playerid, reason)
 		PlayerTextDrawHide(playerid, Account[playerid][TextDraw][2]);
 		PlayerTextDrawHide(playerid, Account[playerid][TextDraw][3]);
 	}
-	return false;
 }
-forward OnCCPlayerKeyStateChange(playerid, newkeys, oldkeys);
-public OnCCPlayerKeyStateChange(playerid, newkeys, oldkeys)
+hook public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
 	// COPCHASE - PRESSING Y TO BECOME VISIBLE IN THE MAP
 	if(Account[playerid][pCopchase] == 2 && PRESSED(KEY_YES) && Ytimer[playerid] == 0)
@@ -366,5 +367,4 @@ public OnCCPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		SendPoliceRadioMessage(sprintf("{%06x}%s (%d){6A5ACD} %s", GetPlayerColor(playerid) >>> 8, GetName(playerid), playerid, (Account[playerid][pCopchaseVisible]) ? ("is now visible in the radar!") : ("is no longer visible in the radar!")));
 		Ytimer[playerid] = 5;
 	}
-	return false;
 }
