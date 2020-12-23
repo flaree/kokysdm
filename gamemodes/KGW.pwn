@@ -18464,8 +18464,8 @@ public UpdateNameTag(playerid, fps) {
 				format(szString, 256, "%s (%d)\n{FFFFFF}({FF0000}%.1f{FFFFFF}/{AAAAAA}%.1f{FFFFFF})\nFPS: %d", GetName(playerid), playerid, GetHealth(playerid), GetArmour(playerid), fps);
 				new color;
 				if(adminDuty[playerid] == true) color = 0xFF0000FF;
-				color = GetPlayerColor(playerid);
-				UpdatePlayer3DTextLabelText(i, WallHackTag[i][playerid], color, szString);
+				color = GetPlayerColor(playerid) >>> 8 + 0x000000FF;				
+                UpdatePlayer3DTextLabelText(i, WallHackTag[i][playerid], color, szString);
 				NameTagNeedsUpdating{playerid} = 0;
 			}
 		}
