@@ -1,5 +1,4 @@
 //data
-static SpectatingPlayer[MAX_PLAYERS] = {-1, ...};
 static pSpecLimit[MAX_PLAYERS];
 
 //hooks

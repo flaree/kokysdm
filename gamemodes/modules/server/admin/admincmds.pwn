@@ -34,6 +34,7 @@ CMD<AD1>:setvw(cmdid, playerid, params[])
 	return 1;
 }
 CMD<AD1>:wallhack(playerid, params[]) {
+	if(SpectatingPlayer[playerid] == -1) SendErrorMessage(playerid, "You must be spectating to use this command");
 	WallHack{playerid} = !WallHack{playerid};
 	sendFormatMessage(playerid, 0xFFFF0000, "* You have %s wall hacks!", WallHack{playerid}?("enabled"):("disabled"));
 	new szString[256];

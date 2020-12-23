@@ -62,6 +62,8 @@ Losers -> BanksDM - LSDM - CarnageTDM!
 
 new Countdown, CountdownTimer;
 
+new SpectatingPlayer[MAX_PLAYERS] = {-1, ...};
+
 new countdowntime[MAX_PLAYERS];
 new countdowntimer[MAX_PLAYERS];
 new dmessage[MAX_PLAYERS];
@@ -1044,7 +1046,6 @@ new VehicleNames[][] =
 #include "modules/server/features/reports.pwn"
 #include "modules/server/features/teamdeathmatch.pwn"
 #include "modules/server/features/skinroll.pwn"
-#include "modules/server/features/spectating.pwn"
 #include "modules/server/features/upgrade.pwn"
 #include "modules/server/features/copchase.pwn"
 #include "modules/server/features/freeroam.pwn"
