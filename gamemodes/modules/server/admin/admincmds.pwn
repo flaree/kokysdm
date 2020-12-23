@@ -43,6 +43,18 @@ CMD<AD6>:givetokens(cmdid, playerid, params[])
 	SendClientMessage(playerid, -1, "You gave the player KDM Tokens.");
 	return true;
 }
+CMD<AD1>:sv(cmdid, playerid, params[])
+{
+	new id = GetPlayerVehicleID(playerid);
+	if(id != INVALID_VEHICLE_ID) {
+		SetVehicleToRespawn(id);
+	} else {
+		if(sscanf(params, "i", id)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /sv [vehicle id]");
+	}
+    SetVehicleToRespawn(id);
+	SendClientMessage(playerid, COLOR_RED, "[AdmCmd]: Vehicle respawned.");
+	return 1;
+}
 CMD<AD6>:resetmonthdmer(cmid, playerid, params[])
 {
 	CheckDateForNPC();
@@ -1792,6 +1804,8 @@ CMD<AD3>:agivemoney(cmdid, playerid, params[])
     if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
 	if(amount > 1000000) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You can't give more than 1.000.000$ per time!");
 	Account[targetid][Cash]+=amount;
+	ResetPlayerMoney(targetid);
+	GivePlayerMoney(targetid, Account[targetid][Cash]);
 	new buf[150];
 	format(buf, sizeof(buf), "Admininistrator %s gave you %d$ cash.", GetName(playerid), amount);
 	SendClientMessage(targetid, COLOR_RED, buf);
