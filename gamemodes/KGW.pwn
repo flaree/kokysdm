@@ -1419,10 +1419,10 @@ public OnPlayerConnect(playerid)
 	pFPSWarn[playerid] = 0;
 
 	Account_Reset(playerid);
-	SetPlayerColor(playerid, PlayerColors[playerid % sizeof PlayerColors]);
-	SendClientMessageToAll(COLOR_GRAY, sprintf("{31AEAA}Connection: {%06x}%s {ffffff}has joined the server.", GetPlayerColor(playerid) >>> 8, GetName(playerid)));
+	SetPlayerColor(playerid, PlayerColors[playerid]);
+	SendClientMessageToAll(COLOR_GRAY, sprintf("{31AEAA}Connection: {%06x}%s {ffffff}has joined the server.", PlayerColors[playerid] >>> 8, GetName(playerid)));
 	TogglePlayerSpectating(playerid, 1);
-	SetPlayerColor(playerid, PlayerColors[playerid % sizeof PlayerColors]);
+	SetPlayerColor(playerid, PlayerColors[playerid]);
 	dmessage2[playerid] = SetTimerEx("CheckDonations", 30000, true, "i", playerid);
 	KeyText(playerid);
 	Account[playerid][Color] = GetPlayerColor(playerid);
