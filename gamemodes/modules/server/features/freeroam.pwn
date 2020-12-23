@@ -195,7 +195,7 @@ CMD<FRMTDM>:veh(cmdid, playerid, params[])
 	PutPlayerInVehicle(playerid, FreeroamVehicle[playerid], 0);
 	SetVehicleNumberPlate(FreeroamVehicle[playerid], "Koky's DM");
 	SetVehicleParamsEx(FreeroamVehicle[playerid], 1, 1, 0, 0, 0, 0, 0);
-	SendClientMessage(playerid, COLOR_GRAY, sprintf("You have successfully spawned a %s.", vehNames[vID-400]));
+	SendClientMessage(playerid, 0xFF0000FF, sprintf("You have successfully spawned a %s.", vehNames[vID-400]));
 	return 1;
 }
 CMD<FRM>:world(cmdid, playerid, params[])
