@@ -1094,10 +1094,10 @@ CMD<AD1>:forceteam(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_RED, buf);
 	return 1;
 }
-CMD<AD1>:weps(cmdid, playerid, params[])
+CMD<AD1>:weaps(cmdid, playerid, params[])
 {
 	new targetid;
-	if(sscanf(params, "u", targetid)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /weps [playerid]");
+	if(sscanf(params, "u", targetid)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /weaps [playerid]");
 	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
 	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
     new weapons[13][2], weaponname[35], string[40], count=0;
@@ -1412,9 +1412,14 @@ CMD<AD2>:area(cmdid, playerid, params[])
     {
         new range, carname[30], color1, color2, string[128];
         if(sscanf(SendClientMessaged_params, "s[30]I(-1)I(-1)I(30)", carname, color1, color2, range)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /area veh [Vehicle name/ID] [color1] [color2] (range)");
-		if(GetModelVehicle(carname) < 400 || GetModelVehicle(carname) > 611) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: Invalid vehicle model.");
+		new vID = FindVehicleByNameID(carname);
+		if(vID == INVALID_VEHICLE_ID)
+		{
+			vID = strval(carname);
+			if(!(399 < vID < 612)) return SendErrorMessage(playerid, "[ERROR]: Invalid vehicle model.");
+		}
 
-		format(string, sizeof(string), "~g~vehicle ~r~%s ~g~spawned", VehicleNames[GetModelVehicle(carname) - 400]);
+		format(string, sizeof(string), "~g~vehicle ~r~%s ~g~spawned", VehicleNames[vID - 400]);
 		new Float:X, Float:Y, Float:Z;
 		foreach(new i : Player)
 		{
@@ -1423,12 +1428,12 @@ CMD<AD2>:area(cmdid, playerid, params[])
 		        if(IsPlayerInAnyVehicle(i))
 		        	RemovePlayerFromVehicle(i);
                 GetPlayerPos(i, X, Y, Z);
-				CreateVehicle(GetModelVehicle(carname), X, Y, Z, 0.0, color1, color2, 180000, 0);
+				CreateVehicle(vID, X, Y, Z, 0.0, color1, color2, 180000, 0);
 				SetPlayerPos(i, X, Y, Z + 5);
 			    GameTextForPlayer(i, string, 5000, 5);
 		    }
 		}
-		format(string, sizeof(string), "You have spawned vehicle %s to players in range of %d.", VehicleNames[GetModelVehicle(carname) - 400],  range);
+		format(string, sizeof(string), "You have spawned vehicle %s to players in range of %d.", VehicleNames[vID - 400],  range);
 		SendClientMessage(playerid, COLOR_RED, string);
     }
     else if(!strcmp(subcommand, "freeze", true))
