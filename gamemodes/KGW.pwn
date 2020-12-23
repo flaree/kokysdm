@@ -3213,6 +3213,8 @@ public OnPlayerText(playerid, const text[])
 
 	new str[145];
 
+    if(Account[playerid][pAdminHide]) passport = language;
+
 	if(Account[playerid][pLanguage] > 0 || GetPlayerAdminLevel(playerid) > 0 && !GetPlayerAdminHidden(playerid))
 	{
 		format(str, sizeof( str), "%s {%06x}%s(%i):{FFFFFF} %s", passport, GetPlayerColor(playerid) >>> 8, GetName(playerid), playerid, text);
