@@ -2193,15 +2193,16 @@ public OnPlayerUpdate(playerid)
 			if((wfps > 0) && (wfps < 200)) pFPS[playerid] = wfps;
 			pDrunkLevelLast[playerid] = drunknew;
 			if(pFPS[playerid] > 110 && !AlreadySentFPSWarn[playerid]) {
-				sendFormatMessage(playerid, 0xFF634700, "Your FPS is too high! It must be lower than 110. (WARNING %d/3)", pFPSWarn[playerid]);
+				sendFormatMessage(playerid, 0xFF634700, "Your FPS is too high! It must be lower than 110.", pFPSWarn[playerid]);
 				AlreadySentFPSWarn[playerid] = true;
-				SetTimerEx("ResetFPSWarn", 10000, 0, "d", playerid);
+				SetTimerEx("ResetFPSWarn", 20000, 0, "d", playerid);
 				pFPSWarn[playerid] ++;
 				if(pFPSWarn[playerid] == 4) {
-					SendPunishmentMessage(sprintf("%s was auto-kicked. Reason: FPS too high", GetName(playerid)));
+					/*SendPunishmentMessage(sprintf("%s was auto-kicked. Reason: FPS too high", GetName(playerid)));
 					mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('Auto-Kick', '%e', '/kick', 'FPS too high', %d)", GetName(playerid), gettime()));
 					Account[playerid][Kicks]++;
-					KickPlayer(playerid);
+					KickPlayer(playerid);*/
+                    SendAdminsMessage(1, COLOR_INDIANRED, sprintf("WARNING: %s has had FPS over 110 for the last 60 seconds", GetName(playerid)));
 					pFPSWarn[playerid] = 0;
 				}
 			}
