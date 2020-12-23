@@ -9,8 +9,13 @@ hook public OnPlayerConnect(playerid)
 CMD<AD1>:aduty(cmdid, playerid, params[])
 {
 	adminDuty[playerid] = !adminDuty[playerid];
+	if(Account[playerid][pAdminHide]) ToggleAdminHidden(playerid);
 
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("Admin %s is currently %s duty.", GetName(playerid), adminDuty[playerid] ? "ON" : "OFF"));
-	SendClientMessage(playerid, -1, sprintf("{31AEAA}Notice: {FFFFFF}You are now %s duty.", adminDuty[playerid] ? "ON" : "OFF"));
+	new szString[144];
+	format(szString, 144, "{FF0000}%s{FFFFFF} is %s on duty.", GetName(playerid), adminDuty[playerid] ? "now" : "no longer");
+	SendClientMessageToAll(COLOR_RED, szString);
+
+	if(adminDuty[playerid]) SetPlayerColor(playerid, 0xFF000000);
+	else SetPlayerColor(playerid, -1);
 	return 1;
 }

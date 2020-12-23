@@ -3170,7 +3170,7 @@ public OnPlayerText(playerid, const text[])
 			    	new TextOutput[128];
 					format(TextOutput, sizeof(TextOutput), text);
 					TextOutput[0] = ' '; // Replacing the . with space
-					format(TextOutput, sizeof(TextOutput), "[TEAM-CHAT] %s: %s", GetName(playerid), text);
+					format(TextOutput, sizeof(TextOutput), "[TEAM-CHAT] %s: %s", GetName(playerid), TextOutput);
 					SendClientMessage(i, 0xFFFF80C8, TextOutput);
 				}
   			}

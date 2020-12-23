@@ -792,7 +792,7 @@ CMD<AD5>:osetadmin(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("You have successfully set %s's admin level to %d", PlayerName, level));
 	return 1;
 }
-CMD<AD6>:osetclanmanagement(cmdid, playerid, params[])
+CMD<AD5>:osetclanmanagement(cmdid, playerid, params[])
 {
 	new PlayerName[MAX_PLAYER_NAME + 1], level;
 	if(sscanf(params, "s[26]i" , PlayerName, level)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /osetclanmanagement [name] [level]");
@@ -922,22 +922,6 @@ CMD<AD4>:sban(cmdid, playerid, params[])
 	SendAdminsMessage(1, COLOR_GRAY, sprintf("Admin %s has banned %s. Reason: %s.", GetName(playerid), GetName(pID), reason));
 
 	IssueBan(pID, GetName(playerid), reason);
-	KickPlayer(pID);
-	Account[playerid][AdminActions]++;
-	return 1;
-}
-
-CMD<AD4>:skick(cmdid, playerid, params[])
-{
-	new pID, reason[128];
-	if(sscanf(params, "uS(Not specified)[128]", pID, reason)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /kick [ID/Name] [reason]");
-	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid, ERROR_OPTION);
-	if(Account[pID][Admin] >= 1 && Account[playerid][Admin] != 6) return SendErrorMessage(playerid, "You can't kick admins.");
-
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("Admin %s has kicked %s. Reason: %s.", GetName(playerid), GetName(pID), reason));
-
-	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/kick', '%e', %d)", GetName(playerid), GetName(pID), reason, gettime()));
-	Account[pID][Kicks]++;
 	KickPlayer(pID);
 	Account[playerid][AdminActions]++;
 	return 1;
@@ -1075,21 +1059,6 @@ CMD<AD1>:acmds(cmdid, playerid, params[])
 	return 1;
 }
 
-CMD<AD1>:undercover(cmdid, playerid) // Hide from admin list
-{
-	if(Account[playerid][pAdminHide] != 0)
-	{
-		Account[playerid][pAdminHide] = 1;
-	    SendClientMessage(playerid, COLOR_RED, "[AdmCmd]: You are now hidden from admin list.");
-	}
-	else if(Account[playerid][pAdminHide])
-	{
-	    Account[playerid][pAdminHide] = 0;
-	    SendClientMessage(playerid, COLOR_LIGHTGREEN, "[AdmCmd]: You are now visible on admin list.");
-	}
-	return 1;
-}
-
 CMD<AD1>:amove(cmdid, playerid, params[])
 {
 	new targetid, amount;
@@ -1128,7 +1097,7 @@ CMD<AD1>:forceteam(cmdid, playerid, params[])
 CMD<AD1>:weps(cmdid, playerid, params[])
 {
 	new targetid;
-	if(sscanf(params, "u", targetid)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /weaps [playerid]");
+	if(sscanf(params, "u", targetid)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /weps [playerid]");
 	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
 	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
     new weapons[13][2], weaponname[35], string[40], count=0;
@@ -1611,15 +1580,14 @@ CMD<AD2>:vget(cmdid, playerid, params[])
 {
 	new targetid;
 	if(sscanf(params, "i", targetid)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /vget [vehicle id]");
-	SetPlayerInterior(playerid, GetPlayerInterior(targetid));
-	SetPlayerVirtualWorld(playerid, GetPlayerVirtualWorld(targetid));
 	new Float:x, Float:y, Float:z;
 	GetPlayerPos(playerid, x, y, z);
 	SetVehiclePos(targetid, x, y , z);
+	SetPlayerPos(playerid, x, y, z+5);
 	LinkVehicleToInterior(targetid, GetPlayerInterior(playerid));
 	SetVehicleVirtualWorld(targetid, GetPlayerVirtualWorld(playerid));
 	new buf[70];
-	format(buf, sizeof(buf), "[AdmCmd]: You have teleported teleported vehicle ID %d to youself.", GetName(targetid), targetid);
+	format(buf, sizeof(buf), "[AdmCmd]: You have teleported teleported vehicle ID %d to youself.", targetid);
 	SendClientMessage(playerid, COLOR_RED, buf);
 	return 1;
 }
