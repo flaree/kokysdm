@@ -78,6 +78,15 @@ new PlayerSecondTimer[MAX_PLAYERS];
 new pName[MAX_PLAYERS][MAX_PLAYER_NAME + 1];
 new bool:AdminPMRead[MAX_PLAYERS];
 
+new WallHack[MAX_PLAYERS char];
+new NameTagNeedsUpdating[MAX_PLAYERS char];
+new PlayerText3D:WallHackTag[MAX_PLAYERS][MAX_PLAYERS] = {
+	{
+		PlayerText3D:INVALID_3DTEXT_ID
+	},
+	...
+};
+
 // Chat keys
 #define ADMCHATKEY   														 '@'
 #define LEADCHATKEY 														 '#'
@@ -2191,6 +2200,8 @@ public OnPlayerUpdate(playerid)
 			new wfps = pDrunkLevelLast[playerid] - drunknew;
 
 			if((wfps > 0) && (wfps < 200)) pFPS[playerid] = wfps;
+            NameTagNeedsUpdating{playerid} = 1;
+            UpdateNameTag(playerid, wfps);
 			pDrunkLevelLast[playerid] = drunknew;
 			if(pFPS[playerid] > 110 && !AlreadySentFPSWarn[playerid]) {
 				sendFormatMessage(playerid, 0xFF634700, "Your FPS is too high! It must be lower than 110.", pFPSWarn[playerid]);
@@ -3653,6 +3664,7 @@ CMD:myskin(cmdid, playerid, params[])
 	else SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Notice: {FFFFFF}You do not have your own private Custom Skin, you may purchase one on the forums! (/donate)");
 	return 1;
 }
+ALT:wh = CMD:wallhack;
 ALT:gw = CMD:giveweapon;
 ALT:w2 = CMD:giveweapon;
 CMD:stats(cmdid, playerid, params[])
@@ -18426,4 +18438,35 @@ removeOldMap(playerid) {
 	RemoveBuildingForPlayer(playerid, 3820, -2784.659, -181.063, 10.726, 0.250);
 	RemoveBuildingForPlayer(playerid, 3831, -2784.659, -181.063, 10.726, 0.250);
 	return 1;
+}
+
+Float:GetHealth(playerid) {
+	new Float:fHP;
+	GetPlayerHealth(playerid, fHP);
+	return fHP;
+}
+
+Float:GetArmour(playerid) {
+	new Float:fHP;
+	GetPlayerArmour(playerid, fHP);
+	return fHP;
+}
+
+forward UpdateNameTag(playerid, fps);
+public UpdateNameTag(playerid, fps) {
+	if(NameTagNeedsUpdating{playerid} == 1) {
+		for(new i; i < MAX_PLAYERS; i++) {
+			if(!IsPlayerConnected(i)) continue;
+			if(WallHack{i} == 0) continue;
+			if(WallHackTag[i][playerid] != PlayerText3D:INVALID_3DTEXT_ID) {
+				new szString[128];
+				format(szString, 256, "%s (%d)\n{FFFFFF}({FF0000}%.1f{FFFFFF}/{AAAAAA}%.1f{FFFFFF})\nFPS: %d", GetName(playerid), playerid, GetHealth(playerid), GetArmour(playerid), fps);
+				new color;
+				if(adminDuty[playerid] == true) color = 0xFF0000FF;
+				color = GetPlayerColor(playerid);
+				UpdatePlayer3DTextLabelText(i, WallHackTag[i][playerid], color, szString);
+				NameTagNeedsUpdating{playerid} = 0;
+			}
+		}
+	}
 }

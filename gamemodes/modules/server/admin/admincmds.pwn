@@ -33,6 +33,15 @@ CMD<AD1>:setvw(cmdid, playerid, params[])
 	SetPlayerVirtualWorld(pID, vw);
 	return 1;
 }
+CMD<AD1>:wallhack(playerid, params[]) {
+	WallHack{playerid} = !WallHack{playerid};
+	sendFormatMessage(playerid, 0xFFFF0000, "* You have %s wall hacks!", WallHack{playerid}?("enabled"):("disabled"));
+	new szString[256];
+	format(szString, 256, "%s is %s using /wallhack.", GetName(playerid), WallHack{playerid}?("now"):("no longer"));
+	SendAdminsMessage(1, COLOR_YELLOW, szString);
+	return 1;
+	#pragma unused params
+}
 CMD<AD6>:givetokens(cmdid, playerid, params[])
 {
 	new pID, tokenamount;
