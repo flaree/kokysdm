@@ -58,101 +58,6 @@ Losers -> BanksDM - LSDM - CarnageTDM!
 #include <pp-mysql>
 #include <pp-hooks>
 
-/*
- *
- *  Anticheat Config
- *
-*/
-forward OnCheatDetected(const playerid, const ip_address[], const type, const code);
-public OnCheatDetected(const playerid, const ip_address[], const type, const code) {
-    if (type) {
-        #if defined BlockIpAddress
-            BlockIpAddress(ip_address, 0);
-        #else
-            static ac_strtmp[32];
-            format(ac_strtmp, sizeof ac_strtmp, "banip %s", ip_address);
-            SendRconCommand(ac_strtmp);
-        #endif
-    } else {
-        switch (code) {
-            case 40: {
-                SendClientMessage(playerid, AC_DEFAULT_COLOR, MAX_CONNECTS_MSG);
-            }
-            case 41: {
-                SendClientMessage(playerid, AC_DEFAULT_COLOR, UNKNOWN_CLIENT_MSG);
-            }
-            default: {
-                new kickMessage[sizeof KICK_MSG + 48];
-                format(kickMessage, sizeof kickMessage, KICK_MSG, CodeToName(code));
-                SendClientMessage(playerid, 0xFF0000AA, kickMessage);
-            }
-        }
-        AntiCheatKickWithDesync(playerid, code);
-    }
-    return 1;
-}
-
-static CodeToName(const code) {
-	new cheatName[48];
-	/* ** ** */
-	switch(code) {
-		case 0: cheatName = "Airbreak (onfoot)";
-		case 1: cheatName = "Airbreak (in vehicle)";
-		case 2: cheatName = "Teleport hack (onfoot)";
-		case 3: cheatName = "Teleport hack (in vehicle)";
-		case 4: cheatName = "Teleport hack (into/between vehicles)";
-		case 5: cheatName = "Teleport hack (vehicle to player)";
-		case 6: cheatName = "Teleport hack (pickups)";
-		case 7: cheatName = "FlyHack (onfoot)";
-		case 8: cheatName = "FlyHack (in vehicle)";
-		case 9: cheatName = "SpeedHack (onfoot)";
-		case 10: cheatName = "SpeedHack (in vehicle)";
-		case 11: cheatName = "Health hack (in vehicle)";
-		case 12: cheatName = "Health hack (onfoot)";
-		case 13: cheatName = "Armour hack";
-		case 14: cheatName = "Money hack";
-		case 15: cheatName = "Weapon hack";
-		case 16: cheatName = "Ammo hack (add)";
-		case 17: cheatName = "Ammo hack (infinite)";
-		case 18: cheatName = "Special actions hack";
-		case 19: cheatName = "GodMode from bullets (onfoot)";
-		case 20: cheatName = "GodMode from bullets (in vehicle)";
-		case 21: cheatName = "Invisible hack";
-		case 22: cheatName = "lagcomp-spoof";
-		case 23: cheatName = "Tuning hack";
-		case 24: cheatName = "Parkour mod";
-		case 25: cheatName = "Quick turn";
-		case 26: cheatName = "Rapid fire";
-		case 27: cheatName = "FakeSpawn";
-		case 28: cheatName = "FakeKill";
-		case 29: cheatName = "Pro Aim";
-		case 30: cheatName = "CJ run";
-		case 31: cheatName = "CarShot";
-		case 32: cheatName = "CarJack";
-		case 33: cheatName = "UnFreeze";
-		case 34: cheatName = "AFK Ghost";
-		case 35: cheatName = "Full Aiming";
-		case 36: cheatName = "Fake NPC";
-		case 37: cheatName = "Reconnect";
-		case 38: cheatName = "High ping";
-		case 39: cheatName = "Dialog hack";
-		case 40: cheatName = "Protection from sandbox";
-		case 41: cheatName = "Protection from invalid version";
-		case 42: cheatName = "Rcon hack";
-		case 43: cheatName = "Tuning crasher";
-		case 44: cheatName = "Invalid seat crasher";
-		case 45: cheatName = "Dialog crasher";
-		case 46: cheatName = "Attached object crasher";
-		case 47: cheatName = "Weapon Crasher";
-		case 48: cheatName = "Protection from connection flood in one slot";
-		case 49: cheatName = "Callback functions flood";
-		case 50: cheatName = "Flood by seat changing";
-		case 51: cheatName = "DDos";
-		case 52: cheatName = "NOP's";
-	}
-	return cheatName;
-}
-
 //
 
 //#include <mSelection>
@@ -1121,6 +1026,7 @@ new VehicleNames[][] =
 
 //anticheat
 #include "modules/server/anticheat/anticheat.pwn"
+#include "modules/server/anticheat/settings.pwn"
 
 //server maps
 #include "modules/server/maps/lobby.pwn"
@@ -18203,7 +18109,7 @@ removeOldMap(playerid) {
 	RemoveBuildingForPlayer(playerid, 10631, -2626.429, 198.921, 7.968, 0.250);
 	RemoveBuildingForPlayer(playerid, 10659, -2626.429, 198.921, 7.968, 0.250);
 	//RemoveBuildingForPlayer(playerid, 10618, -2612.679, 191.117, 5.921, 0.250);
-	RemoveBuildingForPlayer(playerid, 10656, -2612.679, 191.117, 5.921, 0.250);
+	//RemoveBuildingForPlayer(playerid, 10656, -2612.679, 191.117, 5.921, 0.250);
 	RemoveBuildingForPlayer(playerid, 10649, -2594.340, 204.546, 5.851, 0.250);
 	RemoveBuildingForPlayer(playerid, 10648, -2594.340, 204.546, 5.851, 0.250);
 	RemoveBuildingForPlayer(playerid, 3845, -2639.750, 173.772, 9.531, 0.250);
@@ -18297,7 +18203,7 @@ removeOldMap(playerid) {
 	RemoveBuildingForPlayer(playerid, 10550, -2479.810, 124.773, 27.804, 0.250);
 	RemoveBuildingForPlayer(playerid, 10425, -2456.830, 134.507, 49.468, 0.250);
 	RemoveBuildingForPlayer(playerid, 10520, -2456.830, 134.507, 49.468, 0.250);
-	RemoveBuildingForPlayer(playerid, 10616, -2471.340, 212.250, 18.750, 0.250);
+	//RemoveBuildingForPlayer(playerid, 10616, -2471.340, 212.250, 18.750, 0.250);
 	//RemoveBuildingForPlayer(playerid, 10678, -2471.340, 212.250, 18.750, 0.250);
 	RemoveBuildingForPlayer(playerid, 10452, -2447.389, 161.429, 34.273, 0.250);
 	RemoveBuildingForPlayer(playerid, 10549, -2447.389, 161.429, 34.273, 0.250);
