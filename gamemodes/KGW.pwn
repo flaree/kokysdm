@@ -2842,7 +2842,7 @@ SendPunishmentMessage(str[])
 	{
 	   if(Account[i][LoggedIn] > 0)
 	   {
-		   SendClientMessage(i, COLOR_LIGHTRED, sprintf("PUNISHMENT: %s", str));
+		   SendClientMessage(i, 0xFFFFFFFF, sprintf("PUNISHMENT: {bf0000}%s", str));
 	   }
 	}
 	return 1;
@@ -3222,22 +3222,22 @@ public OnPlayerText(playerid, const text[])
         passport = language;
     }
 	else if (tmpLevel == 1) {
-         passport = "({00AF33}A{FFFFFF})";
+        passport = "({00AF33}A{FFFFFF})";
     }
 	else if (tmpLevel == 2) {
-         passport = "({00AF33}A{FFFFFF})";
+        passport = "({00AF33}A{FFFFFF})";
     }
 	else if (tmpLevel == 3) {
-         passport = "({00AF33}A{FFFFFF})";
+        passport = "({00AF33}A{FFFFFF})";
     }
 	else if (tmpLevel == 4) {
-         passport = "({00AF33}A{FFFFFF})";
+        passport = "({00AF33}A{FFFFFF})";
     }
 	else if (tmpLevel == 5) {
-         passport = "({1D7CF2}LA{FFFFFF})";
+        passport = "({1D7CF2}LA{FFFFFF})";
     }
 	else if (tmpLevel >= 6) {
-         passport = "({CD2626}SM{FFFFFF})";
+        passport = "({CD2626}SM{FFFFFF})";
     }
 
 	new str[145];

@@ -9,7 +9,7 @@ CMD<AD1>:aimbotcheck(cmdid, playerid, params[])
 	if(!IsPlayerConnected(pID)) return SendClientMessage(playerid, -1, "{31AEAA}Notice: {FFFFFF}This player is not connected!");
 
 	AimbotCheck(playerid, pID);
-	return true;
+	return CMD_SUCCESS;
 }
 
 AimbotCheck(playerid, target)
