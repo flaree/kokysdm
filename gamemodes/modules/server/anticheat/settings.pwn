@@ -106,7 +106,7 @@ CMD<AD4>:acsettings(cmdid, playerid, params[]) {
 	AwaitAsyncDialog(playerid, response, DIALOG_STYLE_TABLIST_HEADERS, "Select the anticheat", dialogStr, "Select", "Cancel");
 
 	if(!response[E_DIALOG_RESPONSE_Response]) {
-        return 0;
+        return CMD_SUCCESS;
     }
 
     new const listitem = response[E_DIALOG_RESPONSE_Listitem];
@@ -114,5 +114,5 @@ CMD<AD4>:acsettings(cmdid, playerid, params[]) {
     EnableAntiCheat(listitem, !IsAntiCheatEnabled(listitem));
     SendClientMessage(playerid, -1, sprintf("You %s {ffffff}the anticheat for %s.", IsAntiCheatEnabled(listitem) ? "{00ff00}enabled" : "{ff0000}disabled", CodeToName(listitem)));
 
-    return 1;
+    return CMD_SUCCESS;
 }
