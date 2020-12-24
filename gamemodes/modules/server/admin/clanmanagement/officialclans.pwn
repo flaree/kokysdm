@@ -70,7 +70,7 @@ CMD<CM>:saveclanvehicle(cmdid, playerid, params[])
 		return SendErrorMessage(playerid, "You must be in a clan vehicle. Refer to /createclanvehicle.");
 	if(!ClanAlreadyExists(clanName)) 
 		return SendClientMessage(playerid, COLOR_GRAY, sprintf("No clan been found with the name %s.", clanName));
-	if (!(0 < colorOne < 255) || !(0 < colorTwo < 255))
+	if ((colorOne < 0 || colorOne > 255) || (colorTwo < 0 || colorTwo > 255))
 		return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /saveclanvehicle [clanname] [color 1 (0-255)] [color 2 (0-255)]");
 
 	new vehicleid, vehiclemodel, Float:x, Float:y, Float:z, Float:a;
