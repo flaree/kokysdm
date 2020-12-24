@@ -19,7 +19,7 @@ new
         DEBUG_CODE_5[] =                "[Nex-AC debug] ID %d used NOP %s",
 #endif
  
-        KICK_MSG[] =                    "You have been kicked on suspicion of using cheat programs (#%03d)",
+        KICK_MSG[] =                    "You have been kicked on suspicion of using cheat programs (%s)",
         MAX_CONNECTS_MSG[] =    "You have exceeded the maximum number of connections from 1 IP-address",
         UNKNOWN_CLIENT_MSG[] =  "This version of the client is not compatible with the server version.",
  

@@ -268,8 +268,11 @@ OfficialClanSelection(playerid)
 		GiveTDMAmmunation(playerid);
 		Account[playerid][CopChaseDead] = 1;
 		SpawnProtTimer[playerid] = SetTimerEx("SpawnProtection", 8000, false, "i", playerid);
-
-		SetPlayerColor(playerid, PlayerColors[Account[playerid][ClanID] + 5]);
+		if ((Account[playerid][ClanID] + 5) < 200) {
+			SetPlayerColor(playerid, PlayerColors[Account[playerid][ClanID] + 5]);
+		} else {
+			SetPlayerColor(playerid, clamp(Account[playerid][ClanID] + 5, 0, 200));
+		}
 		SetPlayerPosEx(playerid, xspawn, yspawn, zspawn, 0, WORLD_TDM);
 		SetPlayerSkinEx(playerid, skin);
 		SetPlayerCheckpoint(playerid, 1929.8989, -1776.3195, 13.5469, 2);

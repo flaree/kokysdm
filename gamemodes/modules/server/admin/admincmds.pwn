@@ -394,7 +394,7 @@ CMD<AD1>:kick(cmdid, playerid, params[])
 	new pID, reason[128];
 	if(sscanf(params, "uS(Not specified)[128]", pID, reason)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /kick [ID/Name] [reason]");
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid, ERROR_OPTION);
-	if(Account[pID][Admin] >= 1 && Account[playerid][Admin] != 6) return SendErrorMessage(playerid, "You can't kick admins.");
+	if(Account[pID][Admin] >= 1 && Account[playerid][Admin] < 6) return SendErrorMessage(playerid, "You can't kick admins.");
 
 	if (GetPlayerAdminHidden(playerid))
 		SendPunishmentMessage(sprintf("An admin has kicked %s. Reason: %s", GetName(pID), reason));
@@ -707,7 +707,7 @@ CMD<AD1>:ban(cmdid, playerid, params[])
 	new pID, reason[128];
 	if(sscanf(params, "uS(Not specified)[128]", pID, reason)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /ban [id] [reason]");
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid, ERROR_OPTION);
-	if(Account[pID][Admin] >= 1 && Account[playerid][Admin] != 6) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Notice: {FFFFFF}You can't ban admins.");
+	if(Account[pID][Admin] >= 1 && Account[playerid][Admin] < 6) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Notice: {FFFFFF}You can't ban admins.");
 
 	if (GetPlayerAdminHidden(playerid))
 		SendClientMessageToAll(COLOR_LIGHTRED, sprintf("An admin has banned %s. Reason: %s", GetName(pID), reason));
@@ -937,7 +937,7 @@ CMD<AD4>:sban(cmdid, playerid, params[])
 	new pID, reason[128];
 	if(sscanf(params, "uS(Not specified)[128]", pID, reason)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /ban [id] [reason]");
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid, ERROR_OPTION);
-	if(Account[pID][Admin] >= 1 && Account[playerid][Admin] != 6) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Notice: {FFFFFF}You can't ban admins.");
+	if(Account[pID][Admin] >= 1 && Account[playerid][Admin] < 6) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Notice: {FFFFFF}You can't ban admins.");
 
 
 	SendAdminsMessage(1, COLOR_GRAY, sprintf("Admin %s has banned %s. Reason: %s.", GetName(playerid), GetName(pID), reason));
@@ -1226,9 +1226,13 @@ CMD<AD1>:fakeban(cmdid, playerid, params[])
 	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
 	if(targetid == playerid) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You can't use this command on yourself.");
 	if(Account[targetid][Admin] > 1) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You cannot ban an admin.");
-	new string[100];
-	format(string, sizeof(string), "[AdmCmd]: %s has banned %s. Reason: %s", GetName(targetid), GetName(playerid), reason);
-	SendClientMessageToAll(COLOR_RED, string);
+
+	if (GetPlayerAdminHidden(playerid)) {
+		SendClientMessageToAll(COLOR_LIGHTRED, sprintf("An admin has banned %s. Reason: %s", GetName(targetid), reason));
+	} else {
+		SendClientMessageToAll(COLOR_LIGHTRED, sprintf("Admin %s has banned %s. Reason: %s", GetName(playerid), GetName(targetid), reason));
+	}
+
 	return 1;
 }
 
