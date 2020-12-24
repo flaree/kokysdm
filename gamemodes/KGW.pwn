@@ -18092,7 +18092,7 @@ removeOldMap(playerid) {
 	RemoveBuildingForPlayer(playerid, 3841, -2651.320, 196.757, 8.031, 0.250);
 	RemoveBuildingForPlayer(playerid, 10631, -2626.429, 198.921, 7.968, 0.250);
 	RemoveBuildingForPlayer(playerid, 10659, -2626.429, 198.921, 7.968, 0.250);
-	RemoveBuildingForPlayer(playerid, 10618, -2612.679, 191.117, 5.921, 0.250);
+	//RemoveBuildingForPlayer(playerid, 10618, -2612.679, 191.117, 5.921, 0.250);
 	RemoveBuildingForPlayer(playerid, 10656, -2612.679, 191.117, 5.921, 0.250);
 	RemoveBuildingForPlayer(playerid, 10649, -2594.340, 204.546, 5.851, 0.250);
 	RemoveBuildingForPlayer(playerid, 10648, -2594.340, 204.546, 5.851, 0.250);
@@ -18114,8 +18114,8 @@ removeOldMap(playerid) {
 	RemoveBuildingForPlayer(playerid, 10668, -2539.050, 255.516, 19.062, 0.250);
 	RemoveBuildingForPlayer(playerid, 10634, -2575.030, 264.695, 18.898, 0.250);
 	RemoveBuildingForPlayer(playerid, 10669, -2575.030, 264.695, 18.898, 0.250);
-	RemoveBuildingForPlayer(playerid, 10635, -2580.139, 266.765, 10.507, 0.250);
-	RemoveBuildingForPlayer(playerid, 10654, -2580.139, 266.765, 10.507, 0.250);
+	//RemoveBuildingForPlayer(playerid, 10635, -2580.139, 266.765, 10.507, 0.250);
+	//RemoveBuildingForPlayer(playerid, 10654, -2580.139, 266.765, 10.507, 0.250);
 	RemoveBuildingForPlayer(playerid, 10713, -2545.300, 197.867, 10.734, 0.250);
 	RemoveBuildingForPlayer(playerid, 10714, -2545.300, 197.867, 10.734, 0.250);
 	RemoveBuildingForPlayer(playerid, 10480, -2571.350, 159.352, 3.734, 0.250);
@@ -18188,7 +18188,7 @@ removeOldMap(playerid) {
 	RemoveBuildingForPlayer(playerid, 10425, -2456.830, 134.507, 49.468, 0.250);
 	RemoveBuildingForPlayer(playerid, 10520, -2456.830, 134.507, 49.468, 0.250);
 	RemoveBuildingForPlayer(playerid, 10616, -2471.340, 212.250, 18.750, 0.250);
-	RemoveBuildingForPlayer(playerid, 10678, -2471.340, 212.250, 18.750, 0.250);
+	//RemoveBuildingForPlayer(playerid, 10678, -2471.340, 212.250, 18.750, 0.250);
 	RemoveBuildingForPlayer(playerid, 10452, -2447.389, 161.429, 34.273, 0.250);
 	RemoveBuildingForPlayer(playerid, 10549, -2447.389, 161.429, 34.273, 0.250);
 	RemoveBuildingForPlayer(playerid, 10455, -2424.719, 125.109, 34.109, 0.250);
