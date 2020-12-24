@@ -16,6 +16,6 @@ CMD<AD1>:aduty(cmdid, playerid, params[])
 	SendClientMessageToAll(COLOR_RED, szString);
 
 	if(adminDuty[playerid]) SetPlayerColor(playerid, 0xFF000000);
-	else SetPlayerColor(playerid, -1);
+	else SetPlayerColor(playerid, Account[playerid][Color]);
 	return 1;
 }
