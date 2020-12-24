@@ -1407,6 +1407,9 @@ public OnPlayerConnect(playerid)
 {
 	removeOldMap(playerid);
 
+	//get the player's name and store it in memory so we don't have to constantly re-fetch it from the samp server
+	GetPlayerName(playerid, pName[playerid], MAX_PLAYER_NAME + 1);
+
 	CreateSpacer(playerid, 128);
 	CreateSessionStats(playerid);
 	CreateNetworkTDs(playerid);
@@ -1567,9 +1570,6 @@ public OnPlayerConnect(playerid)
 	PreloadAnimLib(playerid,"PARK");
 	PreloadAnimLib(playerid,"INT_HOUSE");
 	PreloadAnimLib(playerid,"FOOD");
-
-	//get the player's name and store it in memory so we don't have to constantly re-fetch it from the samp server
-	GetPlayerName(playerid, pName[playerid], MAX_PLAYER_NAME + 1);
 
 	//farm arena building removals
 	RemoveBuildingForPlayer(playerid, 11618, -688.117, 939.179, 11.125, 0.250);
