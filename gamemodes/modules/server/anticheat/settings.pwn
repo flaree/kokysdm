@@ -94,6 +94,19 @@ static CodeToName(const code) {
 	return cheatName;
 }
 
+CMD<AD4>:disableac(cmdid, playerid, params[]) {
+
+    for (new i; i < 52; i++) {
+		if (IsAntiCheatEnabled(i)) {
+			EnableAntiCheat(i, false);
+		}
+    }
+
+	SendClientMessage(playerid, -1, "You disabled the whole AntiCheat.");
+
+	return CMD_SUCCESS;
+}
+
 CMD<AD4>:acsettings(cmdid, playerid, params[]) {
     new dialogStr[48 * 52];
     format(dialogStr, sizeof dialogStr, "ID\tName\tEnabled\n"); 

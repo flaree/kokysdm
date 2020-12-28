@@ -556,7 +556,7 @@ CMD<AD1>:slap(cmdid, playerid, params[])
 		SetPlayerPos(pID, px, py, pz+4);
 		PlayerPlaySound(pID, 1190, 0.0, 0.0, 0.0);
 		if (GetPlayerAdminHidden(playerid))
-			SendClientMessage(pID, COLOR_LIGHTRED, "PUNISHMENT: An admin %s has slapped you.");
+			SendClientMessage(pID, COLOR_LIGHTRED, "PUNISHMENT: An admin has slapped you.");
 		else
 			SendClientMessage(pID, COLOR_LIGHTRED, sprintf("PUNISHMENT: Admin %s has slapped you.", GetName(playerid)));
 	}
