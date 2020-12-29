@@ -10,9 +10,9 @@ hook OnPlayerText(playerid, text[])
 {
 	new passport[100];
 
-	if (Account[playerid][Muted] > 1)
+	if (Account[playerid][Muted] > gettime())
 	{
-		SendClientMessage(playerid, -1, "{31AEAA}Notice: {FFFFFF}You are currently muted.");
+		SendClientMessage(playerid, -1, sprintf("{31AEAA}Notice: {FFFFFF}You still have {31AEAA}%d {FFFFFF}seconds(s) of a mute left.", Account[playerid][Muted] - gettime()));
 		return 0;
 	}
 

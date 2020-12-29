@@ -81,9 +81,9 @@ public CheckJailsUnderIP(playerid, const ip[])
 
 MuteCheck(playerid)
 {
-	if(Account[playerid][Muted] > 0)
+	if(Account[playerid][Muted] > gettime())
 	{
-		SendClientMessage(playerid, -1, sprintf("{31AEAA}Mute: {FFFFFF}You still have {31AEAA}%d {FFFFFF}minute(s) of a mute left. You will continue to serve it.", Account[playerid][Muted]));
+		SendClientMessage(playerid, -1, sprintf("{31AEAA}Mute: {FFFFFF}You still have {31AEAA}%d {FFFFFF}seconds(s) of a mute left. You will continue to serve it.", Account[playerid][Muted] - gettime()));
 	}
 	return 1;
 }

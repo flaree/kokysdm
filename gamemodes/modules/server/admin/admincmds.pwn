@@ -286,7 +286,7 @@ CMD<AD2>:giveweapon(cmdid, playerid, params[])
 	if(gWeaponAmmo > 1000) return SendErrorMessage(playerid, ERROR_VALUE);
 
 	GivePlayerWeapon(Player, WeaponID, gWeaponAmmo);
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{31AEAA}Admin Notice: {FFFFFF}Admin %s has given %s weapon: %s (Ammo:%d)", GetName(playerid), GetName(Player), WeaponNameList[WeaponID], gWeaponAmmo));
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{5c000b}Admin Notice: {FFFFFF}Admin %s has given %s weapon: %s (Ammo:%d)", GetName(playerid), GetName(Player), WeaponNameList[WeaponID], gWeaponAmmo));
 	SendClientMessage(Player, COLOR_GRAY, sprintf("{31AEAA}Notice: {FFFFFF}Admin %s has given %s weapon: %s (Ammo:%d)", GetName(playerid), GetName(Player), WeaponNameList[WeaponID], gWeaponAmmo));
 	return 1;
 }
@@ -416,7 +416,7 @@ CMD<AD1>:mute(cmdid, playerid, params[])
 	Account[pID][Mutes]++;
 
 	SendPunishmentMessage(sprintf("Admin %s has muted %s for %i minutes. Reason: %s", GetName(playerid), GetName(pID), time, reason));
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{31AEAA}Admin Notice: {FFFFFF}%s has muted %s for %i minutes! Reason: %s", GetName(playerid), GetName(pID), time, reason));
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{5c000b}Admin Notice: {C0C0C0}%s has muted %s for %i minutes! Reason: %s", GetName(playerid), GetName(pID), time, reason));
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/mute', '%e', '%d')", GetName(playerid), GetName(pID), reason, gettime()));
 	Account[playerid][AdminActions]++;
 	return 1;
@@ -494,7 +494,7 @@ CMD<AD1>:ajail(cmdid, playerid, params[])
 	SetPlayerPosEx(target, 2577.2522,2695.4265,22.9507, 0, 0);
 
 	SendPunishmentMessage(sprintf("Admin %s has a-jailed %s for %d minutes! Reason: %s", GetName(playerid), GetName(target), time, reason));
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{31AEAA}Admin Notice: {FFFFFF}%s a-jailed %s! Reason: %s", GetName(playerid), GetName(target), reason));
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{5c000b}Admin Notice: {FFFFFF}%s a-jailed %s! Reason: %s", GetName(playerid), GetName(target), reason));
 
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp, ajailtime) VALUES('%e', '%e', '/ajail', '%e', '%d', '%i')", GetName(playerid), GetName(target), reason, gettime(), time));
 	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE Accounts SET ajail_minutes = %i WHERE SQLID = %i", time, Account[target][SQLID]));
@@ -538,7 +538,7 @@ CMD<AD2>:freeze(cmdid, playerid, params[])
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid, ERROR_OPTION);
 
 	TogglePlayerControllable(pID, 0);
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{31AEAA}Admin Notice: {FFFFFF}Admin %s has frozen %s.", GetName(playerid), GetName(pID)));
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{5c000b}Admin Notice: {FFFFFF}Admin %s has frozen %s.", GetName(playerid), GetName(pID)));
 	SendClientMessage(pID, COLOR_GRAY, "{31AEAA}Notice: {FFFFFF}You have been frozen by an admin.");
 	Account[playerid][AdminActions]++;
 	return 1;
@@ -710,9 +710,10 @@ CMD<AD1>:ban(cmdid, playerid, params[])
 	if(Account[pID][Admin] >= 1 && Account[playerid][Admin] < 6) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Notice: {FFFFFF}You can't ban admins.");
 
 	if (GetPlayerAdminHidden(playerid))
-		SendClientMessageToAll(COLOR_LIGHTRED, sprintf("An admin has banned %s. Reason: %s", GetName(pID), reason));
+		SendPunishmentMessage(sprintf("An admin has banned %s. Reason: %s", GetName(pID), reason));
 	else
-		SendClientMessageToAll(COLOR_LIGHTRED, sprintf("Admin %s has banned %s. Reason: %s", GetName(playerid), GetName(pID), reason));
+		SendPunishmentMessage(sprintf("Admin %s has banned %s. Reason: %s", GetName(playerid), GetName(pID), reason));
+
 	IssueBan(pID, GetName(playerid), reason);
 	KickPlayer(pID);
 	Account[playerid][AdminActions]++;
@@ -724,7 +725,7 @@ CMD<AD4>:banip(cmdid, playerid, params[])
 	if(sscanf(params, "s[24]i", ip, minutes))
 		return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /banip [ip (wildcards supported)] [minutes]");
 
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{31AEAA}Admin Notice: {FFFFFF}%s has blocked IP '%s' on '%i' minutes", GetName(playerid), ip, minutes));
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{5c000b}Admin Notice: {FFFFFF}%s has blocked IP '%s' on '%i' minutes", GetName(playerid), ip, minutes));
 
 	BlockIpAddress(ip, 1000 * minutes);
 	Account[playerid][AdminActions]++;
@@ -736,7 +737,7 @@ CMD<AD4>:unbanip(cmdid, playerid, params[])
 	if(sscanf(params, "s[24]", ip))
 		return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /unbanip [ip (wildcards supported)]");
 
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{31AEAA}Admin Notice: {FFFFFF}%s un-blocked IP '%s'", GetName(playerid), ip));
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{5c000b}Admin Notice: {FFFFFF}%s un-blocked IP '%s'", GetName(playerid), ip));
 
 	UnBlockIpAddress(ip);
 	Account[playerid][AdminActions]++;
@@ -768,7 +769,7 @@ CMD<AD1>:offlinejail(cmdid, playerid, params[])
 
 	Account[playerid][AdminActions]++;
 	SendPunishmentMessage(sprintf("PUNISHMENT: Admin %s has offline jailed %s for %i minutes! (Reason: %s)", GetName(playerid), pID, time, reason));
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{31AEAA}Admin Notice: {FFFFFF}%s a-jailed %s! Reason: %s", GetName(playerid), pID, reason));
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{5c000b}Admin Notice: {FFFFFF}%s a-jailed %s! Reason: %s", GetName(playerid), pID, reason));
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/ajail', '%e', '%d')", GetName(playerid), pID, reason, gettime()));
 	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE `Accounts` SET ajail_minutes = %i WHERE `Username` = '%e'", time, pID));
 	return 1;
@@ -1020,7 +1021,7 @@ CMD<AD4>:sajail(cmdid, playerid, params[])
 	SetPlayerSkin(target, 20051);
 	SetPlayerPosEx(target, 2518.7590, 602.5683, 45.2066, 0, 0);
 
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{31AEAA}Admin Notice: {FFFFFF}%s a-jailed %s! Reason: %s", GetName(playerid), GetName(target), reason));
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{5c000b}Admin Notice: {FFFFFF}%s a-jailed %s! Reason: %s", GetName(playerid), GetName(target), reason));
 
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp, ajailtime) VALUES('%e', '%e', '/ajail', '%e', '%d', '%i')", GetName(playerid), GetName(target), reason, gettime(), time));
 	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE Accounts SET ajail_minutes = %i WHERE SQLID = %i", time, Account[target][SQLID]));
@@ -1043,7 +1044,7 @@ CMD<AD4>:sslap(cmdid, playerid, params[])
 		GetPlayerPos(pID, px, py, pz);
 		SetPlayerPos(pID, px, py, pz+4);
 		PlayerPlaySound(pID, 1190, 0.0, 0.0, 0.0);
-		SendAdminsMessage(1, COLOR_GRAY, sprintf("{31AEAA}Admin Notice: {FFFFFF}%s slapped %s!", GetName(playerid), GetName(pID)));
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{5c000b}Admin Notice: {FFFFFF}%s slapped %s!", GetName(playerid), GetName(pID)));
 	}
 	return 1;
 }
@@ -1159,7 +1160,7 @@ CMD<AD1>:muted(cmdid, playerid)
 	SendClientMessage(playerid, COLOR_GRAY, "Muted players:");
 	foreach (new i : Player)
 	{
-		if (Account[i][LoggedIn] && Account[i][Muted] > 0)
+		if (Account[i][LoggedIn] && Account[i][Muted] > gettime())
 		{
 			format(string, sizeof(string), "[%d] %s (%d seconds remaining)", i, GetName(i), Account[i][Muted]-gettime());
 			SendClientMessage(playerid, COLOR_RED, string);

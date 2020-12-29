@@ -1920,9 +1920,9 @@ public PlayerSecond(playerid)
 
 		if(Account[playerid][Muted] != 0)
 		{
-			Account[playerid][Muted] --;
-			if(Account[playerid][Muted] == 0)
+			if(Account[playerid][Muted] < gettime())
 			{
+                Account[playerid][Muted] = 0;
 				SendClientMessage(playerid, -1, "{31AEAA}Notice: {FFFFFF}Your mute timer has expired. You may now use the chat feature.");
 			}
 		}
@@ -2209,7 +2209,7 @@ public OnPlayerUpdate(playerid)
             UpdateNameTag(playerid, wfps);
 			pDrunkLevelLast[playerid] = drunknew;
 			if(pFPS[playerid] > 110 && !AlreadySentFPSWarn[playerid]) {
-				sendFormatMessage(playerid, 0xFF634700, "Your FPS is too high! It must be lower than 110.", pFPSWarn[playerid]);
+				sendFormatMessage(playerid, 0xFFFFFFFF, "Your FPS is too high! It must be lower than 110.", pFPSWarn[playerid]);
 				AlreadySentFPSWarn[playerid] = true;
 				SetTimerEx("ResetFPSWarn", 120000, 0, "d", playerid);
 				pFPSWarn[playerid] ++;
@@ -3206,9 +3206,9 @@ public OnPlayerText(playerid, const text[])
 	}
 
 	format(language, sizeof(language), "[%s]{FFFFFF}", GetLanguage(Account[playerid][pLanguage]));
-	if (Account[playerid][Muted] >= 1)
+	if (Account[playerid][Muted] > gettime())
 	{
-		SendClientMessage(playerid, -1, "{31AEAA}Notice: {FFFFFF}You are currently muted.");
+        SendClientMessage(playerid, -1, sprintf("{31AEAA}Notice: {FFFFFF}You still have {31AEAA}%d {FFFFFF}seconds(s) of a mute left.", Account[playerid][Muted] - gettime()));
 		return 0;
 	}
 
@@ -3788,7 +3788,7 @@ CMD:pay(cmdid, playerid, params[])
 	GivePlayerMoneyEx(playerid, -amount);
 	GivePlayerMoneyEx(player, amount);
 
-	SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{31AEAA}Admin Notice: {FFFFFF}%s has just paid %s $%s.", GetName(playerid), GetName(player), Comma(amount)));
+	SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{5c000b}Admin Notice: {FFFFFF}%s has just paid %s $%s.", GetName(playerid), GetName(player), Comma(amount)));
 	return 1;
 }
 CMD:admins(cmdid, playerid, params[])
@@ -3819,7 +3819,7 @@ CMD:admins(cmdid, playerid, params[])
         iter_get_arr(i, admin);
         SendClientMessage(playerid, COLOR_WHITE, sprintf("(Level %s Admin) %s (ID %i) {FF6347}%s", AdminNames(admin[1]), GetName(admin[0]), admin[0], Account[admin[0]][pAdminHide] == 1 ? "(HIDDEN)" : ""));
     }
-	if(!GetPlayerAdminLevel(playerid)) SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{31AEAA}Admin Notice: {FFFFFF}%s has just typed /admins.", GetName(playerid)));
+	if(!GetPlayerAdminLevel(playerid)) SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{5c000b}Admin Notice: {FFFFFF}%s has just typed /admins.", GetName(playerid)));
     list_delete(adminlist);
     return true;
 }
