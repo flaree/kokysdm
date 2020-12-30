@@ -1342,13 +1342,13 @@ CMD<AD1>:ip(cmdid, playerid, params[])
 	GetPlayerISP(targetid, isp);
 	GetPlayerTimezone(targetid, timezone);
 	new Player_IP[16];	GetPlayerIp(targetid, Player_IP, 16);
-	format(info, sizeof(info), "{FF5733}IP Address: {FFFFFF}%s\n", Player_IP); strcat(string, info);
-	format(info, sizeof(info), "{FF5733}Country: {FFFFFF}%s\n", country); strcat(string, info);
-	format(info, sizeof(info), "{FF5733}Region: {FFFFFF}%s\n", region); strcat(string, info);
-	format(info, sizeof(info), "{FF5733}City: {FFFFFF}%s\n", city); strcat(string, info);
-	format(info, sizeof(info), "{FF5733}Internet provider: {FFFFFF}%s\n", isp); strcat(string, info);
-	format(info, sizeof(info), "{FF5733}Timezone: {FFFFFF}%s\n", timezone); strcat(string, info);
-	Dialog_Show(playerid, DIALOG_IP, DIALOG_STYLE_MSGBOX, "IP Address lookup", string, "OK", ""); // Show Help-dialog
+	va_SendClientMessage(playerid, -1, "{FF5733}IP Address: {FFFFFF}\n", Player_IP);
+	va_SendClientMessage(playerid, -1, "{FF5733}Country: {FFFFFF}%s", country);
+	va_SendClientMessage(playerid, -1, "{FF5733}Region: {FFFFFF}%s", region);
+	va_SendClientMessage(playerid, -1, "{FF5733}City: {FFFFFF}%s", city);
+	va_SendClientMessage(playerid, -1, "{FF5733}Internet provider: {FFFFFF}\n", isp);
+	va_SendClientMessage(playerid, -1, "{FF5733}Timezone: {FFFFFF}%s", timezone);
+	//Dialog_Show(playerid, DIALOG_IP, DIALOG_STYLE_MSGBOX, "IP Address lookup", string, "OK", ""); // Show Help-dialog
 	return 1;
 }
 CMD<AD1>:suicide(cmdid, playerid, params[])
