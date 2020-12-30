@@ -167,13 +167,13 @@ public OnAccountPasswordChecked(playerid)
 	{
 		if(LoginAttempts[playerid] < 2)
 		{
-			SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Notice: {FFFFFF}Incorrect password, try again.");
+			SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}Incorrect password, try again.");
 			LoginAttempts[playerid] ++;
 			Login_Dialog(playerid);
 		}
 		else
 		{
-			SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Notice: {FFFFFF}You have been kicked for too many failed attempts.");
+			SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}You have been kicked for too many failed attempts.");
 			KickPlayer(playerid);
 		}
 		return true;
@@ -209,7 +209,7 @@ Login_Dialog(playerid)
 
 	if(!response[E_DIALOG_RESPONSE_Response])
 	{
-		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Notice: {FFFFFF}You have left the server.");
+		SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}You have left the server.");
 		KickPlayer(playerid);
 		return true;
 	}
@@ -234,7 +234,7 @@ Register_Dialog(playerid)
 
 	if(strlen(response[E_DIALOG_RESPONSE_InputText]) < 5)
 	{
-		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Notice: {FFFFFF}Your password must contain more than 5 characters.");
+		SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}Your password must contain more than 5 characters.");
 		Register_Dialog(playerid);
 		return true;
 	}
@@ -372,21 +372,21 @@ ShowAdminPinDialog(playerid, adminlevel, correctpin)
 
 		if(!response[E_DIALOG_RESPONSE_Response])
 		{
-			SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Notice: {FFFFFF}You have left the server.");
+			SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}You have left the server.");
 			KickPlayer(playerid);
 			break;
 		}
 		extract response[E_DIALOG_RESPONSE_InputText] -> new pin; else
 		{
-			SendClientMessage(playerid, -1, "{31AEAA}Notice: {FFFFFF}Invalid pin.");
+			SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}Invalid pin.");
 			continue;
 		}
 		if(pin != correctpin)
 		{
-			SendClientMessage(playerid, -1, "{31AEAA}Notice: {FFFFFF}Incorrect pin.");
+			SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}Incorrect pin.");
 			continue;
 		}
-		SendClientMessage(playerid, -1, "{31AEAA}Notice: {FFFFFF}You have logged in as an Administrator.");
+		SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}You have logged in as an Administrator.");
 		LoginAccount(playerid);
 		break;
 	}
@@ -402,17 +402,17 @@ ShowCreateAdminPinDialog(playerid)
 		if(!response[E_DIALOG_RESPONSE_Response]) continue;
 		extract response[E_DIALOG_RESPONSE_InputText] -> new pin; else
 		{
-			SendClientMessage(playerid, -1, "{31AEAA}Notice: {FFFFFF}Invalid pin.");
+			SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}Invalid pin.");
 			continue;
 		}
 		if(pin <= 999 || pin > 9999)
 		{
-			SendClientMessage(playerid, -1, "{31AEAA}Notice: {FFFFFF}Pin must be 4 digits long.");
+			SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}Pin must be 4 digits long.");
 			continue;
 		}
 
 		Account[playerid][AdminPin] = pin;
-		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Notice: {FFFFFF}You have set your Admin Pin. If you wish to change it, please contact a higher staff member.");
+		SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}You have set your Admin Pin. If you wish to change it, please contact a higher staff member.");
 		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE Accounts SET AdminPin = %i WHERE Username = '%e' LIMIT 1", pin, GetName(playerid)));
 		LoginAccount(playerid);
 		break;
@@ -424,9 +424,9 @@ ShowCreateAdminPinDialog(playerid)
 CMD:changepassword(cmdid, playerid, params[])
 {
 	if(isnull(params)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /changepassword [New Password]");
-	if(strlen(params) < 5) SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Notice: {FFFFFF}Your password must be more than five characters long.");
+	if(strlen(params) < 5) SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}Your password must be more than five characters long.");
 
 	bcrypt_hash(params, BCRYPT_COST, "OnNewPasswordHashed", "i", playerid);
-	SendClientMessage(playerid, COLOR_LGREEN, "{31AEAA}Notice: {FFFFFF}You have successfully changed your password, keep it safe.");
+	SendClientMessage(playerid, COLOR_LGREEN, "{bf0000}Notice: {FFFFFF}You have successfully changed your password, keep it safe.");
 	return true;
 }

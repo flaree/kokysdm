@@ -128,7 +128,7 @@ CMD<AD1>:spec(cmdid, playerid, params[])
 	}
 
 	SpectatePlayer(playerid, target);
-	SendClientMessage(playerid, -1, sprintf("{1E90FF}(Spectate):{dadada} You are now spectating %s(%i). Player Mode: %s. Press SPRINT key to sync.", GetName(target), target, ReturnActivityDescription(target)));
+	SendClientMessage(playerid, -1, sprintf("{bf0000}(Spectate): {808080}You are now spectating %s(%i). Player Mode: %s. Press SPRINT key to sync.", GetName(target), target, ReturnActivityDescription(target)));
 	return true;
 }
 

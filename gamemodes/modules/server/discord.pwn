@@ -140,7 +140,7 @@ DQCMD:freeze(DCC_Channel:channel, DCC_User:user, params[])
 
 	TogglePlayerControllable(target, false);
 	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has been frozen via discord.", GetName(target)));
-	SendClientMessage(target, COLOR_GRAY, sprintf("{31AEAA}Notice: {FFFFFF}You have been frozen by an admin.", GetName(target)));
+	SendClientMessage(target, COLOR_GRAY, sprintf("{bf0000}Notice: {FFFFFF}You have been frozen by an admin.", GetName(target)));
 	DCC_SendChannelMessage(channel, sprintf("**PUNISHMENT:** %s was frozen by %s.", GetName(target), admin));
 	return 1;
 }
@@ -157,7 +157,7 @@ DQCMD:unfreeze(DCC_Channel:channel, DCC_User:user, params[])
 
 	TogglePlayerControllable(target, true);
 	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has been unfrozen via discord.", GetName(target)));
-	SendClientMessage(target, COLOR_GRAY, sprintf("{31AEAA}Notice: {FFFFFF}You have been unfrozen by an admin.", GetName(target)));
+	SendClientMessage(target, COLOR_GRAY, sprintf("{bf0000}Notice: {FFFFFF}You have been unfrozen by an admin.", GetName(target)));
 	DCC_SendChannelMessage(channel, sprintf("**PUNISHMENT:** %s was unfrozen by %s.", GetName(target), admin));
 	return 1;
 }
@@ -386,7 +386,7 @@ DQCMD:aunjail(DCC_Channel:channel, DCC_User:user, params[])
 
 	DCC_SendChannelMessage(channel, sprintf("**PUNISHMENT:** %s was unjailed by %s.", GetName(target), admin));
 	SendClientMessageToAll(COLOR_LIGHTRED, sprintf("PUNISHMENT: %s was unjailed by %s via Discord.", GetName(target), admin));
-	SendClientMessage(target, -1, sprintf("{31AEAA}Notice: {FFFFFF}You have been unjailed by %s via Discord.", admin));
+	SendClientMessage(target, -1, sprintf("{bf0000}Notice: {FFFFFF}You have been unjailed by %s via Discord.", admin));
 	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE Accounts SET ajail_minutes = 0 WHERE SQLID = %i", Account[target][SQLID]));
 	return 1;
 }
@@ -426,7 +426,7 @@ DQCMD:unmute(DCC_Channel:channel, DCC_User:user, params[])
 	DCC_SendChannelMessage(channel, sprintf("**PUNISHMENT:** %s was unmuted by %s.", GetName(target), admin));
 	SendClientMessageToAll(COLOR_LIGHTRED, sprintf("PUNISHMENT: %s was unmuted by %s via Discord.", GetName(target), admin));
 	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has unmuted %s via Discord.", admin, GetName(target)));
-	SendClientMessage(target, COLOR_GRAY, "{31AEAA}Notice: {FFFFFF}You have been unmuted by an admin.");
+	SendClientMessage(target, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}You have been unmuted by an admin.");
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/unmute', 'N/A', '%d')", admin, GetName(target), gettime()));
 	return 1;
 }

@@ -311,7 +311,7 @@ RemoveRestrictedArenaSkin(playerid)
 	if(Restricted_Skins(GetPlayerSkin(playerid)) || Restricted_Skins(Account[playerid][Skin]))
 	{
 		SetPlayerSkinEx(playerid, 25);
-		SendClientMessage(playerid, -1, "{31AEAA}Notice: {FFFFFF}This skin is not allowed, therefore we have changed your skin!");
+		SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}This skin is not allowed, therefore we have changed your skin!");
 		ClearAnimations(playerid);
 	}
 	return true;

@@ -870,7 +870,7 @@ CMD:dcp(cmdid, playerid, params[])
 		{
 			ShowDonatorControlPanel(playerid);
 		}
-		else return SendClientMessage(playerid, -1, "{31AEAA}Notice: You must be in the lobby in order to use this command!");
+		else return SendClientMessage(playerid, -1, "{bf0000}Notice: You must be in the lobby in order to use this command!");
 	}
 	else return SendClientMessage(playerid, COLOR_LIGHTRED, "{31AEAA}Upgrades: {FFFFFF}You must be a donator to use this command. Please refer to /upgrade if you wish to upgrade your account");
 	return 1;

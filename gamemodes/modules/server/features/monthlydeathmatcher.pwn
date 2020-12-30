@@ -11,7 +11,7 @@ UpdateMonthlyKeyText(username[], playerskin, kills)
 	format(str, sizeof(str), "{EE5133}Monthly Deathmatcher: {33C4EE}%s {EE5133}with\n{33C4EE}%d {EE5133}kills!", username, kills);
 	Update3DTextLabelText(dmerlabel, -1, str);
 	UpdateNPCSkin(playerskin);
-	SendClientMessageToAll(-1, sprintf("{31AEAA}Notice: {FFFFFF}The Monthly Deathmatcher has been updated! {31AEAA}%s {FFFFFF}with {31AEAA}%d {FFFFFF}kills this month!", username, kills));
+	SendClientMessageToAll(-1, sprintf("{bf0000}Notice: {FFFFFF}The Monthly Deathmatcher has been updated! {31AEAA}%s {FFFFFF}with {31AEAA}%d {FFFFFF}kills this month!", username, kills));
 }
 UpdateNPCSkin(skinid)
 {
@@ -62,5 +62,5 @@ UpdateMonthlyKills(playerid)
 	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT MonthKills, LastMonthKills FROM `Accounts` WHERE Username = '%e'", GetName(playerid)));
 	cache_get_value_name_int(0, "MonthKills", Account[playerid][MonthKills]);
 	cache_get_value_name_int(0, "LastMonthKills", Account[playerid][LastMonthKills]);
-	SendClientMessage(playerid, -1, sprintf("{31AEAA}Notice: {FFFFFF}It's the start of a new month, therefore the monthly deathmatcher has been reset! You got %d kills in the last month!", Account[playerid][LastMonthKills]));
+	SendClientMessage(playerid, -1, sprintf("{bf0000}Notice: {FFFFFF}It's the start of a new month, therefore the monthly deathmatcher has been reset! You got %d kills in the last month!", Account[playerid][LastMonthKills]));
 }

@@ -12,12 +12,12 @@ hook OnPlayerText(playerid, text[])
 
 	if (Account[playerid][Muted] > gettime())
 	{
-		SendClientMessage(playerid, -1, sprintf("{31AEAA}Notice: {FFFFFF}You still have {31AEAA}%d {FFFFFF}seconds(s) of a mute left.", Account[playerid][Muted] - gettime()));
+		SendClientMessage(playerid, -1, sprintf("{bf0000}Notice: {FFFFFF}You still have {31AEAA}%d {FFFFFF}seconds(s) of a mute left.", Account[playerid][Muted] - gettime()));
 		return 0;
 	}
 
 	if(!Account[playerid][Admin] && ChatLocked) {
-		SendClientMessage(playerid, -1, "{31AEAA}Notice: {FFFFFF}The chat is currently locked by an administrator.");
+		SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}The chat is currently locked by an administrator.");
 		return 0;
 	}
 

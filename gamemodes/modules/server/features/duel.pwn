@@ -807,7 +807,7 @@ CMD:duel(cmdid, playerid, params[])
 
 		ShowDuelSettingsDialog(playerid);
 	}
-	else return SendClientMessage(playerid, -1, "{31AEAA}Notice: {FFFFFF}You must be in the lobby in order to use this command!");
+	else return SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}You must be in the lobby in order to use this command!");
 	return 1;
 }
 

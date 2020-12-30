@@ -610,7 +610,7 @@ Dialog:EVENTS(playerid, response, listitem, inputtext[])
 // -----------------------------------------------------------------------------
 CMD:startevent(cmdid, playerid, params[])
 {
-	if(ActivityState[playerid] != ACTIVITY_LOBBY) return SendClientMessage(playerid, -1, "{31AEAA}Notice: {FFFFFF} You must be in the lobby to use this command.");
+	if(ActivityState[playerid] != ACTIVITY_LOBBY) return SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF} You must be in the lobby to use this command.");
 
 	if(EventType != 0)
 		return SendClientMessage(playerid, -1, "{31AEAA}Events: {FFFFFF}Event in progress, unable to start another!");
@@ -619,7 +619,7 @@ CMD:startevent(cmdid, playerid, params[])
 	{
 		Dialog_Show(playerid, EVENTS, DIALOG_STYLE_LIST, "Event Types", "Headshot Only\nGun Game\nOne in the Chamber\nTeam Deathmatch\n", "Select", "Cancel");
 	}
-	else SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Notice: {FFFFFF}You don't have any events, you can win some in our crates!");
+	else SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}You don't have any events, you can win some in our crates!");
 
 	return 1;
 }
@@ -628,7 +628,7 @@ CMD:startevent(cmdid, playerid, params[])
 CMD:joinevent(cmdid, playerid, params[])
 {
 	if(!IsPlayerInLobby(playerid))
-		return SendClientMessage(playerid, -1, "{31AEAA}Notice: {FFFFFF}You must be in the lobby to use this command.");
+		return SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}You must be in the lobby to use this command.");
 
 	if(ActivityState[playerid] == ACTIVITY_EVENT)
 		return SendClientMessage(playerid, -1, "{31AEAA}Events: Yes, let's join the event again when you're already in it.");
