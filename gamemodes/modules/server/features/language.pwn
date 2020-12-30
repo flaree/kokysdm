@@ -52,7 +52,7 @@ SendChat(playerlanguage, str[])
 		if(Account[i][Language] == playerlanguage)
 		{
 			format(astr, sizeof(astr), "(AdmChat) %s", str);
-			SendClientMessage(i, -1, astr);
+			SendClientMessage(i, 0x808080FF, astr);
 		}
 	}
 }

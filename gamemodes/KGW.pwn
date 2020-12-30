@@ -1306,7 +1306,7 @@ public SendRandomMessage()
 		"[Koky's Deathmatch]{FFFFFF}: Did you know? You can start your own clan and make it official! /createclan!"
 	};
 
-	SendClientMessageToAll(COLOR_LIGHTBLUE, randomMessages[ random(sizeof(randomMessages)) ]);
+	SendClientMessageToAll(0xBF0000FF, randomMessages[ random(sizeof(randomMessages)) ]);
 }
 
 main()
@@ -2863,7 +2863,7 @@ SendAdminsMessage(level, color, str[])
 		new astr[128];
 		if(Account[i][Admin] >= level)
 		{
-			format(astr, sizeof(astr), "(AdmChat) %s", str);
+			format(astr, sizeof(astr), "{808080}(AdmChat) {bf0000}%s", str);
 			SendClientMessage(i, color, astr);
 		}
 	}
@@ -3788,7 +3788,7 @@ CMD:pay(cmdid, playerid, params[])
 	GivePlayerMoneyEx(playerid, -amount);
 	GivePlayerMoneyEx(player, amount);
 
-	SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{5c000b}Admin Notice: {FFFFFF}%s has just paid %s $%s.", GetName(playerid), GetName(player), Comma(amount)));
+	SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has just paid %s $%s.", GetName(playerid), GetName(player), Comma(amount)));
 	return 1;
 }
 CMD:admins(cmdid, playerid, params[])
@@ -3811,15 +3811,15 @@ CMD:admins(cmdid, playerid, params[])
         return true;
     }
     else {
-        SendClientMessage(playerid, COLOR_GREY, "Admins online:");
+        SendClientMessage(playerid, 0xBF0000FF, "Admins online:");
     }
     list_sort(adminlist, 1, -1, true);
     for_list(i: adminlist)
     {
         iter_get_arr(i, admin);
-        SendClientMessage(playerid, COLOR_WHITE, sprintf("(Level %s Admin) %s (ID %i) {FF6347}%s", AdminNames(admin[1]), GetName(admin[0]), admin[0], Account[admin[0]][pAdminHide] == 1 ? "(HIDDEN)" : ""));
+        SendClientMessage(playerid, COLOR_WHITE, sprintf("(Level {bf0000}%s {ffffff}Admin) {%06x}%s {ffffff}(ID %i) {FF6347}%s", AdminNames(admin[1]), GetPlayerColor(admin[0]) >>> 8, GetName(admin[0]), admin[0], Account[admin[0]][pAdminHide] == 1 ? "(HIDDEN)" : ""));
     }
-	if(!GetPlayerAdminLevel(playerid)) SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{5c000b}Admin Notice: {FFFFFF}%s has just typed /admins.", GetName(playerid)));
+	if(!GetPlayerAdminLevel(playerid)) SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has just typed /admins.", GetName(playerid)));
     list_delete(adminlist);
     return true;
 }
