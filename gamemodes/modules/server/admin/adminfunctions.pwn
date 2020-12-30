@@ -62,8 +62,8 @@ public CheckJailsUnderIP(playerid, const ip[])
 
 		if(jail > 0)
 		{
-			format(str, sizeof(str), "%s has been caught a-jail evading under the alias %s which was jailed for %i minutes previously! The player was kicked and warned to serve the time.", GetName(playerid), username, jail);
-			SendAdminsMessage(1, COLOR_LIGHTRED, str);
+			format(str, sizeof(str), "{bf0000}%s has been caught a-jail evading under the alias %s which was jailed for %i minutes previously! The player was kicked and warned to serve the time.", GetName(playerid), username, jail);
+			SendAdminsMessage(1, 0xBF0000FF, str);
 
 			format(str1, sizeof(str1), "%s has been caught a-jail evading! The player has been automatically kicked!", GetName(playerid));
 			SendPunishmentMessage(str1);

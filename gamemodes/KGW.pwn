@@ -1430,7 +1430,7 @@ public OnPlayerConnect(playerid)
 
 	Account_Reset(playerid);
 	SetPlayerColor(playerid, PlayerColors[playerid]);
-	SendClientMessageToAll(COLOR_GRAY, sprintf("{31AEAA}Connection: {%06x}%s {ffffff}has joined the server.", PlayerColors[playerid] >>> 8, GetName(playerid)));
+	SendClientMessageToAll(COLOR_GRAY, sprintf("{bf0000}Connection: {%06x}%s {ffffff}has joined the server.", PlayerColors[playerid] >>> 8, GetName(playerid)));
 	TogglePlayerSpectating(playerid, 1);
 	SetPlayerColor(playerid, PlayerColors[playerid]);
 	dmessage2[playerid] = SetTimerEx("CheckDonations", 30000, true, "i", playerid);
@@ -2617,7 +2617,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 	{
 		if(killerid == INVALID_PLAYER_ID)
 		{
-			SendClientMessageToAll(-1, sprintf("{31AEAA}Duel: {%06x}%s {FFFFFF}died in mysterious circumstances. Duel ended.", GetPlayerColor(playerid) >>> 8, GetName(playerid)));
+			SendClientMessageToAll(-1, sprintf("{bf0000}Duel: {%06x}%s {FFFFFF}died in mysterious circumstances. Duel ended.", GetPlayerColor(playerid) >>> 8, GetName(playerid)));
 			EndDuel(playerid, true);
 			return true;
 		}
@@ -2632,7 +2632,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 		new team_count = DuelTeam[host_id][playerid] == HOST_TEAM ? AlliesCount[host_id] : EnemyCount[host_id];
 		if(team_count == 0)
 		{
-			SendClientMessageToAll(-1, sprintf("{31AEAA}Duel: {%06x}%s {FFFFFF}has won the duel for their team by finishing off {%06x}%s!", GetPlayerColor(killerid) >>> 8, GetName(killerid), GetPlayerColor(playerid) >>> 8, GetName(playerid)));
+			SendClientMessageToAll(-1, sprintf("{bf0000}Duel: {%06x}%s {FFFFFF}has won the duel for their team by finishing off {%06x}%s!", GetPlayerColor(killerid) >>> 8, GetName(killerid), GetPlayerColor(playerid) >>> 8, GetName(playerid)));
 			EndDuel(playerid, false);
 		}
 		else
@@ -3821,7 +3821,7 @@ CMD:admins(cmdid, playerid, params[])
     for_list(i: adminlist)
     {
         iter_get_arr(i, admin);
-        SendClientMessage(playerid, COLOR_WHITE, sprintf("(Level {bf0000}%s {ffffff}Admin) {%06x}%s {ffffff}(ID %i) {FF6347}%s", AdminNames(admin[1]), GetPlayerColor(admin[0]) >>> 8, GetName(admin[0]), admin[0], Account[admin[0]][pAdminHide] == 1 ? "(HIDDEN)" : ""));
+        SendClientMessage(playerid, COLOR_WHITE, sprintf("(Level {bf0000}%s {ffffff}Admin) {%06x}%s {ffffff}(ID %i) {bf0000}%s", AdminNames(admin[1]), GetPlayerColor(admin[0]) >>> 8, GetName(admin[0]), admin[0], Account[admin[0]][pAdminHide] == 1 ? "(HIDDEN)" : ""));
     }
 	if(!GetPlayerAdminLevel(playerid)) SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has just typed /admins.", GetName(playerid)));
     list_delete(adminlist);
@@ -17125,6 +17125,12 @@ createMap() {
 }
 
 removeOldMap(playerid) {
+    // GAS TURF
+    RemoveBuildingForPlayer(playerid, 1412, 1917.3203, -1797.4219, 13.8125, 0.25);
+    RemoveBuildingForPlayer(playerid, 1412, 1912.0547, -1797.4219, 13.8125, 0.25);
+    RemoveBuildingForPlayer(playerid, 1412, 1906.7734, -1797.4219, 13.8125, 0.25);
+    RemoveBuildingForPlayer(playerid, 1412, 1922.5859, -1797.4219, 13.8125, 0.25);
+
 	// BANK TURF
 	RemoveBuildingForPlayer(playerid, 10027, -1951.689, 660.023, 89.507, 0.250);
 	RemoveBuildingForPlayer(playerid, 9939, -1951.689, 660.023, 89.507, 0.250);

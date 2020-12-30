@@ -295,32 +295,32 @@ CMD<AD1>:ah(cmdid, playerid, params[])
 	StatsLine(playerid);
 	if(Account[playerid][Admin] >= 1)
 	{
-		SendClientMessage(playerid, COLOR_GRAY, "{1E90FF}Level 1 admin commands");
+		SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Level 1 admin commands");
 		if(Account[playerid][Admin] >= 1) SendCommandList(playerid, COLOR_GRAY, AD1);
 	}
 	if(Account[playerid][Admin] >= 2)
 	{
-		SendClientMessage(playerid, COLOR_GRAY, "{1E90FF}Level 2 admin commands");
+		SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Level 2 admin commands");
 		if(Account[playerid][Admin] >= 2) SendCommandList(playerid, COLOR_GRAY, AD2);
 	}
 	if(Account[playerid][Admin] >= 3)
 	{
-		SendClientMessage(playerid, COLOR_GRAY, "{1E90FF}Level 3 admin commands");
+		SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Level 3 admin commands");
 		if(Account[playerid][Admin] >= 3) SendCommandList(playerid, COLOR_GRAY, AD3);
 	}
 	if(Account[playerid][Admin] >= 4)
 	{
-		SendClientMessage(playerid, COLOR_GRAY, "{1E90FF}Level 4 admin commands");
+		SendClientMessage(playerid, COLOR_GRAY, "{5f0000}Level 4 admin commands");
 		if(Account[playerid][Admin] >= 4) SendCommandList(playerid, COLOR_GRAY, AD4);
 	}
 	if(Account[playerid][Admin] >= 5)
 	{
-		SendClientMessage(playerid, COLOR_GRAY, "{1E90FF}Level 5 admin commands");
+		SendClientMessage(playerid, COLOR_GRAY, "{5f0000}Level 5 admin commands");
 		if(Account[playerid][Admin] >= 5) SendCommandList(playerid, COLOR_GRAY, AD5);
 	}
 	if(Account[playerid][Admin] >= 6)
 	{
-		SendClientMessage(playerid, COLOR_GRAY, "{1E90FF}Level 6 admin commands");
+		SendClientMessage(playerid, COLOR_GRAY, "{5f0000}Level 6 admin commands");
 		if(Account[playerid][Admin] >= 6) SendCommandList(playerid, COLOR_GRAY, AD6);
 	}
 	StatsLine(playerid);
@@ -330,7 +330,7 @@ CMD<AD1>:a(cmdid, playerid, params[])
 {
 	if(isnull(params)) return SendUsageMessage(playerid, "/a [text]");
 
-	SendAdminsMessage(1, COLOR_TURQUOISE, sprintf("%s: %s", GetName(playerid), params));
+	SendAdminsMessage(1, COLOR_TURQUOISE, sprintf("{FFFF80}%s: %s", GetName(playerid), params));
 	return true;
 }
 CMD<AD3>:staffreward(cmdid, playerid, params[])
@@ -1220,7 +1220,7 @@ CMD<AD1>:tempban(cmdid, playerid, params[])
 	mysql_tquery(SQL_CONNECTION, query, "", "");
 	format(string, sizeof(string), "[AdmCmd]: %s has banned %s for %d hours. Reason: %s", GetName(playerid), GetName(targetid), hours, reason);
 	SendClientMessageToAll(COLOR_RED, string);
-	SetTimerEx("KickPlayer",500,false,"i",targetid);// Kicks player in 500ms
+	KickPlayer(targetid);
 	return 1;
 }
 
@@ -1346,11 +1346,11 @@ CMD<AD1>:ip(cmdid, playerid, params[])
 	GetPlayerTimezone(targetid, timezone);
 	new Player_IP[16];	GetPlayerIp(targetid, Player_IP, 16);
 	SendClientMessage(playerid, -1, sprintf("{FFCC66}Current internet lookup information on user: {FFFFFF}%s", GetName(targetid)));
-	SendClientMessage(playerid, -1, sprintf("{FF5733}IP Address: {FFFFFF}\n", Player_IP));
+	SendClientMessage(playerid, -1, sprintf("{FF5733}IP Address: {FFFFFF}%s", Player_IP));
 	SendClientMessage(playerid, -1, sprintf("{FF5733}Country: {FFFFFF}%s", country));
 	SendClientMessage(playerid, -1, sprintf("{FF5733}Region: {FFFFFF}%s", region));
 	SendClientMessage(playerid, -1, sprintf("{FF5733}City: {FFFFFF}%s", city));
-	SendClientMessage(playerid, -1, sprintf("{FF5733}Internet provider: {FFFFFF}\n", isp));
+	SendClientMessage(playerid, -1, sprintf("{FF5733}Internet provider: {FFFFFF}%s", isp));
 	SendClientMessage(playerid, -1, sprintf("{FF5733}Timezone: {FFFFFF}%s", timezone));
 	//Dialog_Show(playerid, DIALOG_IP, DIALOG_STYLE_MSGBOX, "IP Address lookup", string, "OK", ""); // Show Help-dialog
 	return 1;

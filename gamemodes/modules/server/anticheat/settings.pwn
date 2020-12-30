@@ -116,6 +116,7 @@ CMD<AD4>:acsettings(cmdid, playerid, params[]) {
             %i\t%s\t%s", dialogStr, i, CodeToName(i), IsAntiCheatEnabled(i) ? "{00ff00}Yes" : "{ff0000}No");
     }
 	new response[e_DIALOG_RESPONSE_INFO];
+	yield 1;
 	AwaitAsyncDialog(playerid, response, DIALOG_STYLE_TABLIST_HEADERS, "Select the anticheat", dialogStr, "Select", "Cancel");
 
 	if(!response[E_DIALOG_RESPONSE_Response]) {
