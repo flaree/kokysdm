@@ -43,26 +43,26 @@ CMD<AD1>:forcelobby(cmdid, playerid, params[])
 //functions
 CreateLobbyActors()
 {
-	Create3DTextLabel("{EE5133}Shoot me to go to{33C4EE}\nFreeroam", -1, FREEROAM_NPC_POS, 40.0, 0);
+	Create3DTextLabel("{bf0000}Shoot me to go to{FFFFFF}\nFreeroam", -1, FREEROAM_NPC_POS, 40.0, 0);
 	freeroam_actor = CreateActor(99, FREEROAM_NPC_POS, 137.6998);
 	SetActorVirtualWorld(freeroam_actor, 0);
 	SetActorInvulnerable(freeroam_actor, false);
 	SetActorHealth(freeroam_actor, 1000);
 
-	Create3DTextLabel("{EE5133}Shoot me for the list of{33C4EE}\nArenas", -1, ARENA_NPC_POS, 40.0, 0);
+	Create3DTextLabel("{bf0000}Shoot me for the list of{FFFFFF}\nArenas", -1, ARENA_NPC_POS, 40.0, 0);
 	arena_actor = CreateActor(80, ARENA_NPC_POS, 41.5057);
 	SetActorVirtualWorld(arena_actor, 0);
 	SetActorInvulnerable(arena_actor, false);
 	SetActorHealth(arena_actor, 1000);
 
-	Create3DTextLabel("{EE5133}Shoot me to go to{33C4EE}\n{33C4EE}Team Deathmatch", -1, GANGWAR_NPC_POS, 40.0, 0);
+	Create3DTextLabel("{bf0000}Shoot me to go to{FFFFFF}\nTeam Deathmatch", -1, GANGWAR_NPC_POS, 40.0, 0);
 	gangwars_actor = CreateActor(106, GANGWAR_NPC_POS, 225.1204);
 	SetActorVirtualWorld(gangwars_actor, 0);
 	SetActorInvulnerable(gangwars_actor, false);
 	SetActorHealth(gangwars_actor, 1000);
 	ApplyActorAnimation(gangwars_actor, "DANCING", "dnce_M_a", 4.1, 1, 1, 1, 1, 0); // Pay anim
 
-	Create3DTextLabel("{EE5133}Shoot me to join the{33C4EE}\nCop Chase", -1, COPCHASE_NPC_POS, 40.0, 0);
+	Create3DTextLabel("{bf0000}Shoot me to join the{FFFFFF}\nCop Chase", -1, COPCHASE_NPC_POS, 40.0, 0);
 	copchase_actor =  CreateActor(265, COPCHASE_NPC_POS, 304.3715);
 	SetActorVirtualWorld(copchase_actor, 0);
 	SetActorInvulnerable(copchase_actor, false);

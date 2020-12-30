@@ -101,11 +101,11 @@ CMD<AD1>:handlereport(cmdid, playerid, params[])
 
 	pool_remove(Reports, reportindex);
 	if (GetPlayerAdminHidden(playerid))
-		SendClientMessage(reporter, COLOR_LIGHTRED, sprintf("Reports:{FFFFFF} An admin is now looking into your report on %s (%i). They will contact you if any further information is required.", GetName(target), target));
+		SendClientMessage(reporter, COLOR_LIGHTRED, sprintf("{bf0000}Reports:{FFFFFF} An admin is now looking into your report on %s (%i). They will contact you if any further information is required.", GetName(target), target));
 	else
-		SendClientMessage(reporter, COLOR_LIGHTRED, sprintf("Reports:{FFFFFF} Admin %s is now looking into your report on %s (%i). They will contact you if any further information is required.", GetName(playerid), GetName(target), target));
-	SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("Reports:{FFFFFF} You are now handling report %i.", reportindex));
-	SendAdminsMessage(1, COLOR_INDIANRED, sprintf("Reports: %s {FFFFFF}is handling report %i.", GetName(playerid), reportindex));
+		SendClientMessage(reporter, COLOR_LIGHTRED, sprintf("{bf0000}Reports:{FFFFFF} Admin %s is now looking into your report on %s (%i). They will contact you if any further information is required.", GetName(playerid), GetName(target), target));
+	SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("{bf0000}Reports:{FFFFFF} You are now handling report %i.", reportindex));
+	SendAdminsMessage(1, COLOR_INDIANRED, sprintf("{bf0000}Reports: %s {808080}is handling report %i.", GetName(playerid), reportindex));
 	DCC_SendChannelMessage(DCC_FindChannelByName("in-game-reports"), sprintf("**Reports:** %s is handling report %i by %s.", GetName(playerid), reportindex, GetName(reporter)));
 	return true;
 }

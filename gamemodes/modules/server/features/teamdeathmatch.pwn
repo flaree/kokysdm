@@ -383,7 +383,7 @@ DrivebyCheck(playerid)
 public SpawnProtection(playerid)
 {
 	Account[playerid][CopChaseDead] = 0;
-	SendClientMessage(playerid, COLOR_LIGHTBLUE, "Spawn Protection: {FFFFFF}Your spawn protection has been disabled.");
+	SendClientMessage(playerid, 0xbf0000FF, "Spawn Protection: {FFFFFF}Your spawn protection has been disabled.");
 
 	Account[playerid][CopChaseDead] = 0;
 

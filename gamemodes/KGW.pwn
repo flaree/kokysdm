@@ -137,6 +137,9 @@ new PlayerText3D:KeyCrates;
 new Text3D:playerinfo;
 new Text:ChangeColor[66];
 
+// Duty TD
+new Text:DutyTextDraw;
+
 new ColorsAvailable[66] = {
 	1, 0, 2, 3, 4, 6, 8, 12, 13, 16, 17, 20, 24, 28, 44, 43, 46, 51, 52, 55, 57, 79, 93, 86, 87, 65, 97, 112, 117, 118, 126, 111, 103, 102, 128, 145, 136, 139, 143, 158, 175, 170, 171, 154, 176, 179, 182, 191, 194, 195, 196, 198, 215, 224, 225, 237, 241, 244, 245, 248, 251, 252, 253, 254
 };
@@ -1199,7 +1202,7 @@ forward UpdatePlayerInformation();
 public UpdatePlayerInformation()
 {
 	new str[256];
-	format(str, sizeof(str), "{EE5133}Arena Players: {33C4EE}%i\n{EE5133}TDM Players: {33C4EE}%i\n{EE5133}Copchase Players: {33C4EE}%i\n{EE5133}Freeroam Players: {33C4EE}%i\n",
+	format(str, sizeof(str), "{bf0000}Arena Players: {FFFFFF}%i\n{bf0000}TDM Players: {FFFFFF}%i\n{bf0000}Copchase Players: {FFFFFF}%i\n{bf0000}Freeroam Players: {FFFFFF}%i\n",
 		GetActivityCount(ACTIVITY_ARENADM), GetActivityCount(ACTIVITY_TDM), GetActivityCount(ACTIVITY_COPCHASE), GetActivityCount(ACTIVITY_FREEROAM));
 	Update3DTextLabelText(playerinfo, -1, str);
 }
@@ -1656,7 +1659,7 @@ public HttpResponse(playerid, responseCode, data[])
 Unban_Dialog(playerid)
 {
 	new str[128];
-	format(str, sizeof(str), "{FFFFFF}Hello Admin %s!\n\nYou are about to unban a user.\n{D69929}Make sure you have locked and move the thread.", GetName(playerid));
+	format(str, sizeof(str), "{FFFFFF}Hello Admin %s!\n\nYou are about to unban a user.\n{990a1e}Make sure you have locked and move the thread.", GetName(playerid));
 	Dialog_Show(playerid, UNBAN, DIALOG_STYLE_INPUT, "Administrator | Unban", str, "Unban", "Cancel");
 	return 1;
 }
@@ -4474,6 +4477,19 @@ CreateServerTextDraws()
 	TextDrawSetProportional(HitMark_centre, 1);
 	TextDrawSetOutline(HitMark_centre, 1);
 	TextDrawSetShadow(HitMark_centre, 0);
+
+    //admin duty
+	DutyTextDraw = TextDrawCreate(320.691223, 2.166717, " ");
+	TextDrawLetterSize(DutyTextDraw, 0.255695, 0.894167);
+	TextDrawAlignment(DutyTextDraw, 2);
+	TextDrawColor(DutyTextDraw, -1);
+	TextDrawSetShadow(DutyTextDraw, 0);
+	TextDrawSetOutline(DutyTextDraw, 1);
+	TextDrawBackgroundColor(DutyTextDraw, 255);
+	TextDrawFont(DutyTextDraw, 1);
+	TextDrawSetProportional(DutyTextDraw, 1);
+	TextDrawSetShadow(DutyTextDraw, 0);
+    TextDrawSetString(DutyTextDraw, "~n~~w~-_~r~ON_DUTY~w~-");    
 
 	//login
 	logintd = TextDrawCreate(183.5000, -41.0000, "mdl-1087:Koky_DM");

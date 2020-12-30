@@ -349,7 +349,7 @@ CMD<AD1>:fpscheck(cmdid, playerid, params[])
 	if(sscanf(params, "u", pID)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /fpscheck [player name/playerid]");
 	if(!IsPlayerConnected(pID)) return SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}This player is not connected!");
 
-	SendClientMessage(playerid, -1, sprintf("{31AEAA}FPS CHECK: {FFFFFF}User {%06x}%s {FFFFFF}has {D69929}%d {FFFFFF}FRAMES PER SECOND.", GetPlayerColor(pID) >>> 8, GetName(pID), pFPS[pID]));
+	SendClientMessage(playerid, -1, sprintf("{31AEAA}FPS CHECK: {FFFFFF}User {%06x}%s {FFFFFF}has {990a1e}%d {FFFFFF}FRAMES PER SECOND.", GetPlayerColor(pID) >>> 8, GetName(pID), pFPS[pID]));
 	return 1;
 }
 CMD<AD1>:forcerules(cmdid, playerid, params[])
@@ -415,7 +415,12 @@ CMD<AD1>:mute(cmdid, playerid, params[])
 	Account[pID][Muted] = gettime() + time*60;
 	Account[pID][Mutes]++;
 
-	SendPunishmentMessage(sprintf("Admin %s has muted %s for %i minutes. Reason: %s", GetName(playerid), GetName(pID), time, reason));
+	if (GetPlayerAdminHidden(playerid)) {
+		SendPunishmentMessage(sprintf("An admin has muted %s for %i minutes. Reason: %s", GetName(pID), time, reason));
+	}
+	else {
+		SendPunishmentMessage(sprintf("Admin %s has muted %s for %i minutes. Reason: %s", GetName(playerid), GetName(pID), time, reason));
+	}
 	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {C0C0C0}%s has muted %s for %i minutes! Reason: %s", GetName(playerid), GetName(pID), time, reason));
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/mute', '%e', '%d')", GetName(playerid), GetName(pID), reason, gettime()));
 	Account[playerid][AdminActions]++;

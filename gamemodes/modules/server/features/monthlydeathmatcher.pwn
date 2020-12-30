@@ -2,13 +2,13 @@
 MonthlyKeyText()
 {
 	new str[128];
-	format(str, sizeof(str), "{EE5133}Monthly Deathmatcher: {33C4EE}N/A {EE5133}with {33C4EE}N/A {EE5133}kills!");
+	format(str, sizeof(str), "{bf0000}Monthly Deathmatcher: {FFFFFF}N/A {bf0000}with {FFFFFF}N/A {bf0000}kills!");
 	dmerlabel = Create3DTextLabel(str, -1, MONTHDM_NPC_POS, 30.0, 0, 0);
 }
 UpdateMonthlyKeyText(username[], playerskin, kills)
 {
 	new str[128];
-	format(str, sizeof(str), "{EE5133}Monthly Deathmatcher: {33C4EE}%s {EE5133}with\n{33C4EE}%d {EE5133}kills!", username, kills);
+	format(str, sizeof(str), "{bf0000}Monthly Deathmatcher: {FFFFFF}%s {bf0000}with\n{FFFFFF}%d {bf0000}kills!", username, kills);
 	Update3DTextLabelText(dmerlabel, -1, str);
 	UpdateNPCSkin(playerskin);
 	SendClientMessageToAll(-1, sprintf("{bf0000}Notice: {FFFFFF}The Monthly Deathmatcher has been updated! {31AEAA}%s {FFFFFF}with {31AEAA}%d {FFFFFF}kills this month!", username, kills));

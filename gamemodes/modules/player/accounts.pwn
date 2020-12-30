@@ -9,10 +9,10 @@ public OnPlayerFinishedDownloading(playerid, virtualworld)
 		new tmpName[MAX_PLAYER_NAME];
 		GetPlayerName(playerid, tmpName, sizeof tmpName);
 		TextDrawShowForPlayer(playerid, logintd);
-		SendClientMessage(playerid, COLOR_ORANGE, sprintf("%s [%s]", Server[Name], Server[Version]));
+		SendClientMessage(playerid, 0xbf0000FF, sprintf("%s [%s]", Server[Name], Server[Version]));
 		SendClientMessage(playerid, COLOR_WHITE, sprintf("Welcome to the server, %s.", tmpName));
 
-		InfoBoxForPlayer(playerid, "== ~y~[Koky's Deathmatch]~w~==~n~Welcome to Koky's Deathmatch!");
+		InfoBoxForPlayer(playerid, "== ~r~[Koky's Deathmatch]~w~==~n~Welcome to Koky's Deathmatch!");
 
 		Account[playerid][LoggedIn] = 0;
 		LoginAttempts[playerid] = 0;
@@ -204,7 +204,7 @@ Login_Dialog(playerid)
 	TextDrawShowForPlayer(playerid, logintd);
 
 	new response[e_DIALOG_RESPONSE_INFO];
-	format(str, sizeof(str), "{FFFFFF}Hello, %s!\n\nWelcome back to {D69929}Koky's Deathmatch{FFFFFF}.\nPlease login with your existing password below.", GetName(playerid));
+	format(str, sizeof(str), "{FFFFFF}Hello, %s!\n\nWelcome back to {990a1e}Koky's Deathmatch{FFFFFF}.\nPlease login with your existing password below.", GetName(playerid));
 	AwaitAsyncDialog(playerid, response, DIALOG_STYLE_PASSWORD, "Koky's Deathmatch | Login", str, "Login", "Leave");
 
 	if(!response[E_DIALOG_RESPONSE_Response])
@@ -226,7 +226,7 @@ Login_Dialog(playerid)
 Register_Dialog(playerid)
 {
 	new response[e_DIALOG_RESPONSE_INFO], str[256];
-	format(str, sizeof(str), "{FFFFFF}Hello, %s!\n\nWelcome to {D69929}Koky's Deathmatch{FFFFFF}.\nThis username isn't registered, thus you will register it now!\n\nEnter your desired password:",
+	format(str, sizeof(str), "{FFFFFF}Hello, %s!\n\nWelcome to {990a1e}Koky's Deathmatch{FFFFFF}.\nThis username isn't registered, thus you will register it now!\n\nEnter your desired password:",
 		GetName(playerid));
 	AwaitAsyncDialog(playerid, response, DIALOG_STYLE_PASSWORD, "Koky's Deathmatch | Register", str, "Register", "Leave");
 
@@ -365,7 +365,7 @@ HandleAdminPin(playerid, adminlevel, pin)
 ShowAdminPinDialog(playerid, adminlevel, correctpin)
 {
 	new str[128], response[e_DIALOG_RESPONSE_INFO];
-	format(str, sizeof(str), "{FFFFFF}Hello, %s!\n\nYou have logged in as an Admin. {D69929}Admin Level {FF0000}%i.{FFFFFF}.\nPlease input your Admin Pin below.", GetName(playerid), adminlevel);
+	format(str, sizeof(str), "{FFFFFF}Hello, %s!\n\nYou have logged in as an Admin. {990a1e}Admin Level {FFFFFF}%i.\nPlease input your Admin Pin below.", GetName(playerid), adminlevel);
 	for(;;)
 	{
 		AwaitAsyncDialog(playerid, response, DIALOG_STYLE_PASSWORD, "Koky's Deathmatch | Admin Pin", str, "Login", "Exit");
@@ -397,7 +397,7 @@ ShowCreateAdminPinDialog(playerid)
 	new response[e_DIALOG_RESPONSE_INFO];
 	for(;;)
 	{
-		AwaitAsyncDialog(playerid, response, DIALOG_STYLE_PASSWORD, "{FF0000}Password Change", "You have logged in as an Admin and have not yet set your Admin Pin.\n{FF0000}Your pin MUST be {D69929}4{FF0000} digits long.", "Submit", "");
+		AwaitAsyncDialog(playerid, response, DIALOG_STYLE_PASSWORD, "{FF0000}Password Change", "You have logged in as an Admin and have not yet set your Admin Pin.\n{FF0000}Your pin MUST be {990a1e}4{FF0000} digits long.", "Submit", "");
 
 		if(!response[E_DIALOG_RESPONSE_Response]) continue;
 		extract response[E_DIALOG_RESPONSE_InputText] -> new pin; else

@@ -15,7 +15,13 @@ CMD<AD1>:aduty(cmdid, playerid, params[])
 	format(szString, 144, "{FF0000}%s{FFFFFF} is %s on duty.", GetName(playerid), adminDuty[playerid] ? "now" : "no longer");
 	SendClientMessageToAll(COLOR_RED, szString);
 
-	if(adminDuty[playerid]) SetPlayerColor(playerid, 0xFF000000);
-	else SetPlayerColor(playerid, Account[playerid][Color]);
+	if(adminDuty[playerid]) {
+		TextDrawShowForPlayer(playerid, DutyTextDraw);
+		SetPlayerColor(playerid, 0xFF000000);
+	}
+	else {
+		TextDrawHideForPlayer(playerid, DutyTextDraw);
+		SetPlayerColor(playerid, Account[playerid][Color]);
+	}
 	return 1;
 }

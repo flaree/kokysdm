@@ -1,13 +1,13 @@
 LatestDonatorText()
 {
 	new str[128];
-	format(str, sizeof(str), "{EE5133}Latest Donator: {33C4EE}N/A {EE5133}purchased {33C4EE}N/A {EE5133}!");
+	format(str, sizeof(str), "{bf0000}Latest Donator: {FFFFFF}N/A {bf0000}purchased {FFFFFF}N/A {bf0000}!");
 	latestdonatorlabel = Create3DTextLabel(str, -1, DONATOR_NPC_POS, 30.0, 0, 0);
 }
 UpdateLatestDonator(playerid)
 {
 	new str[128];
-	format(str, sizeof(str), "{EE5133}Latest Donator: {33C4EE}%s!\n{EE5133}Donated: {33C4EE}%.2f Euro!", GetName(playerid), Account[playerid][DonationAmount]);
+	format(str, sizeof(str), "{bf0000}Latest Donator: {FFFFFF}%s!\n{bf0000}Donated: {FFFFFF}%.2f Euro!", GetName(playerid), Account[playerid][DonationAmount]);
 	Update3DTextLabelText(latestdonatorlabel, -1, str);
 	DestroyActor(latestdonator_actor);
 	latestdonator_actor = CreateActor(Account[playerid][Skin], DONATOR_NPC_POS, 180.0);
