@@ -62,6 +62,7 @@ hook public OnPlayerUpdate(playerid)
 	GetPlayerKeys(playerid, keys, updown, leftright);
 	if(SpectatingPlayer[playerid] != -1 && Account[playerid][Admin] != 0)
 	{
+		UpdateSpecTDs(playerid, SpectatingPlayer[playerid]);
 		if(keys & KEY_SPRINT)
 		{
 			PlayerSpectatePlayer(playerid, SpectatingPlayer[playerid]);
@@ -101,7 +102,7 @@ hook public OnPlayerUpdate(playerid)
 				}
 				SendClientMessage(playerid, -1, sprintf("{31AEAA}Spectating: {FFFFFF}You are now spectating %s(%i). Player Mode: %s. Press SPRINT key to sync.", GetName(i), i, ReturnActivityDescription(i)));
 				SpectatePlayer(playerid, i);
-
+				UpdateSpecTDs(playerid, i);
 				if(ActivityState[i] == ACTIVITY_TDM)
 				{
 					CreateTDMMapping(playerid);
@@ -128,6 +129,13 @@ CMD<AD1>:spec(cmdid, playerid, params[])
 	}
 
 	SpectatePlayer(playerid, target);
+	CreateSpecTDs(playerid);
+	UpdateSpecTDs(playerid, target);
+	if(HudHide[playerid] == false)
+		{
+			HideSessionStats(playerid);
+			HideNetworkTDs(playerid);
+		}
 	SendClientMessage(playerid, -1, sprintf("{bf0000}(Spectate): {808080}You are now spectating %s(%i). Player Mode: %s. Press SPRINT key to sync.", GetName(target), target, ReturnActivityDescription(target)));
 	return true;
 }
@@ -138,6 +146,12 @@ CMD<AD1>:specoff(cmdid, playerid, params[])
 	DestroyAllPlayerObjects(playerid);
 	SendClientMessage(playerid, -1, sprintf("{31AEAA}Spectating: {FFFFFF}You are no longer spectating %s(%i).", GetName(SpectatingPlayer[playerid]), SpectatingPlayer[playerid]));
 	StopSpectating(playerid);
+	DestroySpecTDs(playerid);
+	if(HudHide[playerid] == false)
+		{
+			HideSessionStats(playerid);
+			HideNetworkTDs(playerid);
+		}
 	return true;
 }
 
@@ -174,4 +188,86 @@ public DelayedSpectate(playerid, target)
 {
 	if(IsPlayerInAnyVehicle(target)) PlayerSpectateVehicle(playerid, GetPlayerVehicleID(target));
 	else PlayerSpectatePlayer(playerid, target);
+}
+
+new PlayerText:SpecPlayerFPSTD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
+new PlayerText:SpecPlayerPingTD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
+new PlayerText:SpecPlayerPLTD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
+new PlayerText:SpecPlayerNameTD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
+new PlayerText:SpecPlayerIPTD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
+
+DestroySpecTDs(playerid)
+{
+	PlayerTextDrawDestroy(playerid, SpecPlayerFPSTD[playerid]);
+	PlayerTextDrawDestroy(playerid, SpecPlayerPingTD[playerid]);
+	PlayerTextDrawDestroy(playerid, SpecPlayerPLTD[playerid]);
+	PlayerTextDrawDestroy(playerid, SpecPlayerNameTD[playerid]);
+	PlayerTextDrawDestroy(playerid, SpecPlayerIPTD[playerid]);
+}
+
+CreateSpecTDs(playerid)
+{
+	SpecPlayerNameTD[playerid] = CreatePlayerTextDraw(playerid, 547.000000, 16.000000, "Player Name");
+	PlayerTextDrawBackgroundColor(playerid, SpecPlayerNameTD[playerid], 255);
+	PlayerTextDrawFont(playerid, SpecPlayerNameTD[playerid], 2);
+	PlayerTextDrawLetterSize(playerid, SpecPlayerNameTD[playerid], 0.200000, 1.000000);
+	PlayerTextDrawColor(playerid, SpecPlayerNameTD[playerid], -16776961);
+	PlayerTextDrawSetOutline(playerid, SpecPlayerNameTD[playerid], 1);
+	PlayerTextDrawSetProportional(playerid, SpecPlayerNameTD[playerid], 1);
+	PlayerTextDrawSetSelectable(playerid, SpecPlayerNameTD[playerid], 0);
+
+	SpecPlayerIPTD[playerid] = CreatePlayerTextDraw(playerid, 547.000000, 25.000000, "IP:~W~ 0.0.0.0");
+	PlayerTextDrawBackgroundColor(playerid, SpecPlayerIPTD[playerid], 255);
+	PlayerTextDrawFont(playerid, SpecPlayerIPTD[playerid], 1);
+	PlayerTextDrawLetterSize(playerid, SpecPlayerIPTD[playerid], 0.200000, 1.000000);
+	PlayerTextDrawColor(playerid, SpecPlayerIPTD[playerid], -1397969665);
+	PlayerTextDrawSetOutline(playerid, SpecPlayerIPTD[playerid], 1);
+	PlayerTextDrawSetProportional(playerid, SpecPlayerIPTD[playerid], 1);
+	PlayerTextDrawSetSelectable(playerid, SpecPlayerIPTD[playerid], 0);
+
+	SpecPlayerFPSTD[playerid] = CreatePlayerTextDraw(playerid, 547.000000, 34.000000, "FPS:~W~ 0");
+	PlayerTextDrawBackgroundColor(playerid, SpecPlayerFPSTD[playerid], 255);
+	PlayerTextDrawFont(playerid, SpecPlayerFPSTD[playerid], 1);
+	PlayerTextDrawLetterSize(playerid, SpecPlayerFPSTD[playerid], 0.200000, 1.000000);
+	PlayerTextDrawColor(playerid, SpecPlayerFPSTD[playerid], -1397969665);
+	PlayerTextDrawSetOutline(playerid, SpecPlayerFPSTD[playerid], 1);
+	PlayerTextDrawSetProportional(playerid, SpecPlayerFPSTD[playerid], 1);
+	PlayerTextDrawSetSelectable(playerid, SpecPlayerFPSTD[playerid], 0);
+
+	SpecPlayerPingTD[playerid] = CreatePlayerTextDraw(playerid, 547.000000, 43.000000, "PING:~W~ 0");
+	PlayerTextDrawBackgroundColor(playerid, SpecPlayerPingTD[playerid], 255);
+	PlayerTextDrawFont(playerid, SpecPlayerPingTD[playerid], 1);
+	PlayerTextDrawLetterSize(playerid, SpecPlayerPingTD[playerid], 0.200000, 1.000000);
+	PlayerTextDrawColor(playerid, SpecPlayerPingTD[playerid], -1397969665);
+	PlayerTextDrawSetOutline(playerid, SpecPlayerPingTD[playerid], 1);
+	PlayerTextDrawSetProportional(playerid, SpecPlayerPingTD[playerid], 1);
+	PlayerTextDrawSetSelectable(playerid, SpecPlayerPingTD[playerid], 0);
+
+	SpecPlayerPLTD[playerid] = CreatePlayerTextDraw(playerid, 547.000000, 52.000000, "P/L:~W~ 0.0%");
+	PlayerTextDrawBackgroundColor(playerid, SpecPlayerPLTD[playerid], 255);
+	PlayerTextDrawFont(playerid, SpecPlayerPLTD[playerid], 1);
+	PlayerTextDrawLetterSize(playerid, SpecPlayerPLTD[playerid], 0.200000, 1.000000);
+	PlayerTextDrawColor(playerid, SpecPlayerPLTD[playerid], -1397969665);
+	PlayerTextDrawSetOutline(playerid, SpecPlayerPLTD[playerid], 1);
+	PlayerTextDrawSetProportional(playerid, SpecPlayerPLTD[playerid], 1);
+	PlayerTextDrawSetSelectable(playerid, SpecPlayerPLTD[playerid], 0);
+	
+
+	PlayerTextDrawShow(playerid, SpecPlayerFPSTD[playerid]);
+	PlayerTextDrawShow(playerid, SpecPlayerPingTD[playerid]);
+	PlayerTextDrawShow(playerid, SpecPlayerPLTD[playerid]);
+	PlayerTextDrawShow(playerid, SpecPlayerIPTD[playerid]);
+	PlayerTextDrawShow(playerid, SpecPlayerNameTD[playerid]);
+	return true;
+}
+
+UpdateSpecTDs(playerid, targetid)
+{
+	new Player_IP[16];	GetPlayerIp(targetid, Player_IP, 16);
+	PlayerTextDrawSetString(playerid, SpecPlayerNameTD[playerid], sprintf("%s", pName[targetid]));
+	PlayerTextDrawSetString(playerid, SpecPlayerIPTD[playerid], sprintf("IP:~W~ %s", Player_IP));
+    PlayerTextDrawSetString(playerid, SpecPlayerFPSTD[playerid], sprintf("FPS:~W~ %i", pFPS[targetid]));
+    PlayerTextDrawSetString(playerid, SpecPlayerPingTD[playerid], sprintf("PING:~W~ %i", GetPlayerPing(targetid)));
+	PlayerTextDrawSetString(playerid, SpecPlayerPLTD[playerid], sprintf("P/L:~W~ %.2f%", NetStats_PacketLossPercent(targetid)));
+    return true;
 }
