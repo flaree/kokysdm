@@ -349,7 +349,7 @@ CMD<AD1>:fpscheck(cmdid, playerid, params[])
 	if(sscanf(params, "u", pID)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /fpscheck [player name/playerid]");
 	if(!IsPlayerConnected(pID)) return SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}This player is not connected!");
 
-	SendClientMessage(playerid, -1, sprintf("{31AEAA}FPS CHECK: {FFFFFF}User {%06x}%s {FFFFFF}has {990a1e}%d {FFFFFF}FRAMES PER SECOND.", GetPlayerColor(pID) >>> 8, GetName(pID), pFPS[pID]));
+	SendClientMessage(playerid, -1, sprintf("{bf0000}FPS CHECK: {FFFFFF}User {%06x}%s {FFFFFF}has {990a1e}%d {FFFFFF}FRAMES PER SECOND.", GetPlayerColor(pID) >>> 8, GetName(pID), pFPS[pID]));
 	return 1;
 }
 CMD<AD1>:forcerules(cmdid, playerid, params[])

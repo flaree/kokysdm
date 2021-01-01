@@ -1430,7 +1430,7 @@ public OnPlayerConnect(playerid)
 
 	Account_Reset(playerid);
 	SetPlayerColor(playerid, PlayerColors[playerid]);
-	SendClientMessageToAll(COLOR_GRAY, sprintf("{bf0000}Connection: {%06x}%s {ffffff}has joined the server.", PlayerColors[playerid] >>> 8, GetName(playerid)));
+	SendClientMessageToAll(COLOR_GRAY, sprintf("{bf0000}Connection: {9f9f9f}%s {ffffff}has joined the server.", GetName(playerid)));
 	TogglePlayerSpectating(playerid, 1);
 	SetPlayerColor(playerid, PlayerColors[playerid]);
 	dmessage2[playerid] = SetTimerEx("CheckDonations", 30000, true, "i", playerid);
@@ -2409,7 +2409,7 @@ SendSpree(playerid)
 		GetPlayerArmour(playerid, armour);
 		SetPlayerArmour(playerid, armour + 25);
 
-		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{31AEAA}Spree:{%06x} %s{FFFFFF} is on a %d killing spree!", GetPlayerColor(playerid) >>> 8, GetName(playerid), Account[playerid][KillStreak]));
+		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{fdff00}KILLSTREAK: %s is on a %d killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +25 armour for your spree!");
 		GameTextForPlayer(playerid, "~R~Triple Kill!", 1000, 6);
 	}
@@ -2419,27 +2419,27 @@ SendSpree(playerid)
 		GetPlayerArmour(playerid, armour);
 		SetPlayerArmour(playerid, armour + 50);
 
-		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{31AEAA}Spree:{%06x} %s{FFFFFF} is on a %d killing spree!", GetPlayerColor(playerid) >>> 8, GetName(playerid), Account[playerid][KillStreak]));
+		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{fdff00}KILLSTREAK: %s is on a %d killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +50 armour for your spree!");
 		GameTextForPlayer(playerid, "~R~Multi-Kill!", 1000, 6);
 	}
 	if(Account[playerid][KillStreak] == 10)
 	{
-		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{31AEAA}Spree:{%06x} %s{FFFFFF} is on a %d killing spree!", GetPlayerColor(playerid) >>> 8, GetName(playerid), Account[playerid][KillStreak]));
+		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{fdff00}KILLSTREAK: %s is on a %d killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given $3500 for your spree!");
 		GivePlayerMoneyEx(playerid, 3500);
 		GameTextForPlayer(playerid, "~R~INSANE SPREE", 1000, 6);
 	}
 	if(Account[playerid][KillStreak] == 15)
 	{
-		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{31AEAA}Spree:{%06x} %s{FFFFFF} is on a %d killing spree!", GetPlayerColor(playerid) >>> 8, GetName(playerid), Account[playerid][KillStreak]));
+		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{fdff00}KILLSTREAK: %s is on a %d killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +10 kills for your spree!");
 		GivePlayerKillEx(playerid, 10);
 		GameTextForPlayer(playerid, "~R~MADNESS SPREE", 1000, 6);
 	}
 	if(Account[playerid][KillStreak] == 25)
 	{
-		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{31AEAA}Spree:{%06x} %s{FFFFFF} is on a %d killing spree!", GetPlayerColor(playerid) >>> 8, GetName(playerid), Account[playerid][KillStreak]));
+		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{fdff00}KILLSTREAK: %s is on a %d killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +25 kills for your spree!");
 		GivePlayerKillEx(playerid, 25);
 		GameTextForPlayer(playerid, "~R~NUKE SPREE!", 1000, 6);
@@ -2465,7 +2465,7 @@ SendTDMSpree(playerid)
 		GetPlayerArmour(playerid, armour);
 		SetPlayerArmour(playerid, armour + 25);
 
-		SendTDMMessage(-1, sprintf("{31AEAA}Spree:{%06x} %s{FFFFFF} is on a %d killing spree!", GetPlayerColor(playerid) >>> 8, GetName(playerid), Account[playerid][KillStreak]));
+		SendTDMMessage(-1, sprintf("{fdff00}KILLSTREAK: %s is on a %d killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +25 armour for your spree!");
 		GameTextForPlayer(playerid, "~R~Triple Kill!", 1000, 6);
 	}
@@ -2475,27 +2475,27 @@ SendTDMSpree(playerid)
 		GetPlayerArmour(playerid, armour);
 		SetPlayerArmour(playerid, armour + 50);
 
-		SendTDMMessage(-1, sprintf("{31AEAA}Spree:{%06x} %s{FFFFFF} is on a %d killing spree!", GetPlayerColor(playerid) >>> 8, GetName(playerid), Account[playerid][KillStreak]));
+		SendTDMMessage(-1, sprintf("{fdff00}KILLSTREAK: %s is on a %d killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +50 armour for your spree!");
 		GameTextForPlayer(playerid, "~R~Multi-Kill!", 1000, 6);
 	}
 	if(Account[playerid][KillStreak] == 10)
 	{
-		SendTDMMessage(-1, sprintf("{31AEAA}Spree:{%06x} %s{FFFFFF} is on a %d killing spree!", GetPlayerColor(playerid) >>> 8, GetName(playerid), Account[playerid][KillStreak]));
+		SendTDMMessage(-1, sprintf("{fdff00}KILLSTREAK: %s is on a %d killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given $3500 for your spree!");
 		GivePlayerMoneyEx(playerid, 3500);
 		GameTextForPlayer(playerid, "~R~INSANE SPREE", 1000, 6);
 	}
 	if(Account[playerid][KillStreak] == 15)
 	{
-		SendTDMMessage(-1, sprintf("{31AEAA}Spree:{%06x} %s{FFFFFF} is on a %d killing spree!", GetPlayerColor(playerid) >>> 8, GetName(playerid), Account[playerid][KillStreak]));
+		SendTDMMessage(-1, sprintf("{fdff00}KILLSTREAK: %s is on a %d killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +10 kills for your spree!");
 		GivePlayerKillEx(playerid, 10);
 		GameTextForPlayer(playerid, "~R~MADNESS SPREE", 1000, 6);
 	}
 	if(Account[playerid][KillStreak] == 25)
 	{
-		SendTDMMessage(-1, sprintf("{31AEAA}Spree:{%06x} %s{FFFFFF} is on a %d killing spree!", GetPlayerColor(playerid) >>> 8, GetName(playerid), Account[playerid][KillStreak]));
+		SendTDMMessage(-1, sprintf("{fdff00}KILLSTREAK: %s is on a %d killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +25 kills for your spree!");
 		GivePlayerKillEx(playerid, 25);
 		GameTextForPlayer(playerid, "~R~NUKE SPREE!", 1000, 6);
@@ -2511,7 +2511,13 @@ SendTDMSpree(playerid)
 }
 public OnPlayerClickPlayer(playerid, clickedplayerid, source)
 {
-	ShowStatsForPlayer(playerid, clickedplayerid);
+    if (!GetPlayerAdminLevel(playerid)) {
+	    ShowStatsForPlayer(playerid, clickedplayerid);
+    } else {
+        new networkStats[400];
+        GetPlayerNetworkStats(clickedplayerid, networkStats, sizeof networkStats);
+        ShowPlayerDialog(playerid, 0, DIALOG_STYLE_MSGBOX, sprintf("%s Networkstats", GetName(clickedplayerid)), networkStats, "Okay", "");
+    }
 	return 1;
 }
 
@@ -2617,7 +2623,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 	{
 		if(killerid == INVALID_PLAYER_ID)
 		{
-			SendClientMessageToAll(-1, sprintf("{bf0000}Duel: {%06x}%s {FFFFFF}died in mysterious circumstances. Duel ended.", GetPlayerColor(playerid) >>> 8, GetName(playerid)));
+			SendClientMessageToAll(-1, sprintf("{fdff00}Duel: %s {FFFFFF}died in mysterious circumstances. Duel ended.", GetName(playerid)));
 			EndDuel(playerid, true);
 			return true;
 		}
@@ -2632,7 +2638,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 		new team_count = DuelTeam[host_id][playerid] == HOST_TEAM ? AlliesCount[host_id] : EnemyCount[host_id];
 		if(team_count == 0)
 		{
-			SendClientMessageToAll(-1, sprintf("{bf0000}Duel: {%06x}%s {FFFFFF}has won the duel for their team by finishing off {%06x}%s!", GetPlayerColor(killerid) >>> 8, GetName(killerid), GetPlayerColor(playerid) >>> 8, GetName(playerid)));
+			SendClientMessageToAll(-1, sprintf("{fdff00}Duel: %s has won the duel for their team by finishing off %s!", GetName(killerid), GetName(playerid)));
 			EndDuel(playerid, false);
 		}
 		else
@@ -2957,18 +2963,18 @@ public OnPremiumCrateStep(playerid, step)
 			if(reward == 0)
 			{
 				GivePlayerMoneyEx(playerid, 5000);
-				format(str, sizeof(str), "{31AEAA}Crates: {%06x}%s {FFFFFF}has just won $5000!", GetPlayerColor(playerid) >>> 8, GetName(playerid));
+				format(str, sizeof(str), "{fdff00}Crates: {%06x}%s {FFFFFF}has just won $5000!", GetPlayerColor(playerid) >>> 8, GetName(playerid));
 				SendClientMessageToAll(-1, str);
 			}
 			if(reward == 1)
 			{
-				format(str, sizeof(str), "{31AEAA}Crates: {%06x}%s {FFFFFF}has just won $10000!", GetPlayerColor(playerid) >>> 8, GetName(playerid));
+				format(str, sizeof(str), "{fdff00}Crates: {%06x}%s {FFFFFF}has just won $10000!", GetPlayerColor(playerid) >>> 8, GetName(playerid));
 				SendClientMessageToAll(-1, str);
 				GivePlayerMoneyEx(playerid, 10000);
 			}
 			if(reward == 2)
 			{
-				format(str, sizeof(str), "{31AEAA}Crates: {%06x}%s {FFFFFF}has just won an Event!", GetPlayerColor(playerid) >>> 8, GetName(playerid));
+				format(str, sizeof(str), "{fdff00}Crates: {%06x}%s {FFFFFF}has just won an Event!", GetPlayerColor(playerid) >>> 8, GetName(playerid));
 				SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}Congratulations, you've won an Event. (/startevent)");
 				SendClientMessageToAll(-1, str);
 				Account[playerid][PlayerEvents]++;
@@ -2977,7 +2983,7 @@ public OnPremiumCrateStep(playerid, step)
 			{
 				if(Account[playerid][Donator] <= 0 || Account[playerid][Donator] > 0 && Account[playerid][GsignPack] <= 0)
 				{
-					format(str, sizeof(str), "{31AEAA}Crates: {%06x}%s {FFFFFF}has just won access to /gsign!", GetPlayerColor(playerid) >>> 8, GetName(playerid));
+					format(str, sizeof(str), "{fdff00}Crates: {%06x}%s {FFFFFF}has just won access to /gsign!", GetPlayerColor(playerid) >>> 8, GetName(playerid));
 					SendClientMessageToAll(-1, str);
 					Account[playerid][GsignPack] = 1;
 				}
@@ -2996,7 +3002,7 @@ public OnPremiumCrateStep(playerid, step)
 			}
 			if(reward == 4)
 			{
-				format(str, sizeof(str), "{31AEAA}Crates: {%06x}%s {FFFFFF}has just won $25000!", GetPlayerColor(playerid) >>> 8, GetName(playerid));
+				format(str, sizeof(str), "{fdff00}Crates: {%06x}%s {FFFFFF}has just won $25000!", GetPlayerColor(playerid) >>> 8, GetName(playerid));
 				SendClientMessageToAll(-1, str);
 				GivePlayerMoneyEx(playerid, 25000);
 				UpdateKeyText(playerid);
@@ -3005,7 +3011,7 @@ public OnPremiumCrateStep(playerid, step)
 			{
 				if(Account[playerid][WeatherAccess] <= 0 || Account[playerid][Donator] > 0 && Account[playerid][WeatherAccess] <= 0)
 				{
-					format(str, sizeof(str), "{31AEAA}Crates: {%06x}%s {FFFFFF}has just won access to /setweather!", GetPlayerColor(playerid) >>> 8, GetName(playerid));
+					format(str, sizeof(str), "{fdff00}Crates: {%06x}%s {FFFFFF}has just won access to /setweather!", GetPlayerColor(playerid) >>> 8, GetName(playerid));
 					SendClientMessageToAll(-1, str);
 					Account[playerid][WeatherAccess] = 1;
 				}
@@ -3027,7 +3033,7 @@ public OnPremiumCrateStep(playerid, step)
 			{
 				if(Account[playerid][WheelChair] <= 0 || Account[playerid][Donator] > 0 && Account[playerid][WheelChair] <= 0)
 				{
-					format(str, sizeof(str), "{31AEAA}Crates: {%06x}%s {FFFFFF}has just won access to /wheelchair!", GetPlayerColor(playerid) >>> 8,  GetName(playerid));
+					format(str, sizeof(str), "{fdff00}Crates: {%06x}%s {FFFFFF}has just won access to /wheelchair!", GetPlayerColor(playerid) >>> 8,  GetName(playerid));
 					SendClientMessageToAll(-1, str);
 					Account[playerid][WheelChair] = 1;
 				}
@@ -3049,7 +3055,7 @@ public OnPremiumCrateStep(playerid, step)
 			{
 				if(Account[playerid][TimeAccess] <= 0 || Account[playerid][Donator] > 0 && Account[playerid][TimeAccess] <= 0)
 				{
-					format(str, sizeof(str), "{31AEAA}Crates: {%06x}%s {FFFFFF}has just won access to /settime!", GetPlayerColor(playerid) >>> 8, GetName(playerid));
+					format(str, sizeof(str), "{fdff00}Crates: {%06x}%s {FFFFFF}has just won access to /settime!", GetPlayerColor(playerid) >>> 8, GetName(playerid));
 					SendClientMessageToAll(-1, str);
 					Account[playerid][TimeAccess] = 1;
 				}
@@ -3069,14 +3075,14 @@ public OnPremiumCrateStep(playerid, step)
 			}
 			if(reward == 8)
 			{
-				format(str, sizeof(str), "{31AEAA}Crates: {%06x}%s {FFFFFF}has just won $50000!", GetPlayerColor(playerid) >>> 8, GetName(playerid));
+				format(str, sizeof(str), "{fdff00}Crates: {%06x}%s {FFFFFF}has just won $50000!", GetPlayerColor(playerid) >>> 8, GetName(playerid));
 				SendClientMessageToAll(-1, str);
 				GivePlayerMoneyEx(playerid, 50000);
 				UpdateKeyText(playerid);
 			}
 			if(reward == 9)
 			{
-				format(str, sizeof(str), "{31AEAA}Crates: {%06x}%s {FFFFFF}has just won 2 events!", GetPlayerColor(playerid) >>> 8, GetName(playerid));
+				format(str, sizeof(str), "{fdff00}Crates: {%06x}%s {FFFFFF}has just won 2 events!", GetPlayerColor(playerid) >>> 8, GetName(playerid));
 				SendClientMessageToAll(-1, str);
 				Account[playerid][PlayerEvents] = Account[playerid][PlayerEvents] + 2;
 				UpdateKeyText(playerid);
@@ -3743,6 +3749,9 @@ CMD:pm(cmdid, playerid, params[])
 	new pID, pmmsg[200];
 	if(sscanf(params, "us[200]", pID, pmmsg)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /pm [playerid] [message]");
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid, ERROR_OPTION);
+    if (Account[playerid][Muted] != 0) {
+        SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}You are muted!");
+    }
 	if(!AllowPMS{pID} && GetPlayerAdminLevel(playerid) == 0) return SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}This player has disabled his private messages!");
 	if(!GetPlayerAdminLevel(playerid) && ChatLocked) return SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}The chat is currently locked by an administrator.");
 	SendClientMessage(pID, COLOR_WHITE, sprintf("{FF8C00}Private Message from %s(%d):{FFFFFF} %s",GetName(playerid), playerid, pmmsg));
@@ -3816,6 +3825,7 @@ CMD:admins(cmdid, playerid, params[])
     }
     else {
         SendClientMessage(playerid, 0xBF0000FF, "Admins online:");
+        SendClientMessage(playerid, 0xBF0000FF, "______________________________________________");
     }
     list_sort(adminlist, 1, -1, true);
     for_list(i: adminlist)
@@ -3823,6 +3833,7 @@ CMD:admins(cmdid, playerid, params[])
         iter_get_arr(i, admin);
         SendClientMessage(playerid, COLOR_WHITE, sprintf("(Level {bf0000}%s {ffffff}Admin) {%06x}%s {ffffff}(ID %i) {bf0000}%s", AdminNames(admin[1]), GetPlayerColor(admin[0]) >>> 8, GetName(admin[0]), admin[0], Account[admin[0]][pAdminHide] == 1 ? "(HIDDEN)" : ""));
     }
+    SendClientMessage(playerid, 0xBF0000FF, "______________________________________________");
 	if(!GetPlayerAdminLevel(playerid)) SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has just typed /admins.", GetName(playerid)));
     list_delete(adminlist);
     return true;
@@ -3831,12 +3842,18 @@ ALT:staff = CMD:admins;
 ALT:mods = CMD:admins;
 ALT:moderators = CMD:admins;
 
+new crateCoolDown[MAX_PLAYERS];
+
 CMD:opencrate(cmdid, playerid, params[])
 {
-	if(!IsPlayerInLobby(playerid)) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Crates: {FFFFFF}You must be in the lobby to use this command.");
-	if(Account[playerid][PlayerKeys] <= 0) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Crates: {FFFFFF}You do not have enough keys to use this feature.");
+	if(!IsPlayerInLobby(playerid)) return SendClientMessage(playerid, COLOR_GRAY, "{fdff00}Crates: {FFFFFF}You must be in the lobby to use this command.");
+	if(Account[playerid][PlayerKeys] <= 0) return SendClientMessage(playerid, COLOR_GRAY, "{fdff00}Crates: {FFFFFF}You do not have enough keys to use this feature.");
+    if (crateCoolDown[playerid] > gettime()) {
+        return SendClientMessage(playerid, -1, sprintf("{bf0000}Notice: {ffffff}You must wait %i more seconds before opening a crate again.", crateCoolDown[playerid] - gettime()));
+    }
 
 	OnPremiumCrateStep(playerid, 0);
+    crateCoolDown[playerid] = gettime() + 2;
 	Account[playerid][PlayerKeys]--;
 	UpdateKeyText(playerid);
 	Account[playerid][OpenedCrates]++;
