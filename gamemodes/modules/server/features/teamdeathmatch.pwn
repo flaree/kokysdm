@@ -517,7 +517,7 @@ GiveTDMAmmunation(playerid)
 	{
 		GivePlayerWeapon(playerid, WEAPON_SNIPER, 25);
 		GivePlayerWeapon(playerid, WEAPON_PARACHUTE, 1);
-		SendClientMessage(playerid, -1, "{31AEAA}Donator: {FFFFFF}You have been given a Sniper for being Diamond Donator!");
+		SendClientMessage(playerid, -1, "{fdff00}Donator: You have been given a Sniper for being Diamond Donator!");
 	}
 
 	if(Account[playerid][Donator] == 3)

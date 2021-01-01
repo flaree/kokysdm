@@ -24,7 +24,7 @@ hook public OnPlayerDisconnect(playerid, reason)
 	{
 		if(SpectatingPlayer[i] == playerid)
 		{
-			SendClientMessage(i, -1, sprintf("{31AEAA}Spectating: {FFFFFF}%s (%i) has disconnected, sending you to lobby.", GetName(playerid), playerid));
+			SendClientMessage(i, -1, sprintf("{bf0000}Spectating: {808080}%s (%i) has disconnected, sending you to lobby.", GetName(playerid), playerid));
 			StopSpectating(i);
 		}
 	}
@@ -100,7 +100,7 @@ hook public OnPlayerUpdate(playerid)
 						if(i == -1) i = MAX_PLAYERS-1;
 					}
 				}
-				SendClientMessage(playerid, -1, sprintf("{31AEAA}Spectating: {FFFFFF}You are now spectating %s(%i). Player Mode: %s. Press SPRINT key to sync.", GetName(i), i, ReturnActivityDescription(i)));
+				SendClientMessage(playerid, -1, sprintf("{bf0000}Spectating: {808080}You are now spectating %s(%i). Player Mode: %s. Press SPRINT key to sync.", GetName(i), i, ReturnActivityDescription(i)));
 				SpectatePlayer(playerid, i);
 				UpdateSpecTDs(playerid, i);
 				if(ActivityState[i] == ACTIVITY_TDM)
@@ -118,10 +118,10 @@ CMD<AD1>:spec(cmdid, playerid, params[])
 {
 	new target;
 	if(sscanf( params, "u", target)) return SendClientMessage( playerid, -1, "USAGE: /spec(tate) [ID]");
-	if(target == playerid) return SendClientMessage( playerid, -1, "{31AEAA}Spectating: {FFFFFF}You cannot spectate yourself.");
-	if(target == INVALID_PLAYER_ID) return SendClientMessage( playerid, -1, "{31AEAA}Spectating: {FFFFFF}Player not found.");
-	if(GetPlayerState(target) == PLAYER_STATE_WASTED) return SendClientMessage( playerid, -1, "{31AEAA}Spectating: {FFFFFF}Player is respawning.");
-	if(!IsPlayerInLobby(playerid)) return SendClientMessage( playerid, -1, "{31AEAA}Spectating: {FFFFFF}You must be in the lobby to use this command. This prevents wrong number of players in modes! Sorry baby.");
+	if(target == playerid) return SendClientMessage( playerid, -1, "{bf0000}Spectating: {808080}You cannot spectate yourself.");
+	if(target == INVALID_PLAYER_ID) return SendClientMessage( playerid, -1, "{bf0000}Spectating: {808080}Player not found.");
+	if(GetPlayerState(target) == PLAYER_STATE_WASTED) return SendClientMessage( playerid, -1, "{bf0000}Spectating: {808080}Player is respawning.");
+	if(!IsPlayerInLobby(playerid)) return SendClientMessage( playerid, -1, "{bf0000}Spectating: {808080}You must be in the lobby to use this command. This prevents wrong number of players in modes! Sorry baby.");
 
 	if(ActivityState[target] == ACTIVITY_TDM)
 	{
@@ -142,9 +142,9 @@ CMD<AD1>:spec(cmdid, playerid, params[])
 
 CMD<AD1>:specoff(cmdid, playerid, params[])
 {
-	if(SpectatingPlayer[playerid] == -1) return SendClientMessage( playerid, -1, "{31AEAA}Spectating: {FFFFFF}You are not spectating anyone.");
+	if(SpectatingPlayer[playerid] == -1) return SendClientMessage( playerid, -1, "{bf0000}Spectating: {808080}You are not spectating anyone.");
 	DestroyAllPlayerObjects(playerid);
-	SendClientMessage(playerid, -1, sprintf("{31AEAA}Spectating: {FFFFFF}You are no longer spectating %s(%i).", GetName(SpectatingPlayer[playerid]), SpectatingPlayer[playerid]));
+	SendClientMessage(playerid, -1, sprintf("{bf0000}Spectating: {808080}You are no longer spectating %s(%i).", GetName(SpectatingPlayer[playerid]), SpectatingPlayer[playerid]));
 	StopSpectating(playerid);
 	DestroySpecTDs(playerid);
 	if(HudHide[playerid] == false)
