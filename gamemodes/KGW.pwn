@@ -3692,8 +3692,16 @@ ALT:gw = CMD:giveweapon;
 ALT:w2 = CMD:giveweapon;
 CMD:stats(cmdid, playerid, params[])
 {
+    new targetid;
+    if(sscanf(params, "u", targetid)) 
+    {
+        print(pName[playerid]);
+        InfoBoxForPlayer(playerid, "~g~Gathering players information, please wait...");
+	    ShowStatsForPlayer(playerid, playerid);
+        return 1;
+    }
 	InfoBoxForPlayer(playerid, "~g~Gathering players information, please wait...");
-	ShowStatsForPlayer(playerid, playerid);
+	ShowStatsForPlayer(playerid, targetid);
 	return 1;
 }
 CMD:help(cmdid, playerid, params[])
