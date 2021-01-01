@@ -110,6 +110,7 @@ CMD<AD1>:handlereport(cmdid, playerid, params[])
 	return true;
 }
 ALT:hr = CMD:handlereport;
+ALT:ar = CMD:handlereport;
 
 CMD<AD1>:denyreport(cmdid, playerid, params[])
 {

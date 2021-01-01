@@ -156,3 +156,4 @@ CMD<AD1>:aimprofile(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_WHITE, "\n");
 	return true;
 }
+ALT:ap = CMD:aimprofile;

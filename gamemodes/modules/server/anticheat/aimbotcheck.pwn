@@ -11,6 +11,7 @@ CMD<AD1>:aimbotcheck(cmdid, playerid, params[])
 	AimbotCheck(playerid, pID);
 	return CMD_SUCCESS;
 }
+ALT:ac = CMD:aimbotcheck;
 
 AimbotCheck(playerid, target)
 {

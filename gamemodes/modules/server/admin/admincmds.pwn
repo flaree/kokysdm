@@ -352,6 +352,8 @@ CMD<AD1>:fpscheck(cmdid, playerid, params[])
 	SendClientMessage(playerid, -1, sprintf("{bf0000}FPS CHECK: {FFFFFF}User {%06x}%s {FFFFFF}has {990a1e}%d {FFFFFF}FRAMES PER SECOND.", GetPlayerColor(pID) >>> 8, GetName(pID), pFPS[pID]));
 	return 1;
 }
+ALT:fps = CMD:fpscheck;
+
 CMD<AD1>:forcerules(cmdid, playerid, params[])
 {
 	new pID, reason[64];
