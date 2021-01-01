@@ -22,8 +22,8 @@ new Text3D:latestdonatorlabel;
 //commands
 CMD:lobby(cmdid, playerid)
 {
-	if(ActivityState[playerid] == ACTIVITY_LOBBY && inServerHub[playerid] == 0) return SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}You are already in the lobby."); 
-	if(Account[playerid][LobbyPermission] > gettime()) return SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}You recently took damage, please wait for 6 seconds before using this command.");
+	if(ActivityState[playerid] == ACTIVITY_LOBBY && inServerHub[playerid] == 0) return SendClientMessage(playerid, -1, "{bf0000}NOTICE: {FFFFFF}You are already in the lobby."); 
+	if(Account[playerid][LobbyPermission] > gettime()) return SendClientMessage(playerid, -1, "{bf0000}NOTICE: {FFFFFF}You recently took damage, please wait for 6 seconds before using this command.");
 	HandleLobbyTransition(playerid);
 	return 1;
 }
@@ -194,7 +194,7 @@ SendPlayerToLobby(playerid)
 {
 	// if(Account[playerid][ForumID] == 0 || Account[playerid][ForumID] < 1)
 	// {
-	// 	SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}You have not yet set your Forum account. Please use /forum and input the correct Forum name.");
+	// 	SendClientMessage(playerid, COLOR_GRAY, "{bf0000}NOTICE: {FFFFFF}You have not yet set your Forum account. Please use /forum and input the correct Forum name.");
 	// }
 	DestroyAllPlayerObjects(playerid);
 	CreateLobby(playerid);
@@ -267,7 +267,7 @@ hook public OnPlayerGiveDamageActor(playerid, damaged_actorid, Float:amount, wea
 			SetActorInvulnerable(monthlydm_actor, false);
 			SetActorHealth(monthlydm_actor, 1000);
 			ApplyActorAnimation(monthlydm_actor, "GHANDS", "gsign3", 4.1, 1, 1, 1, 1, 0);
-			SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}This is the Monthly Deathmatcher! It updates every 10 minutes, winner gets Diamond VIP!");
+			SendClientMessage(playerid, -1, "{bf0000}NOTICE: {FFFFFF}This is the Monthly Deathmatcher! It updates every 10 minutes, winner gets Diamond VIP!");
 		}
 		if(damaged_actorid == latestdonator_actor)
 		{
@@ -276,7 +276,7 @@ hook public OnPlayerGiveDamageActor(playerid, damaged_actorid, Float:amount, wea
 			SetActorInvulnerable(latestdonator_actor, false);
 			SetActorHealth(latestdonator_actor, 1000);
 			ApplyActorAnimation(latestdonator_actor, "GHANDS", "gsign3", 4.1, 1, 1, 1, 1, 0);
-			SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}Donate to the server for rewards via www.kokysdm.net/donate!");
+			SendClientMessage(playerid, -1, "{bf0000}NOTICE: {FFFFFF}Donate to the server for rewards via www.kokysdm.net/donate!");
 		}
 	}
 }
