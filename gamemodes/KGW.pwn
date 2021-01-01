@@ -3154,7 +3154,7 @@ public OnPlayerText(playerid, const text[])
 		new TextOutput[128];
 		format(TextOutput, sizeof(TextOutput), text);
 		TextOutput[0] = ' '; // Replacing the . with space
-		format(TextOutput, sizeof(TextOutput), "%s: %s", GetName(playerid), TextOutput);
+		format(TextOutput, sizeof(TextOutput), "{FFFF80}%s:%s", GetName(playerid), TextOutput);
 		SendAdminsMessage(1, 0x09F7DFC8, TextOutput);
 		return 0; // Don't send the message publicly.
 	}
