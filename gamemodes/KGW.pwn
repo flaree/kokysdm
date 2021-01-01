@@ -81,6 +81,7 @@ new HitmarkerTimer[MAX_PLAYERS];
 new PlayerSecondTimer[MAX_PLAYERS];
 new pName[MAX_PLAYERS][MAX_PLAYER_NAME + 1];
 new bool:AdminPMRead[MAX_PLAYERS];
+new bool:HudHide[MAX_PLAYERS];
 
 new WallHack[MAX_PLAYERS char];
 new NameTagNeedsUpdating[MAX_PLAYERS char];

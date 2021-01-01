@@ -430,3 +430,22 @@ CMD:changepassword(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_LGREEN, "{bf0000}Notice: {FFFFFF}You have successfully changed your password, keep it safe.");
 	return true;
 }
+
+CMD:togglehud(cmdid, playerid, params[])
+{
+	if(HudHide[playerid])
+	{
+		ShowSessionStats(playerid);
+		ShowNetworkTDs(playerid);
+		HudHide[playerid] = false;
+		SendClientMessage(playerid, COLOR_GREEN, "HUD enabled.");
+	}
+	else
+	{
+		HideSessionStats(playerid);
+		HideNetworkTDs(playerid);
+		HudHide[playerid] = true;
+		SendClientMessage(playerid, COLOR_RED, "HUD disabled.");
+	}
+	return true;
+}

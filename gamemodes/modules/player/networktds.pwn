@@ -9,6 +9,14 @@ ShowNetworkTDs(playerid)
 	PlayerTextDrawShow(playerid, PlayerPLTD[playerid]);
 	return true;
 }
+
+HideNetworkTDs(playerid)
+{
+	PlayerTextDrawHide(playerid, PlayerFPSTD[playerid]);
+	PlayerTextDrawHide(playerid, PlayerPingTD[playerid]);
+	PlayerTextDrawHide(playerid, PlayerPLTD[playerid]);
+	return true;
+}
 CreateNetworkTDs(playerid)
 {
 	PlayerFPSTD[playerid] = CreatePlayerTextDraw(playerid, 547.000000, 25.000000, "FPS:~W~ 0");

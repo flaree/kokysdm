@@ -34,6 +34,19 @@ ShowSessionStats(playerid)
 	TextDrawShowForPlayer(playerid, SessionBox);
 	return true;
 }
+HideSessionStats(playerid)
+{
+	PlayerTextDrawHide(playerid, PlayerSessionKills[playerid]);
+	PlayerTextDrawHide(playerid, PlayerSessionDeaths[playerid]);
+	PlayerTextDrawHide(playerid, PlayerSessionRatio[playerid]);
+	TextDrawHideForPlayer(playerid, SessionText);
+	TextDrawHideForPlayer(playerid, SessionKills);
+	TextDrawHideForPlayer(playerid, SessionDeaths);
+	TextDrawHideForPlayer(playerid, SessionRatio);
+	TextDrawHideForPlayer(playerid, SessionHeader);
+	TextDrawHideForPlayer(playerid, SessionBox);
+	return true;
+}
 CreateSessionStats(playerid)
 {
 	PlayerSessionRatio[playerid] = CreatePlayerTextDraw(playerid, 598.000000, 264.000000, "0.0");
