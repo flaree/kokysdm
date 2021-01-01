@@ -1665,12 +1665,12 @@ Unban_Dialog(playerid)
 	return 1;
 }
 
-Forum_Dialog(playerid)
-{
-	new str[400];
-	format(str, sizeof(str), "{FFFFFF}Hello, %s!\n\nIt is important for you to add your forum account to your in-game account, this cannot be changed so please be correct.\nThis will allow you to receive purchases made on the forums such as Account Upgrades instant.\nIf you also win a giveaway, you will instantly get your item(s).", GetName(playerid));
-	Dialog_Show(playerid, FORUM, DIALOG_STYLE_INPUT, "Koky's Deathmatch | wwww.kokysdm.net/forum", str, "Input", "Cancel");
-}
+// Forum_Dialog(playerid)
+// {
+// 	new str[400];
+// 	format(str, sizeof(str), "{FFFFFF}Hello, %s!\n\nIt is important for you to add your forum account to your in-game account, this cannot be changed so please be correct.\nThis will allow you to receive purchases made on the forums such as Account Upgrades instant.\nIf you also win a giveaway, you will instantly get your item(s).", GetName(playerid));
+// 	Dialog_Show(playerid, FORUM, DIALOG_STYLE_INPUT, "Koky's Deathmatch | wwww.kokysdm.net/forum", str, "Input", "Cancel");
+// }
 UserGroup_Dialog(playerid)
 {
 	new str[400];
