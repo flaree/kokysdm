@@ -1056,36 +1056,6 @@ CMD<AD4>:sslap(cmdid, playerid, params[])
 
 // - Server Administrator (Level 1)
 
-CMD<AD1>:acmds(cmdid, playerid, params[])
-{
-	new info[1000];
-	strcat(info, "{FF0000}Server administrator (Level 1):{FFFFFF}\n");
-	strcat(info, "/tempban, /ban, /fakeban, /kick, /goto, /get, /rw, /shp, /sarm, /explode, /setweather, /ann, /ip, /suicide\n");
-	strcat(info, "/aduty, /flip, /schp, /spec, /ar, /dr, /slap, /fr, /unfr, /afix, /anos, /mute, /unmute, /muted\n");
-	strcat(info, "/vcolor, /weaps, /forceteam, /amove, /asay, /sv, /countdown, /undercover, /reports, /settime\n");
-  	strcat(info, "{FFFF00}Use @ symbol for admin chat.\n\n");
-	if (GetPlayerAdminLevel(playerid) >= 2)
-	{
-		strcat(info, "{FF0000}Senior administrator (Level 2):{FFFFFF}\n");
-  		strcat(info, "/sskin, /bringall, /watchpm, /jetpack, /freezeall, /unfreezeall, /clearchat, /copyweaps, /vget, \n");
-  		strcat(info, "/ainject, /setinterior, /gotopos, /giveweapon, /giveallweapon, /datasave, /changename, /area\n\n");
-	}
-	if (GetPlayerAdminLevel(playerid) >= 3)
-	{
-		strcat(info, "{FF0000}Lead Administrator (Level 3):{FFFFFF}\n");
-		strcat(info, "/setadmin, /sethelper, /unsethelper, /agivemoney, /setworld, /spawncars, /healall, /armourall\n");
-		strcat(info, "/astream, /giveallmoney /givecar\n\n");
-		strcat(info, "{FFFF00}Use # symbol for lead admin chat.\n\n");
-	}
-	if (GetPlayerAdminLevel(playerid) >= 4)
-	{
-		strcat(info, "{FF0000}Manager (Level 4):{FFFFFF}\n");
-		strcat(info, "/lserv, /ulserv, /vehicle, /restart, /setmoney, /fakecmd, /fakechat\n\n");
-	}
-	Dialog_Show(playerid, DIALOG_ACMDS, DIALOG_STYLE_MSGBOX, "Administrative Commands:", info, "Close", "");
-	return 1;
-}
-
 CMD<AD1>:amove(cmdid, playerid, params[])
 {
 	new targetid, amount;
