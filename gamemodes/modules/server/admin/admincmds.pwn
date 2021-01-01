@@ -517,7 +517,7 @@ CMD<AD1>:aunjail(cmdid, playerid, params[])
 	if(!Account[pID][AJailTime]) return SendErrorMessage(playerid, "This player is not in ajail.");
 
 	SendClientMessage(pID, -1, sprintf("{bf0000}NOTICE: {FFFFFF}You have been unjailed by %s.", GetName(playerid)));
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has unjailed %s!", GetName(playerid), GetName(target)));
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has unjailed %s!", GetName(playerid), GetName(pID)));
 	Account[pID][AJailTime] = 0;
 	SendPlayerToLobby(pID);
 
