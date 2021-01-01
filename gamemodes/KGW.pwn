@@ -1717,7 +1717,7 @@ Dialog:FORUM(playerid, response, listitem, inputtext[])
 	if(!response) return true;
 
 	await mysql_aquery_s(SQL_FORUM, str_format("SELECT user_id FROM xf_user WHERE username = '%e'", inputtext));
-	if(!cache_num_rows()) return SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}This forum name does not exist in our database.");
+	if(!cache_num_rows()) return SendClientMessage(playerid, COLOR_GRAY, "{bf0000}NOTICE: {FFFFFF}This forum name does not exist in our database.");
 
 	cache_get_value_name_int(0, "user_id", Account[playerid][ForumID]);
 	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE `Accounts` SET `ForumID` = %d WHERE SQLID = %d LIMIT 1", Account[playerid][ForumID], Account[playerid][SQLID]));
@@ -1729,7 +1729,7 @@ ResetForumVerification(playerid)
 {
 	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE `Accounts` SET `Verified` = 0, `ForumID` = 0, `ForumCode` = 0 WHERE SQLID = %d LIMIT 1", Account[playerid][SQLID]));
 	mysql_pquery_s(SQL_FORUM, str_format("DELETE FROM `xf_user_field_value` WHERE field_id = 'security' and user_id = %d", Account[playerid][ForumID]));
-	SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}The code you have entered is incorrect, try again and make sure the information given is correct.");
+	SendClientMessage(playerid, COLOR_GRAY, "{bf0000}NOTICE: {FFFFFF}The code you have entered is incorrect, try again and make sure the information given is correct.");
 	Account[playerid][ForumID] = 0;
 	Account[playerid][Verified] = 0;
 	Account[playerid][ForumCode] = 0;
@@ -1741,7 +1741,7 @@ Dialog:VERIFICATION(playerid, response, listitem, inputtext[])
 	if(strval(inputtext) != Account[playerid][ForumCode]) return ResetForumVerification(playerid);
 
 	Account[playerid][Verified] = Account[playerid][ForumCode];
-	SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}Your account is now verified, thank you for taking your time to verify your account. You have been given $10000 and 1 Premium Key.");
+	SendClientMessage(playerid, COLOR_GRAY, "{bf0000}NOTICE: {FFFFFF}Your account is now verified, thank you for taking your time to verify your account. You have been given $10000 and 1 Premium Key.");
 	Account[playerid][PlayerKeys] = Account[playerid][PlayerKeys] +1;
 	SendAdminsMessage(1, COLOR_GRAY, sprintf("{E13030}[ ADMINOTICE ] %s has just verified his forum account. (Forum ID: %d)", GetName(playerid), Account[playerid][ForumID]));
 	GivePlayerMoneyEx(playerid, 10000);
@@ -1761,7 +1761,7 @@ public CheckDonations(playerid)
 
 	Account[playerid][DonationAmount] = floatadd(Account[playerid][DonationAmount], euro);
 	SendClientMessageToAll(COLOR_LIGHTRED, sprintf("Donation: {%06x}%s {FFFFFF}has just donated {F6546A}%.2f Euro {FFFFFF}to the server! They may now purchase items via /usedonations!", GetPlayerColor(playerid) >>> 8, GetName(playerid), euro));
-	SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("Notice: {FFFFFF}Thank you for donating, you now have %.2f Euro to spend in /usedonations!", Account[playerid][DonationAmount]));
+	SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("NOTICE: {FFFFFF}Thank you for donating, you now have %.2f Euro to spend in /usedonations!", Account[playerid][DonationAmount]));
 	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE `donations` SET `received` = '1' WHERE `donation_id` = %i", donationid));
 	UpdateLatestDonator(playerid);
 	return 1;
@@ -1927,7 +1927,7 @@ public PlayerSecond(playerid)
 			if(Account[playerid][Muted] < gettime())
 			{
                 Account[playerid][Muted] = 0;
-				SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}Your mute timer has expired. You may now use the chat feature.");
+				SendClientMessage(playerid, -1, "{bf0000}NOTICE: {FFFFFF}Your mute timer has expired. You may now use the chat feature.");
 			}
 		}
 		if(Account[playerid][AJailTime] != 0)
@@ -1935,7 +1935,7 @@ public PlayerSecond(playerid)
 			Account[playerid][AJailTime] --;
 			if(Account[playerid][AJailTime] == 0)
 			{
-				SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}You have served your time in admin-jail.");
+				SendClientMessage(playerid, -1, "{bf0000}NOTICE: {FFFFFF}You have served your time in admin-jail.");
 				Account[playerid][AJailTime] = 0;
 				SendPlayerToLobby(playerid);
 
@@ -2410,7 +2410,7 @@ SendSpree(playerid)
 		GetPlayerArmour(playerid, armour);
 		SetPlayerArmour(playerid, armour + 25);
 
-		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{fdff00}KILLSTREAK: %s is on a %d killing spree!", GetName(playerid), Account[playerid][KillStreak]));
+		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{fdff00}KILLSTREAK:{FFFFFF} %s is on a {fdff00}%d {FFFFFF}killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +25 armour for your spree!");
 		GameTextForPlayer(playerid, "~R~Triple Kill!", 1000, 6);
 	}
@@ -2420,27 +2420,27 @@ SendSpree(playerid)
 		GetPlayerArmour(playerid, armour);
 		SetPlayerArmour(playerid, armour + 50);
 
-		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{fdff00}KILLSTREAK: %s is on a %d killing spree!", GetName(playerid), Account[playerid][KillStreak]));
+		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{fdff00}KILLSTREAK:{FFFFFF} %s is on a {fdff00}%d {FFFFFF}killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +50 armour for your spree!");
 		GameTextForPlayer(playerid, "~R~Multi-Kill!", 1000, 6);
 	}
 	if(Account[playerid][KillStreak] == 10)
 	{
-		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{fdff00}KILLSTREAK: %s is on a %d killing spree!", GetName(playerid), Account[playerid][KillStreak]));
+		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{fdff00}KILLSTREAK:{FFFFFF} %s is on a {fdff00}%d {FFFFFF}killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given $3500 for your spree!");
 		GivePlayerMoneyEx(playerid, 3500);
 		GameTextForPlayer(playerid, "~R~INSANE SPREE", 1000, 6);
 	}
 	if(Account[playerid][KillStreak] == 15)
 	{
-		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{fdff00}KILLSTREAK: %s is on a %d killing spree!", GetName(playerid), Account[playerid][KillStreak]));
+		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{fdff00}KILLSTREAK:{FFFFFF} %s is on a {fdff00}%d {FFFFFF}killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +10 kills for your spree!");
 		GivePlayerKillEx(playerid, 10);
 		GameTextForPlayer(playerid, "~R~MADNESS SPREE", 1000, 6);
 	}
 	if(Account[playerid][KillStreak] == 25)
 	{
-		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{fdff00}KILLSTREAK: %s is on a %d killing spree!", GetName(playerid), Account[playerid][KillStreak]));
+		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{fdff00}KILLSTREAK:{FFFFFF} %s is on a {fdff00}%d {FFFFFF}killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +25 kills for your spree!");
 		GivePlayerKillEx(playerid, 25);
 		GameTextForPlayer(playerid, "~R~NUKE SPREE!", 1000, 6);
@@ -2466,7 +2466,7 @@ SendTDMSpree(playerid)
 		GetPlayerArmour(playerid, armour);
 		SetPlayerArmour(playerid, armour + 25);
 
-		SendTDMMessage(-1, sprintf("{fdff00}KILLSTREAK: %s is on a %d killing spree!", GetName(playerid), Account[playerid][KillStreak]));
+		SendTDMMessage(-1, sprintf("{fdff00}KILLSTREAK:{FFFFFF} %s is on a {fdff00}%d {FFFFFF}killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +25 armour for your spree!");
 		GameTextForPlayer(playerid, "~R~Triple Kill!", 1000, 6);
 	}
@@ -2476,27 +2476,27 @@ SendTDMSpree(playerid)
 		GetPlayerArmour(playerid, armour);
 		SetPlayerArmour(playerid, armour + 50);
 
-		SendTDMMessage(-1, sprintf("{fdff00}KILLSTREAK: %s is on a %d killing spree!", GetName(playerid), Account[playerid][KillStreak]));
+		SendTDMMessage(-1, sprintf("{fdff00}KILLSTREAK:{FFFFFF} %s is on a {fdff00}%d {FFFFFF}killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +50 armour for your spree!");
 		GameTextForPlayer(playerid, "~R~Multi-Kill!", 1000, 6);
 	}
 	if(Account[playerid][KillStreak] == 10)
 	{
-		SendTDMMessage(-1, sprintf("{fdff00}KILLSTREAK: %s is on a %d killing spree!", GetName(playerid), Account[playerid][KillStreak]));
+		SendTDMMessage(-1, sprintf("{fdff00}KILLSTREAK:{FFFFFF} %s is on a {fdff00}%d {FFFFFF}killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given $3500 for your spree!");
 		GivePlayerMoneyEx(playerid, 3500);
 		GameTextForPlayer(playerid, "~R~INSANE SPREE", 1000, 6);
 	}
 	if(Account[playerid][KillStreak] == 15)
 	{
-		SendTDMMessage(-1, sprintf("{fdff00}KILLSTREAK: %s is on a %d killing spree!", GetName(playerid), Account[playerid][KillStreak]));
+		SendTDMMessage(-1, sprintf("{fdff00}KILLSTREAK:{FFFFFF} %s is on a {fdff00}%d {FFFFFF}killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +10 kills for your spree!");
 		GivePlayerKillEx(playerid, 10);
 		GameTextForPlayer(playerid, "~R~MADNESS SPREE", 1000, 6);
 	}
 	if(Account[playerid][KillStreak] == 25)
 	{
-		SendTDMMessage(-1, sprintf("{fdff00}KILLSTREAK: %s is on a %d killing spree!", GetName(playerid), Account[playerid][KillStreak]));
+		SendTDMMessage(-1, sprintf("{fdff00}KILLSTREAK:{FFFFFF} %s is on a {fdff00}%d {FFFFFF}killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +25 kills for your spree!");
 		GivePlayerKillEx(playerid, 25);
 		GameTextForPlayer(playerid, "~R~NUKE SPREE!", 1000, 6);
@@ -2624,7 +2624,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 	{
 		if(killerid == INVALID_PLAYER_ID)
 		{
-			SendClientMessageToAll(-1, sprintf("{fdff00}Duel: %s {FFFFFF}died in mysterious circumstances. Duel ended.", GetName(playerid)));
+			SendClientMessageToAll(-1, sprintf("{fdff00}DUEL: %s {FFFFFF}died in mysterious circumstances. Duel ended.", GetName(playerid)));
 			EndDuel(playerid, true);
 			return true;
 		}
@@ -2639,7 +2639,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 		new team_count = DuelTeam[host_id][playerid] == HOST_TEAM ? AlliesCount[host_id] : EnemyCount[host_id];
 		if(team_count == 0)
 		{
-			SendClientMessageToAll(-1, sprintf("{fdff00}Duel: %s has won the duel for their team by finishing off %s!", GetName(killerid), GetName(playerid)));
+			SendClientMessageToAll(-1, sprintf("{11731f}DUEL: %s has won the duel for their team by finishing off %s!", GetName(killerid), GetName(playerid)));
 			EndDuel(playerid, false);
 		}
 		else
@@ -3219,12 +3219,12 @@ public OnPlayerText(playerid, const text[])
 	format(language, sizeof(language), "[%s]{FFFFFF}", GetLanguage(Account[playerid][pLanguage]));
 	if (Account[playerid][Muted] > gettime())
 	{
-        SendClientMessage(playerid, -1, sprintf("{bf0000}Notice: {FFFFFF}You still have {31AEAA}%d {FFFFFF}seconds(s) of a mute left.", Account[playerid][Muted] - gettime()));
+        SendClientMessage(playerid, -1, sprintf("{bf0000}NOTICE: {FFFFFF}You still have {31AEAA}%d {FFFFFF}seconds(s) of a mute left.", Account[playerid][Muted] - gettime()));
 		return 0;
 	}
 
 	if(!GetPlayerAdminLevel(playerid) && ChatLocked) {
-		SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}The chat is currently locked by an administrator.");
+		SendClientMessage(playerid, -1, "{bf0000}NOTICE: {FFFFFF}The chat is currently locked by an administrator.");
 		return 0;
 	}
     new const tmpLevel = GetPlayerAdminLevel(playerid);
@@ -3376,7 +3376,7 @@ public OnPlayerCommandReceived(cmdid, playerid, const cmdtext[])
 	}
 	if(Account[playerid][AJailTime] > 0)
 	{
-		SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}You are currently in admin-jail.");
+		SendClientMessage(playerid, -1, "{bf0000}NOTICE: {FFFFFF}You are currently in admin-jail.");
 		return 0;
 	}
 	return 1;
@@ -3670,18 +3670,18 @@ CMD:gsign(cmdid, playerid, params[])
 }
 CMD:namechange(cmdid, playerid,params[])
 {
-	if(Account[playerid][NameChanges] == 0) return SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}You don't have any name changes available.");
+	if(Account[playerid][NameChanges] == 0) return SendClientMessage(playerid, COLOR_GRAY, "{bf0000}NOTICE: {FFFFFF}You don't have any name changes available.");
 	if(isnull(params)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /namechange [New Name]");
 
 	yield 1;
 	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM Accounts WHERE Username = '%e' LIMIT 1", params));
-	if(cache_num_rows()) return SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}This name already exists in our database.");
+	if(cache_num_rows()) return SendClientMessage(playerid, COLOR_GRAY, "{bf0000}NOTICE: {FFFFFF}This name already exists in our database.");
 
 	Account[playerid][NameChanges]--;
 	SetPlayerName(playerid, params);
 	format(pName[playerid], MAX_PLAYER_NAME + 1, params);
 	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE Accounts SET Username = '%e' WHERE sqlid = %i", params, Account[playerid][SQLID]));
-	SendClientMessage(playerid, COLOR_LGREEN, "{bf0000}Notice: {FFFFFF}You have successfully changed your username.");
+	SendClientMessage(playerid, COLOR_LGREEN, "{bf0000}NOTICE: {FFFFFF}You have successfully changed your username.");
 	return 1;
 }
 CMD:myskin(cmdid, playerid, params[])
@@ -3690,7 +3690,7 @@ CMD:myskin(cmdid, playerid, params[])
 	{
 		SetPlayerSkinEx(playerid, Account[playerid][CustomSkin]);
 	}
-	else SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}You do not have your own private Custom Skin, you may purchase one on the forums! (/donate)");
+	else SendClientMessage(playerid, COLOR_GRAY, "{bf0000}NOTICE: {FFFFFF}You do not have your own private Custom Skin, you may purchase one on the forums! (/donate)");
 	return 1;
 }
 ALT:wh = CMD:wallhack;
@@ -3759,10 +3759,10 @@ CMD:pm(cmdid, playerid, params[])
 	if(sscanf(params, "us[200]", pID, pmmsg)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /pm [playerid] [message]");
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid, ERROR_OPTION);
     if (Account[playerid][Muted] != 0) {
-        SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}You are muted!");
+        SendClientMessage(playerid, -1, "{bf0000}NOTICE: {FFFFFF}You are muted!");
     }
-	if(!AllowPMS{pID} && GetPlayerAdminLevel(playerid) == 0) return SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}This player has disabled his private messages!");
-	if(!GetPlayerAdminLevel(playerid) && ChatLocked) return SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}The chat is currently locked by an administrator.");
+	if(!AllowPMS{pID} && GetPlayerAdminLevel(playerid) == 0) return SendClientMessage(playerid, -1, "{bf0000}NOTICE: {FFFFFF}This player has disabled his private messages!");
+	if(!GetPlayerAdminLevel(playerid) && ChatLocked) return SendClientMessage(playerid, -1, "{bf0000}NOTICE: {FFFFFF}The chat is currently locked by an administrator.");
 	SendClientMessage(pID, COLOR_WHITE, sprintf("{FF8C00}Private Message from %s(%d):{FFFFFF} %s",GetName(playerid), playerid, pmmsg));
 	SendAdminPM(playerid, pID, pmmsg);
 	PlayerPlaySound(pID, 1085, 0.0, 0.0, 0.0);
@@ -3772,7 +3772,7 @@ CMD:pm(cmdid, playerid, params[])
 }
 CMD:r(cmdid, playerid, params[])
 {
-	if(PMReply[playerid] == -1) return SendClientMessage(playerid, COLOR_WHITE, "{bf0000}Notice: {FFFFFF}You do not have any PMs to reply to.");
+	if(PMReply[playerid] == -1) return SendClientMessage(playerid, COLOR_WHITE, "{bf0000}NOTICE: {FFFFFF}You do not have any PMs to reply to.");
 	if(isnull(params)) return SendClientMessage(playerid, COLOR_GREY, "USAGE: /r [message]");
 
 	new playa = PMReply[playerid], str[200];
@@ -3810,7 +3810,7 @@ CMD:pay(cmdid, playerid, params[])
 	GivePlayerMoneyEx(playerid, -amount);
 	GivePlayerMoneyEx(player, amount);
 
-	SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has just paid %s $%s.", GetName(playerid), GetName(player), Comma(amount)));
+	SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}Admin NOTICE: {FFFFFF}%s has just paid %s $%s.", GetName(playerid), GetName(player), Comma(amount)));
 	return 1;
 }
 CMD:admins(cmdid, playerid, params[])
@@ -3843,7 +3843,7 @@ CMD:admins(cmdid, playerid, params[])
         SendClientMessage(playerid, COLOR_WHITE, sprintf("(Level {bf0000}%s {ffffff}Admin) {%06x}%s {ffffff}(ID %i) {bf0000}%s", AdminNames(admin[1]), GetPlayerColor(admin[0]) >>> 8, GetName(admin[0]), admin[0], Account[admin[0]][pAdminHide] == 1 ? "(HIDDEN)" : ""));
     }
     SendClientMessage(playerid, 0xBF0000FF, "______________________________________________");
-	if(!GetPlayerAdminLevel(playerid)) SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has just typed /admins.", GetName(playerid)));
+	if(!GetPlayerAdminLevel(playerid)) SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}Admin NOTICE: {FFFFFF}%s has just typed /admins.", GetName(playerid)));
     list_delete(adminlist);
     return true;
 }
@@ -3858,7 +3858,7 @@ CMD:opencrate(cmdid, playerid, params[])
 	if(!IsPlayerInLobby(playerid)) return SendClientMessage(playerid, COLOR_GRAY, "{fdff00}Crates: {FFFFFF}You must be in the lobby to use this command.");
 	if(Account[playerid][PlayerKeys] <= 0) return SendClientMessage(playerid, COLOR_GRAY, "{fdff00}Crates: {FFFFFF}You do not have enough keys to use this feature.");
     if (crateCoolDown[playerid] > gettime()) {
-        return SendClientMessage(playerid, -1, sprintf("{bf0000}Notice: {ffffff}You must wait %i more seconds before opening a crate again.", crateCoolDown[playerid] - gettime()));
+        return SendClientMessage(playerid, -1, sprintf("{bf0000}NOTICE: {ffffff}You must wait %i more seconds before opening a crate again.", crateCoolDown[playerid] - gettime()));
     }
 
 	OnPremiumCrateStep(playerid, 0);
@@ -3964,7 +3964,7 @@ CMD:forum(cmdid, playerid, params[])
 	}
 	else
 	{
-		SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}You have already set your Forum name. If you chose the wrong one, or got a new Forum account, please use /report.");
+		SendClientMessage(playerid, COLOR_GRAY, "{bf0000}NOTICE: {FFFFFF}You have already set your Forum name. If you chose the wrong one, or got a new Forum account, please use /report.");
 	}
 	return 1;
 }
@@ -4036,7 +4036,7 @@ CMD:youtube(cmdid, playerid, params[])
 	}
 	else
 	{
-		SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}This is a premium feature, you do not have access to this command.");
+		SendClientMessage(playerid, COLOR_GRAY, "{bf0000}NOTICE: {FFFFFF}This is a premium feature, you do not have access to this command.");
 	}
 	return 1;
 }
@@ -4048,7 +4048,7 @@ CMD:donate(cmdid, playerid, params[])
 
 CMD:freeroam(cmdid, playerid)
 {
-	if(!IsPlayerInLobby(playerid)) return SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}You must be in the lobby to use this command.");
+	if(!IsPlayerInLobby(playerid)) return SendClientMessage(playerid, COLOR_GRAY, "{bf0000}NOTICE: {FFFFFF}You must be in the lobby to use this command.");
 
 	SendPlayerToFreeroam(playerid);
 	InfoBoxForPlayer(playerid, "Welcome to freeroam, use /freeroamhelp for more information.");
@@ -4319,7 +4319,7 @@ CMD:crateshelp(cmdid, playerid, params[])
 }
 CMD:serverhub(cmdid, playerid)
 {
-	if(!IsPlayerInLobby(playerid)) return SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF}You must be in the lobby to use this command.");
+	if(!IsPlayerInLobby(playerid)) return SendClientMessage(playerid, -1, "{bf0000}NOTICE: {FFFFFF}You must be in the lobby to use this command.");
 
 	inServerHub[playerid] = 1;
 
