@@ -68,10 +68,10 @@ public CheckJailsUnderIP(playerid, const ip[])
 			format(str1, sizeof(str1), "%s has been caught a-jail evading! The player has been automatically kicked!", GetName(playerid));
 			SendPunishmentMessage(str1);
 
-			SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("Notice: {FFFFFF}You must serve your %i admin jail minutes on your %s account before playing on this account!", jail, username));
-			SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("Notice: {FFFFFF}You must serve your %i admin jail minutes on your %s account before playing on this account!", jail, username));
+			SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("NOTICE: {FFFFFF}You must serve your %i admin jail minutes on your %s account before playing on this account!", jail, username));
+			SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("NOTICE: {FFFFFF}You must serve your %i admin jail minutes on your %s account before playing on this account!", jail, username));
 
-			SetTimerEx("FixKick", 8000, false, "i", playerid);
+			KickPlayer(playerid);
 			return 1;
 		}
 		else ShowHelpMessage(playerid);
