@@ -83,7 +83,7 @@ MuteCheck(playerid)
 {
 	if(Account[playerid][Muted] > gettime())
 	{
-		SendClientMessage(playerid, -1, sprintf("{31AEAA}Mute: {FFFFFF}You still have {31AEAA}%d {FFFFFF}seconds(s) of a mute left. You will continue to serve it.", Account[playerid][Muted] - gettime()));
+		SendClientMessage(playerid, -1, sprintf("{31AEAA}Mute: {FFFFFF}You still have {31AEAA}%d {FFFFFF}second(s) of a mute left. You will continue to serve it.", Account[playerid][Muted] - gettime()));
 	}
 	return 1;
 }
