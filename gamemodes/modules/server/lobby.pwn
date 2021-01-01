@@ -192,10 +192,10 @@ HandleLobbyTransition(playerid)
 }
 SendPlayerToLobby(playerid)
 {
-	if(Account[playerid][ForumID] == 0 || Account[playerid][ForumID] < 1)
-	{
-		SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}You have not yet set your Forum account. Please use /forum and input the correct Forum name.");
-	}
+	// if(Account[playerid][ForumID] == 0 || Account[playerid][ForumID] < 1)
+	// {
+	// 	SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}You have not yet set your Forum account. Please use /forum and input the correct Forum name.");
+	// }
 	DestroyAllPlayerObjects(playerid);
 	CreateLobby(playerid);
 	ShowSessionStats(playerid);

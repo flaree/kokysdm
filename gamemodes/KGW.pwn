@@ -3956,18 +3956,18 @@ CMD:donator(cmdid, playerid, params[])
 	SendClientMessage(playerid, -1, string);
 	return 1;
 }
-CMD:forum(cmdid, playerid, params[])
-{
-	if(Account[playerid][ForumID] == 0 && Account[playerid][ForumCode] == 0 && Account[playerid][Verified] == 0)
-	{
-		Forum_Dialog(playerid);
-	}
-	else
-	{
-		SendClientMessage(playerid, COLOR_GRAY, "{bf0000}NOTICE: {FFFFFF}You have already set your Forum name. If you chose the wrong one, or got a new Forum account, please use /report.");
-	}
-	return 1;
-}
+// CMD:forum(cmdid, playerid, params[])
+// {
+// 	if(Account[playerid][ForumID] == 0 && Account[playerid][ForumCode] == 0 && Account[playerid][Verified] == 0)
+// 	{
+// 		Forum_Dialog(playerid);
+// 	}
+// 	else
+// 	{
+// 		SendClientMessage(playerid, COLOR_GRAY, "{bf0000}NOTICE: {FFFFFF}You have already set your Forum name. If you chose the wrong one, or got a new Forum account, please use /report.");
+// 	}
+// 	return 1;
+// }
 CMD:findusergroups(cmdid, playerid, params[])
 {
 	UserGroup_Dialog(playerid);
