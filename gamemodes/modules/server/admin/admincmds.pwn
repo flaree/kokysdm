@@ -1373,6 +1373,7 @@ CMD<AD2>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have healed players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has healed all players within an area of %d of them!", GetName(playerid), range));
     }
     else if(!strcmp(subcommand, "armour", true))
     {
@@ -1388,6 +1389,7 @@ CMD<AD2>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have armoured players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has armoured all players within an area of %d of them!", GetName(playerid), range));
     }
     else if(!strcmp(subcommand, "weap", true))
     {
@@ -1408,6 +1410,7 @@ CMD<AD2>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You gave weapon %s with %d ammo players in range of %d.", weaponname, ammo, range);
 		SendClientMessage(playerid, COLOR_RED, string);
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has given all players within an area of %d of them a %s!", GetName(playerid), range, weaponname));
     }
     else if(!strcmp(subcommand, "veh", true))
     {
@@ -1436,6 +1439,7 @@ CMD<AD2>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have spawned vehicle %s to players in range of %d.", VehicleNames[vID - 400],  range);
 		SendClientMessage(playerid, COLOR_RED, string);
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has spawned vehicle %s to all players within an area of %d of him!", GetName(playerid), VehicleNames[vID - 400], range));
     }
     else if(!strcmp(subcommand, "freeze", true))
     {
@@ -1451,6 +1455,7 @@ CMD<AD2>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have frozen players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has frozen all players within an area of %d of them!", GetName(playerid), range));
     }
     else if(!strcmp(subcommand, "unfreeze", true))
     {
@@ -1466,6 +1471,7 @@ CMD<AD2>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have unfrozen players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has unfrozen all players within an area of %d of them!", GetName(playerid), range));
     }
     else if(!strcmp(subcommand, "skin", true))
     {
@@ -1483,6 +1489,7 @@ CMD<AD2>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have changed players skin in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has set all players skin to %d within an area of %d of them!", GetName(playerid), skin, range));
     }
     else if(!strcmp(subcommand, "nos", true))
     {
@@ -1499,6 +1506,7 @@ CMD<AD2>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have added nos to players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has given all players within an area of %d of them nos for their vehicle!", GetName(playerid), range));
     }
     else if(!strcmp(subcommand, "disarm", true))
     {
@@ -1515,6 +1523,7 @@ CMD<AD2>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have disarmed players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has disarmed all players within an area of %d of them!", GetName(playerid), range));
     }
     return 1;
 }
