@@ -2602,7 +2602,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 			if(capturingturf[playerid] == 1)
 			{
 				capturingturf[playerid] = 0;
-				SendTDMMessage(COLOR_LIGHTRED, sprintf("TURF: {%06x}%s was killed by {%06x}%s while capturing the turf. The turf is now available for capture!", GetPlayerColor(playerid) >>> 8, GetName(playerid), GetPlayerColor(killerid) >>> 8, GetName(killerid)));
+				SendTDMMessage(COLOR_LIGHTRED, sprintf("TURF: {%06x}%s {000000}was killed by {%06x}%s{000000} while capturing the turf. The turf is now available for capture!", GetPlayerColor(playerid) >>> 8, GetName(playerid), GetPlayerColor(killerid) >>> 8, GetName(killerid)));
 				KillTimer(capturingtimer[playerid]);
 				GangZoneStopFlashForAll(igsturf);
 				beingcaptured = -1;
