@@ -1149,6 +1149,23 @@ CMD<AD1>:muted(cmdid, playerid)
 	return 1;
 }
 
+CMD<AD1>:jailed(cmdid, playerid)
+{
+	new string[64], count = 0;
+	SendClientMessage(playerid, COLOR_GRAY, "Jailed players:");
+	foreach (new i : Player)
+	{
+		if (Account[i][LoggedIn] && Account[i][AJailTime])
+		{
+			format(string, sizeof(string), "[%d] %s (%d minutes remaining)", i, GetName(i), Account[i][AJailTime]);
+			SendClientMessage(playerid, COLOR_RED, string);
+			count++;
+		}
+	}
+	if(!count) SendClientMessage(playerid, COLOR_RED,"There are currently no jailed players.");
+	return 1;
+}
+
 CMD<AD1>:nos(cmdid, playerid, params[])
 {
 	if (!IsPlayerInAnyVehicle(playerid)) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You must be in a vehicle to use this command.");
