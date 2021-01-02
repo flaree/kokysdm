@@ -198,8 +198,11 @@ SendPlayerToLobby(playerid)
 	// }
 	DestroyAllPlayerObjects(playerid);
 	CreateLobby(playerid);
-	ShowSessionStats(playerid);
-	ShowNetworkTDs(playerid);
+	if(HudShow[playerid])
+	{
+		ShowSessionStats(playerid);
+		ShowNetworkTDs(playerid);
+	}
 
 	ActivityState[playerid] = ACTIVITY_LOBBY;
 	ActivityStateID[playerid] = -1;

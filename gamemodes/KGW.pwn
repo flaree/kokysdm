@@ -81,7 +81,7 @@ new HitmarkerTimer[MAX_PLAYERS];
 new PlayerSecondTimer[MAX_PLAYERS];
 new pName[MAX_PLAYERS][MAX_PLAYER_NAME + 1];
 new bool:AdminPMRead[MAX_PLAYERS];
-new bool:HudHide[MAX_PLAYERS];
+new bool:HudShow[MAX_PLAYERS] = {true, ...};
 
 new WallHack[MAX_PLAYERS char];
 new NameTagNeedsUpdating[MAX_PLAYERS char];
@@ -1304,7 +1304,7 @@ public SendRandomMessage()
 		"[Koky's Deathmatch]{FFFFFF}: Use /top to view the top kills, headshots and deaths!",
 		"[Koky's Deathmatch]{FFFFFF}: You can duel your friend and foes, use /duel!",
 		"[Koky's Deathmatch]{FFFFFF}: Not having fun? Start your own event! (/startevent)",
-		"[Koky's Deathmatch]{FFFFFF}: Double click on a players name to view their stats in the tablist!",
+		"[Koky's Deathmatch]{FFFFFF}: /stats [player] to view their stats!",
 		"[Koky's Deathmatch]{FFFFFF}: Did you know? You can donate to the server and receive perks! (/donate)",
 		"[Koky's Deathmatch]{FFFFFF}: Join our official Discord! discord.gg/TCVdvdV",
 		"[Koky's Deathmatch]{FFFFFF}: Did you know? You can start your own clan and make it official! /createclan!"
