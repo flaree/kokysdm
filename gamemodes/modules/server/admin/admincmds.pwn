@@ -1339,6 +1339,36 @@ CMD<AD1>:suicide(cmdid, playerid, params[])
 	return 1;
 }
 
+CMD<AD1>:checkaccount(cmdid, playerid, params[])
+{
+    new accountName[MAX_PLAYER_NAME];
+    if(sscanf(params, "s[24]", accountName)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /checkaccount [username]");
+
+    yield 1;
+    await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT SQLID, LoggedIn, LatestIP, Kills, Admin FROM Accounts WHERE Username = '%e' LIMIT 1;", accountName));
+	if(!cache_num_rows()) return SendClientMessage(playerid, COLOR_GRAY, "{bf0000}NOTICE: {FFFFFF}That account name does not exist in our database.");
+
+    new id, loggedIn, latestIp[16], kills, admin, banned = 0;
+    cache_get_value_name_int(0, "SQLID", id);
+    cache_get_value_name_int(0, "LoggedIn", loggedIn);
+    cache_get_value_name(0, "LatestIP", latestIp, sizeof(latestIp));
+    cache_get_value_name_int(0, "Kills", kills);
+    cache_get_value_name_int(0, "Admin", admin);
+
+    yield 1;
+    await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT id FROM `Bans` WHERE A_ID = %d OR PlayerName = '%e' LIMIT 1", id, accountName));
+    if (cache_num_rows() > 0) banned = 1;
+
+    SendClientMessage(playerid, COLOR_GRAY, sprintf("{bf0000}Account Details - {FFFFFF}%s", accountName));
+    SendClientMessage(playerid, COLOR_WHITE, sprintf("SQLID: %d", id));
+    SendClientMessage(playerid, COLOR_WHITE, sprintf("LoggedIn: %s", loggedIn ? "Yes" : "No"));
+    SendClientMessage(playerid, COLOR_WHITE, sprintf("Banned: %s", banned ? "Yes" : "No"));
+    SendClientMessage(playerid, COLOR_WHITE, sprintf("IP Address: %s", latestIp));
+    SendClientMessage(playerid, COLOR_WHITE, sprintf("Kills: %d", kills));
+    SendClientMessage(playerid, COLOR_WHITE, sprintf("Admin: %d", admin));
+    return 1;
+}
+
 CMD<AD1>:schp(cmdid, playerid, params[])
 {
 	new targetid, health;
