@@ -1431,6 +1431,8 @@ public OnPlayerConnect(playerid)
 
 	pFPSWarn[playerid] = 0;
 
+    HudShow[playerid] = true;
+
 	Account_Reset(playerid);
 	SetPlayerColor(playerid, PlayerColors[playerid]);
 	SendClientMessageToAll(COLOR_GRAY, sprintf("{bf0000}Connection: {9f9f9f}%s {ffffff}has joined the server.", GetName(playerid)));
