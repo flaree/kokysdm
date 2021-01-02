@@ -1368,6 +1368,8 @@ public OnGameModeInit()
 
 	mysql_tquery(SQL_CONNECTION, "SELECT * FROM `serversettings` LIMIT 1", "LoadSettings");
 
+    mysql_tquery(SQL_CONNECTION, "UPDATE Accounts SET LoggedIn = 0");
+
 	new ClockHours;
 	gettime(ClockHours);
 	SetWorldTime(ClockHours);
@@ -3699,7 +3701,7 @@ ALT:w2 = CMD:giveweapon;
 CMD:stats(cmdid, playerid, params[])
 {
     new targetid;
-    if(sscanf(params, "u", targetid)) 
+    if(sscanf(params, "u", targetid))
     {
         print(pName[playerid]);
         InfoBoxForPlayer(playerid, "~g~Gathering players information, please wait...");
@@ -4515,7 +4517,7 @@ CreateServerTextDraws()
 	TextDrawFont(DutyTextDraw, 1);
 	TextDrawSetProportional(DutyTextDraw, 1);
 	TextDrawSetShadow(DutyTextDraw, 0);
-    TextDrawSetString(DutyTextDraw, "~n~~w~-_~r~ON_DUTY~w~-");    
+    TextDrawSetString(DutyTextDraw, "~n~~w~-_~r~ON_DUTY~w~-");
 
 	//login
 	logintd = TextDrawCreate(183.5000, -41.0000, "mdl-1087:Koky_DM");
