@@ -168,7 +168,7 @@ CMD<FRM>:god(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{31AEAA}Freeroam:{FFFFFF} Godmode %s. Use /god to disable it.", Account[playerid][PreventDamage] ? "enabled" : "disabled"));
 	return true;
 }
-CMD<FRMTDM>:veh(cmdid, playerid, params[])
+CMD<FRM>:veh(cmdid, playerid, params[])
 {
 	new vehicleid[20], color1, color2, State = GetPlayerState(playerid);
 	if(GetPlayerVirtualWorld(playerid) < 2) return SendErrorMessage(playerid, "You cannot spawn a vehicle in this virutal world.");
