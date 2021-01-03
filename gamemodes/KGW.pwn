@@ -33,6 +33,8 @@ Losers -> BanksDM - LSDM - CarnageTDM!
 #include <nex-ac>
 
 #define WC_CUSTOM_VENDING_MACHINES false
+#define WC_DEBUG false
+#define WC_DEBUG_SILENT false
 #include <weapon-config>
 
 #include <lookup>
