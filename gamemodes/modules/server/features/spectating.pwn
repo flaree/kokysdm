@@ -123,7 +123,7 @@ CMD<AD1>:spec(cmdid, playerid, params[])
 	if(target == playerid) return SendClientMessage( playerid, -1, "{bf0000}Spectating: {808080}You cannot spectate yourself.");
 	if(target == INVALID_PLAYER_ID) return SendClientMessage( playerid, -1, "{bf0000}Spectating: {808080}Player not found.");
 	if(GetPlayerState(target) == PLAYER_STATE_WASTED) return SendClientMessage( playerid, -1, "{bf0000}Spectating: {808080}Player is respawning.");
-	if(!IsPlayerInLobby(playerid)) return SendClientMessage( playerid, -1, "{bf0000}Spectating: {808080}You must be in the lobby to use this command. This prevents wrong number of players in modes! Sorry baby.");
+	if(!IsPlayerInLobby(playerid)) HandleLobbyTransition(playerid);
 
 	if(ActivityState[target] == ACTIVITY_TDM)
 	{
