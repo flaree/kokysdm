@@ -1386,6 +1386,22 @@ CMD<AD1>:checkaccount(cmdid, playerid, params[])
     return 1;
 }
 
+CMD<AD1>:vpncheck(cmdid, playerid, params[])
+{
+	new targetid;
+	if(sscanf(params, "u", targetid)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /vpncheck [playerid]");
+	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
+	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
+	new url[100], ip[16], data[2];
+	data[0] = playerid;
+	data[1] = targetid;
+	SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}VPN Check: {FFFFFF}%s is checking %s for a VPN. ", GetName(playerid), GetName(targetid)));
+	GetPlayerIp(targetid, ip, sizeof(ip));
+	format(url, sizeof(url), "check.getipintel.net/check.php?ip=%s&contact=flare2399@gmail.com&flags=m", ip);
+	HTTP(targetid, HTTP_GET, url, "", "VPNCheck");
+	return 1;
+}
+
 CMD<AD1>:schp(cmdid, playerid, params[])
 {
 	new targetid, health;
