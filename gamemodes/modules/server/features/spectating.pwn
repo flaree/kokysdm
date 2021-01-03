@@ -101,7 +101,9 @@ hook public OnPlayerUpdate(playerid)
 					}
 				}
 				SendClientMessage(playerid, -1, sprintf("{bf0000}Spectating: {808080}You are now spectating %s(%i). Player Mode: %s. Press SPRINT key to sync.", GetName(i), i, ReturnActivityDescription(i)));
+				DestroySpecTDs(playerid);
 				SpectatePlayer(playerid, i);
+				CreateSpecTDs(playerid, i);
 				UpdateSpecTDs(playerid, i);
 				if(ActivityState[i] == ACTIVITY_TDM)
 				{
@@ -121,21 +123,16 @@ CMD<AD1>:spec(cmdid, playerid, params[])
 	if(target == playerid) return SendClientMessage( playerid, -1, "{bf0000}Spectating: {808080}You cannot spectate yourself.");
 	if(target == INVALID_PLAYER_ID) return SendClientMessage( playerid, -1, "{bf0000}Spectating: {808080}Player not found.");
 	if(GetPlayerState(target) == PLAYER_STATE_WASTED) return SendClientMessage( playerid, -1, "{bf0000}Spectating: {808080}Player is respawning.");
-	if(!IsPlayerInLobby(playerid)) return SendClientMessage( playerid, -1, "{bf0000}Spectating: {808080}You must be in the lobby to use this command. This prevents wrong number of players in modes! Sorry baby.");
+	if(!IsPlayerInLobby(playerid)) HandleLobbyTransition(playerid);
 
 	if(ActivityState[target] == ACTIVITY_TDM)
 	{
 		CreateTDMMapping(playerid);
 	}
-
+	DestroySpecTDs(playerid);
 	SpectatePlayer(playerid, target);
-	CreateSpecTDs(playerid);
+	CreateSpecTDs(playerid, target);
 	UpdateSpecTDs(playerid, target);
-	if(HudHide[playerid] == false)
-		{
-			HideSessionStats(playerid);
-			HideNetworkTDs(playerid);
-		}
 	SendClientMessage(playerid, -1, sprintf("{bf0000}(Spectate): {808080}You are now spectating %s(%i). Player Mode: %s. Press SPRINT key to sync.", GetName(target), target, ReturnActivityDescription(target)));
 	return true;
 }
@@ -146,12 +143,6 @@ CMD<AD1>:specoff(cmdid, playerid, params[])
 	DestroyAllPlayerObjects(playerid);
 	SendClientMessage(playerid, -1, sprintf("{bf0000}Spectating: {808080}You are no longer spectating %s(%i).", GetName(SpectatingPlayer[playerid]), SpectatingPlayer[playerid]));
 	StopSpectating(playerid);
-	DestroySpecTDs(playerid);
-	if(HudHide[playerid] == false)
-		{
-			HideSessionStats(playerid);
-			HideNetworkTDs(playerid);
-		}
 	return true;
 }
 
@@ -170,6 +161,9 @@ SpectatePlayer(playerid, target)
 			if(strlen(ArenaInfo[arena][ArenaMapCallback])) CallLocalFunction(ArenaInfo[arena][ArenaMapCallback], "i", playerid);
 		}
 	}
+	HideSessionStats(playerid);
+	HideNetworkTDs(playerid);
+
 
 	SetTimerEx("DelayedSpectate", 200, false, "ii", playerid, target);
 	return true;
@@ -180,6 +174,12 @@ StopSpectating(playerid)
 	SpectatingPlayer[playerid] = -1;
 	TogglePlayerSpectating(playerid, false);
 	SendPlayerToLobby(playerid);
+	DestroySpecTDs(playerid);
+	if(HudShow[playerid] == false)
+	{
+		HideSessionStats(playerid);
+		HideNetworkTDs(playerid);
+	}
 	return true;
 }
 
@@ -205,9 +205,9 @@ DestroySpecTDs(playerid)
 	PlayerTextDrawDestroy(playerid, SpecPlayerIPTD[playerid]);
 }
 
-CreateSpecTDs(playerid)
+CreateSpecTDs(playerid, targetid)
 {
-	SpecPlayerNameTD[playerid] = CreatePlayerTextDraw(playerid, 547.000000, 16.000000, "Player Name");
+	SpecPlayerNameTD[playerid] = CreatePlayerTextDraw(playerid, 547.000000, 16.000000, sprintf("%s", pName[targetid]));
 	PlayerTextDrawBackgroundColor(playerid, SpecPlayerNameTD[playerid], 255);
 	PlayerTextDrawFont(playerid, SpecPlayerNameTD[playerid], 2);
 	PlayerTextDrawLetterSize(playerid, SpecPlayerNameTD[playerid], 0.200000, 1.000000);
@@ -216,7 +216,8 @@ CreateSpecTDs(playerid)
 	PlayerTextDrawSetProportional(playerid, SpecPlayerNameTD[playerid], 1);
 	PlayerTextDrawSetSelectable(playerid, SpecPlayerNameTD[playerid], 0);
 
-	SpecPlayerIPTD[playerid] = CreatePlayerTextDraw(playerid, 547.000000, 25.000000, "IP:~W~ 0.0.0.0");
+	new Player_IP[16];	GetPlayerIp(targetid, Player_IP, 16);
+	SpecPlayerIPTD[playerid] = CreatePlayerTextDraw(playerid, 547.000000, 25.000000, sprintf("IP:~W~ %s", Player_IP));
 	PlayerTextDrawBackgroundColor(playerid, SpecPlayerIPTD[playerid], 255);
 	PlayerTextDrawFont(playerid, SpecPlayerIPTD[playerid], 1);
 	PlayerTextDrawLetterSize(playerid, SpecPlayerIPTD[playerid], 0.200000, 1.000000);
@@ -225,7 +226,7 @@ CreateSpecTDs(playerid)
 	PlayerTextDrawSetProportional(playerid, SpecPlayerIPTD[playerid], 1);
 	PlayerTextDrawSetSelectable(playerid, SpecPlayerIPTD[playerid], 0);
 
-	SpecPlayerFPSTD[playerid] = CreatePlayerTextDraw(playerid, 547.000000, 34.000000, "FPS:~W~ 0");
+	SpecPlayerFPSTD[playerid] = CreatePlayerTextDraw(playerid, 547.000000, 34.000000, sprintf("FPS:~W~ %i", pFPS[targetid]));
 	PlayerTextDrawBackgroundColor(playerid, SpecPlayerFPSTD[playerid], 255);
 	PlayerTextDrawFont(playerid, SpecPlayerFPSTD[playerid], 1);
 	PlayerTextDrawLetterSize(playerid, SpecPlayerFPSTD[playerid], 0.200000, 1.000000);
@@ -234,7 +235,7 @@ CreateSpecTDs(playerid)
 	PlayerTextDrawSetProportional(playerid, SpecPlayerFPSTD[playerid], 1);
 	PlayerTextDrawSetSelectable(playerid, SpecPlayerFPSTD[playerid], 0);
 
-	SpecPlayerPingTD[playerid] = CreatePlayerTextDraw(playerid, 547.000000, 43.000000, "PING:~W~ 0");
+	SpecPlayerPingTD[playerid] = CreatePlayerTextDraw(playerid, 547.000000, 43.000000, sprintf("PING:~W~ %i", GetPlayerPing(targetid)));
 	PlayerTextDrawBackgroundColor(playerid, SpecPlayerPingTD[playerid], 255);
 	PlayerTextDrawFont(playerid, SpecPlayerPingTD[playerid], 1);
 	PlayerTextDrawLetterSize(playerid, SpecPlayerPingTD[playerid], 0.200000, 1.000000);
@@ -243,7 +244,7 @@ CreateSpecTDs(playerid)
 	PlayerTextDrawSetProportional(playerid, SpecPlayerPingTD[playerid], 1);
 	PlayerTextDrawSetSelectable(playerid, SpecPlayerPingTD[playerid], 0);
 
-	SpecPlayerPLTD[playerid] = CreatePlayerTextDraw(playerid, 547.000000, 52.000000, "P/L:~W~ 0.0%");
+	SpecPlayerPLTD[playerid] = CreatePlayerTextDraw(playerid, 547.000000, 52.000000, sprintf("P/L:~W~ %.2f%", NetStats_PacketLossPercent(targetid)));
 	PlayerTextDrawBackgroundColor(playerid, SpecPlayerPLTD[playerid], 255);
 	PlayerTextDrawFont(playerid, SpecPlayerPLTD[playerid], 1);
 	PlayerTextDrawLetterSize(playerid, SpecPlayerPLTD[playerid], 0.200000, 1.000000);
@@ -263,9 +264,6 @@ CreateSpecTDs(playerid)
 
 UpdateSpecTDs(playerid, targetid)
 {
-	new Player_IP[16];	GetPlayerIp(targetid, Player_IP, 16);
-	PlayerTextDrawSetString(playerid, SpecPlayerNameTD[playerid], sprintf("%s", pName[targetid]));
-	PlayerTextDrawSetString(playerid, SpecPlayerIPTD[playerid], sprintf("IP:~W~ %s", Player_IP));
     PlayerTextDrawSetString(playerid, SpecPlayerFPSTD[playerid], sprintf("FPS:~W~ %i", pFPS[targetid]));
     PlayerTextDrawSetString(playerid, SpecPlayerPingTD[playerid], sprintf("PING:~W~ %i", GetPlayerPing(targetid)));
 	PlayerTextDrawSetString(playerid, SpecPlayerPLTD[playerid], sprintf("P/L:~W~ %.2f%", NetStats_PacketLossPercent(targetid)));
