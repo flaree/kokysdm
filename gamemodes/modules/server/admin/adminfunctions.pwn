@@ -117,17 +117,18 @@ SendAdminPM(from, to, msg[]) {
 	return 1;
 }
 
-forward VPNCheck(playerid, respondecode, data[]);
-public VPNCheck(playerid, respondecode, data[])
+forward VPNCheck(playerid, responsecode, data[]);
+public VPNCheck(playerid, responsecode, data[])
 {
-	if(respondecode == 200)
+	if(responsecode == 200)
 	{
 		new Float:value = floatstr(data);
 		if(value >= 0.99) {
         	new ip[16];
         	GetPlayerIp(playerid, ip, sizeof(ip));
-        	SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}Admin Notice: {FFFFFF}%s (ID %d) is using a proxy/VPN and has been kicked. (%s)", GetName(playerid), playerid, ip));
+        	SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}VPN Check: {FFFFFF}%s is using a proxy/VPN and has been kicked. (%s)", GetName(playerid), playerid, ip));
 			SendClientMessage(playerid, COLOR_RED, "You have been {FF0000}kicked{FFFFFF} for using a VPN/Proxy. Please disable it to continue playing.");
+			SendPunishmentMessage(sprintf("%s has been kicked for Proxy/VPN usage.", GetName(playerid)));
         	Account[playerid][pVPN] = 1;
 			KickPlayer(playerid);
 			return 1;
@@ -138,7 +139,8 @@ public VPNCheck(playerid, respondecode, data[])
 		SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}VPN Check: {FFFFFF}%s (ID %d) is not using a Proxy/VPN. (%d%)", GetName(playerid), playerid, proxyPercentage));
 	}
 	else {
-		print(sprintf("Response failed: resp code %d", respondecode));
+		print(sprintf("Response failed: resp code %d", responsecode));
+		SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}VPN Check: {FFFFFF}VPN check for %s failed. Response Code: %d", GetName(playerid), responsecode));
 	}
 	return 1;
 }
