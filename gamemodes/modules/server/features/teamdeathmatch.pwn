@@ -6,7 +6,7 @@
 #define TEAM_STAFF 5
 #define MAX_TEAMS 6
 
-#define TDM_TURFPOS 1900.000183, -1802.5, 1959.000183, -1749.50000
+#define TDM_TURFPOS 1900.000183, -1825.5, 1959.000183, -1749.50000
 
 #define WORLD_TDM 1025
 
@@ -185,7 +185,7 @@ hook public OnPlayerEnterCheckpoint(playerid)
 		if(IsPlayerInVehicle(playerid, GetPlayerVehicleID(playerid))) return SendClientMessage(playerid, COLOR_LIGHTRED, "TURF: You cannot be in a vehicle while capturing the turf!");
 		SendTDMMessage(COLOR_LIGHTRED, sprintf("TURF: {%06x}%s {ffffff}is capturing the turf! Kill him to stop the capture.", GetPlayerColor(playerid) >>> 8, GetName(playerid)));
 		capturingturf[playerid] = 1;
-		capturingtimer[playerid] = SetTimerEx("CapturingTurf", 30000, false, "ii", playerid, ActivityStateID[playerid]);
+		capturingtimer[playerid] = SetTimerEx("CapturingTurf", 45000, false, "ii", playerid, ActivityStateID[playerid]);
 		GangZoneFlashForTDM(GetPlayerColor(playerid));
 		beingcaptured = playerid;
 		return true;
@@ -392,10 +392,10 @@ public SpawnProtection(playerid)
 public CapturingTurf(playerid, team)
 {
 	turfholder = team;
-	SendTDMMessage(COLOR_LIGHTRED, sprintf("TURF: {%06x}%s {ffffff}has captured the turf for their team! It will be available for capture in 5 minutes.", GetPlayerColor(playerid) >>> 8, GetName(playerid)));
+	SendTDMMessage(COLOR_LIGHTRED, sprintf("TURF: {%06x}%s {ffffff}has captured the turf for their team! It will be available for capture in 20 minutes.", GetPlayerColor(playerid) >>> 8, GetName(playerid)));
 	GangZoneStopFlashForAll(igsturf);
 	GangZoneCapturedTDM(GetPlayerColor(playerid));
-	SetTimer("AllowTurfCapture", 300000, false);
+	SetTimer("AllowTurfCapture", 900000, false);
 	allowcapture = 0;
 	beingcaptured = -1;
 	capturingturf[playerid] = 0;
