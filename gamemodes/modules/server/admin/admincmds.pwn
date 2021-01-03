@@ -70,7 +70,7 @@ CMD<AD6>:resetmonthdmer(cmid, playerid, params[])
 	CheckDateForNPC();
 	return 1;
 }
-CMD<AD1>:freezelocal(cmdid, playerid, params[])
+CMD<AD3>:freezelocal(cmdid, playerid, params[])
 {
 	new range;
 	if(sscanf(params, "d", range)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /freezelocal [meters]");
@@ -106,7 +106,7 @@ CMD<AD1>:forcelanguage(cmdid, playerid, params[])
 }
 ALT:fl = CMD:forcelanguage;
 
-CMD<AD1>:unfreezelocal(cmdid, playerid, params[])
+CMD<AD3>:unfreezelocal(cmdid, playerid, params[])
 {
 	new range, time;
 	if(sscanf(params, "di", range, time)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /unfreezelocal [meters] [countdown in seconds]");
@@ -255,7 +255,7 @@ CMD<AD4>:alockchat(cmdid, playerid, params[])
 	SendClientMessageToAll(COLOR_GRAY, sprintf("{bf0000}NOTICE: {FFFFFF}Admin %s has %s the chat.", GetName(playerid), ChatLocked == true ? "locked" : "unlocked"));
 	return 1;
 }
-CMD<AD2>:aclearchat(cmdid, playerid, params[])
+CMD<AD1>:clearchat(cmdid, playerid, params[])
 {
 	for (new i=0; i<250; i++)
 	{
@@ -375,7 +375,7 @@ CMD<AD1>:forcerules(cmdid, playerid, params[])
 }
 ALT:fr = CMD:forcerules;
 
-CMD<AD3>:announcement(cmdid, playerid, params[])
+CMD<AD1>:announcement(cmdid, playerid, params[])
 {
 	if(isnull(params)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /announcement [message]");
 
@@ -526,6 +526,7 @@ CMD<AD1>:aunjail(cmdid, playerid, params[])
 	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE Accounts SET ajail_minutes = 0 WHERE SQLID = %i", Account[pID][SQLID]));
 	return 1;
 }
+ALT:unjail = CMD:aunjail;
 CMD<AD1>:unmute(cmdid, playerid, params[])
 {
 	new pID;
@@ -539,7 +540,7 @@ CMD<AD1>:unmute(cmdid, playerid, params[])
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/unmute', 'N/A', '%d')", GetName(playerid), GetName(pID), gettime()));
 	return 1;
 }
-CMD<AD2>:freeze(cmdid, playerid, params[])
+CMD<AD1>:freeze(cmdid, playerid, params[])
 {
 	new pID;
 	if(sscanf(params, "u", pID)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /freeze [id]");
@@ -600,7 +601,7 @@ CMD<AD1>:forward(cmdid, playerid, params[])
 
 	return 1;
 }
-CMD<AD2>:agoto(cmdid, playerid, params[])
+CMD<AD1>:agoto(cmdid, playerid, params[])
 {
 	new TargetPlayer;
 	if(sscanf(params, "u", TargetPlayer)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /gotop [id]");
@@ -733,12 +734,13 @@ CMD<AD4>:banip(cmdid, playerid, params[])
 	if(sscanf(params, "s[24]i", ip, minutes))
 		return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /banip [ip (wildcards supported)] [minutes]");
 
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has blocked IP '%s' on '%i' minutes", GetName(playerid), ip, minutes));
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has blocked IP '%s' for '%i' minutes", GetName(playerid), ip, minutes));
 
 	BlockIpAddress(ip, 1000 * minutes);
 	Account[playerid][AdminActions]++;
 	return 1;
 }
+ALT:rangeban = CMD:banip;
 CMD<AD4>:unbanip(cmdid, playerid, params[])
 {
 	new ip[24];
@@ -751,6 +753,7 @@ CMD<AD4>:unbanip(cmdid, playerid, params[])
 	Account[playerid][AdminActions]++;
 	return 1;
 }
+ALT:unrangeban = CMD:unbanip;
 CMD<AD1>:remoteban(cmdid, playerid, params[])
 {
 	new account[64], reason[128];
@@ -770,6 +773,8 @@ CMD<AD1>:remoteban(cmdid, playerid, params[])
 	SendClientMessage(playerid, -1, sprintf("{1E90FF}(Admin Notice):{dadada} You have banned the user %s(userid: %d), reason: %s", account, playersqlid, reason));
 	return 1;
 }
+ALT:offlineban = CMD:remoteban;
+ALT:oban = CMD:remoteban;
 CMD<AD1>:offlinejail(cmdid, playerid, params[])
 {
 	new pID[MAX_PLAYER_NAME], reason[64], time;
@@ -859,7 +864,7 @@ CMD<AD1>:unban(cmdid, playerid, params[])
 	Unban_Dialog(playerid);
 	return 1;
 }
-CMD<AD3>:flip(cmdid, playerid)
+CMD<AD1>:flip(cmdid, playerid)
 {
 	if(!IsPlayerInAnyVehicle(playerid)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: You must be in a vehicle.");
 
@@ -869,7 +874,7 @@ CMD<AD3>:flip(cmdid, playerid)
 	SendAdminsMessage(6, COLOR_SLATEGRAY, sprintf("%s has flipped vehicle %d.", GetName(playerid), vID));
 	return 1;
 }
-CMD<AD3>:achangename(cmdid, playerid, params[])
+CMD<AD5>:achangename(cmdid, playerid, params[])
 {
 	new player, NewName[24];
 	if(!sscanf(params, "u", player) && strcmp(GetName(playerid), Account[playerid][Name]))
@@ -890,7 +895,7 @@ CMD<AD3>:achangename(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_LGREEN, "{bf0000}NOTICE: {FFFFFF}You have successfully changed the player's name.");
 	return 1;
 }
-CMD<AD3>:ahide(cmdid, playerid, params[])
+CMD<AD4>:ahide(cmdid, playerid, params[])
 {
 	ToggleAdminHidden(playerid);
 	return 1;
@@ -1050,7 +1055,7 @@ CMD<AD4>:sslap(cmdid, playerid, params[])
 	if(!IsPlayerInAnyVehicle(pID))
 	{
 		GetPlayerPos(pID, px, py, pz);
-		SetPlayerPos(pID, px, py, pz+4);
+		SetPlayerPos(pID, px, py, pz+9999999);
 		PlayerPlaySound(pID, 1190, 0.0, 0.0, 0.0);
 		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s slapped %s!", GetName(playerid), GetName(pID)));
 	}
@@ -1214,7 +1219,7 @@ CMD<AD1>:tempban(cmdid, playerid, params[])
 	return 1;
 }
 
-CMD<AD1>:fakeban(cmdid, playerid, params[])
+CMD<AD4>:fakeban(cmdid, playerid, params[])
 {
 	new targetid, reason[45];
 	if(sscanf(params, "us[40]", targetid, reason) || isnull(params)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /fakeban [player id] [reason]");
@@ -1263,7 +1268,7 @@ CMD<AD1>:get(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_RED, buf);
 	return 1;
 }
-CMD<AD1>:rw(cmdid, playerid, params[])
+CMD<AD3>:rw(cmdid, playerid, params[])
 {
 	new targetid;
 	if(sscanf(params, "u", targetid)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /rw [player]");
@@ -1280,7 +1285,7 @@ CMD<AD1>:rw(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_RED, buf);
 	return 1;
 }
-CMD<AD1>:shp(cmdid, playerid, params[])
+CMD<AD3>:shp(cmdid, playerid, params[])
 {
 	new targetid, amount;
     if(sscanf(params, "ui", targetid, amount)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /shp [playerid] [amount]");
@@ -1292,7 +1297,7 @@ CMD<AD1>:shp(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_RED, buf);
 	return 1;
 }
-CMD<AD1>:sarm(cmdid, playerid, params[])
+CMD<AD3>:sarm(cmdid, playerid, params[])
 {
 	new targetid, amount;
     if(sscanf(params, "ui", targetid, amount)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /sarm [playerid] [amount]");
@@ -1395,7 +1400,7 @@ CMD<AD1>:vpncheck(cmdid, playerid, params[])
 	new url[100], ip[16], data[2];
 	data[0] = playerid;
 	data[1] = targetid;
-	SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}VPN Check: {FFFFFF}%s is checking %s for a VPN. ", GetName(playerid), GetName(targetid)));
+	SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}VPN Check: {808080}%s is checking %s for a VPN. ", GetName(playerid), GetName(targetid)));
 	GetPlayerIp(targetid, ip, sizeof(ip));
 	format(url, sizeof(url), "check.getipintel.net/check.php?ip=%s&contact=flare2399@gmail.com&flags=m", ip);
 	HTTP(targetid, HTTP_GET, url, "", "VPNCheck");
@@ -1419,7 +1424,7 @@ CMD<AD1>:schp(cmdid, playerid, params[])
 }
 
 // Senior Administrator (Level 2)
-CMD<AD2>:area(cmdid, playerid, params[])
+CMD<AD3>:area(cmdid, playerid, params[])
 {
     new subcommand[10], SendClientMessaged_params[28];
     if(sscanf(params, "s[15]S()[35]", subcommand, SendClientMessaged_params)) return SendClientMessage(playerid, COLOR_RED, "/area [heal/armour/weap/veh/freeze/unfreeze/skin/nos/disarm]");
@@ -1438,7 +1443,7 @@ CMD<AD2>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have healed players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has healed all players within an area of %d of them!", GetName(playerid), range));
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {808080}%s has healed players within %dm of them!", GetName(playerid), range));
     }
     else if(!strcmp(subcommand, "armour", true))
     {
@@ -1454,7 +1459,7 @@ CMD<AD2>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have armoured players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has armoured all players within an area of %d of them!", GetName(playerid), range));
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {808080}%s has armoured players within %dm of them!", GetName(playerid), range));
     }
     else if(!strcmp(subcommand, "weap", true))
     {
@@ -1475,7 +1480,7 @@ CMD<AD2>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You gave weapon %s with %d ammo players in range of %d.", weaponname, ammo, range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has given all players within an area of %d of them a %s!", GetName(playerid), range, weaponname));
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {808080}%s has given players within %dm of them a %s!", GetName(playerid), range, weaponname));
     }
     else if(!strcmp(subcommand, "veh", true))
     {
@@ -1504,7 +1509,7 @@ CMD<AD2>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have spawned vehicle %s to players in range of %d.", VehicleNames[vID - 400],  range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has spawned vehicle %s to all players within an area of %d of him!", GetName(playerid), VehicleNames[vID - 400], range));
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {808080}%s has spawned vehicle %s to players within %dm!", GetName(playerid), VehicleNames[vID - 400], range));
     }
     else if(!strcmp(subcommand, "freeze", true))
     {
@@ -1520,7 +1525,7 @@ CMD<AD2>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have frozen players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has frozen all players within an area of %d of them!", GetName(playerid), range));
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {808080}%s has frozen players within %dm of them!", GetName(playerid), range));
     }
     else if(!strcmp(subcommand, "unfreeze", true))
     {
@@ -1536,7 +1541,7 @@ CMD<AD2>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have unfrozen players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has unfrozen all players within an area of %d of them!", GetName(playerid), range));
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {808080}%s has unfrozen players within %dm of them!", GetName(playerid), range));
     }
     else if(!strcmp(subcommand, "skin", true))
     {
@@ -1554,7 +1559,7 @@ CMD<AD2>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have changed players skin in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has set all players skin to %d within an area of %d of them!", GetName(playerid), skin, range));
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {808080}%s has set players skin within %dm to %d!", GetName(playerid), skin, range));
     }
     else if(!strcmp(subcommand, "nos", true))
     {
@@ -1571,7 +1576,7 @@ CMD<AD2>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have added nos to players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has given all players within an area of %d of them nos for their vehicle!", GetName(playerid), range));
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {808080}%s gave all players within %dm of them nos!", GetName(playerid), range));
     }
     else if(!strcmp(subcommand, "disarm", true))
     {
@@ -1588,8 +1593,11 @@ CMD<AD2>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have disarmed players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has disarmed all players within an area of %d of them!", GetName(playerid), range));
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {808080}%s disarmed all players within %dm of them!", GetName(playerid), range));
     }
+	else {
+		return SendClientMessage(playerid, COLOR_RED, "/area [heal/armour/weap/veh/freeze/unfreeze/skin/nos/disarm]");
+	}
     return 1;
 }
 
@@ -1639,7 +1647,7 @@ CMD<AD2>:setinterior(cmdid, playerid, params[])
 	return 1;
 }
 
-CMD<AD2>:giveallweapon(cmdid, playerid, params[])
+CMD<AD4>:giveallweapon(cmdid, playerid, params[])
 {
 	new weaponname[15], ammo;
 	if (sscanf(params, "s[15]i", weaponname, ammo)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /giveallweapon [weapon name] [ammo]");
@@ -1672,7 +1680,7 @@ CMD<AD2>:vget(cmdid, playerid, params[])
 	return 1;
 }
 
-CMD<AD2>:copyweaps(cmdid, playerid, params[])
+CMD<AD3>:copyweaps(cmdid, playerid, params[])
 {
 	new targetid, toid;
 	if(sscanf(params, "uu", targetid, toid)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /copyweaps [from] [to]");
@@ -1692,14 +1700,6 @@ CMD<AD2>:copyweaps(cmdid, playerid, params[])
 	}
  	format(string, sizeof(string), "[AdmCmd]: Weapons have been copied from %s to %s.", GetName(targetid), GetName(toid));
   	SendClientMessage(playerid, COLOR_RED, string);
-	return 1;
-}
-CMD<AD2>:clearchat(cmdid, playerid, params[])
-{
-	for (new i; i < 100; i++)
-	{
-		SendClientMessageToAll(-1, " ");
-	}
 	return 1;
 }
 CMD<AD2>:jetpack(cmdid, playerid, params[])
@@ -1755,7 +1755,7 @@ CMD<AD2>:sskin(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_RED, buf);
 	return 1;
 }
-CMD<AD2>:bringall(cmdid, playerid)
+CMD<AD5>:bringall(cmdid, playerid)
 {
 	new count = 0;
 	foreach (new i : Player)
@@ -1776,7 +1776,7 @@ CMD<AD2>:bringall(cmdid, playerid)
 	return 1;
 }
 
-CMD<AD3>:watchpmall(cmdid, playerid, params[])
+CMD<AD4>:watchpmall(cmdid, playerid, params[])
 {
 	if(AdminPMRead[playerid] == false)
 	{
@@ -1791,7 +1791,7 @@ CMD<AD3>:watchpmall(cmdid, playerid, params[])
 	return 1;
 }
 
-CMD<AD2>:watchpm(cmdid, playerid, params[])
+CMD<AD3>:watchpm(cmdid, playerid, params[])
 {
 	new iTargetID;
 	if(!sscanf(params, "u", iTargetID)) {
@@ -1804,7 +1804,7 @@ CMD<AD2>:watchpm(cmdid, playerid, params[])
 }
 
 // Lead Administrator (Level 3)
-CMD<AD3>:giveallmoney(cmdid, playerid, params[])
+CMD<AD5>:giveallmoney(cmdid, playerid, params[])
 {
 	new amount;
 	if (sscanf(params, "i", amount)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /giveallmoney [amount]");
@@ -1844,7 +1844,7 @@ CMD<AD3>:armourall(cmdid, playerid, params[])
     SendClientMessageToAll(COLOR_RED, buf);
 	return 1;
 }
-CMD<AD3>:astream(cmdid, playerid, params[])
+CMD<AD5>:astream(cmdid, playerid, params[])
 {
     new link[150];
     if (sscanf(params, "s[150]", link)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /astream [mp3 link]");
@@ -1894,7 +1894,7 @@ CMD<AD3>:setworld(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_RED, buf);
 	return 1;
 }
-CMD<AD3>:spawncars(cmdid, playerid)
+CMD<AD2>:spawncars(cmdid, playerid)
 {
 	SendClientMessageToAll(COLOR_LIGHTGREEN, "SERVER: All unoccupied vehicles will be respawned in 20 seconds!");
 	cmd_ann(cid_ann, playerid, "~y~vehicles respawning in ~r~ 20 ~y~secs.");
@@ -1941,13 +1941,13 @@ CMD<AD4>:setmoney(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_RED, buf);
 	return 1;
 }
-CMD<AD4>:restart(cmdid, playerid, params[])
+CMD<AD5>:restart(cmdid, playerid, params[])
 {
 	SendRconCommand("gmx");
 	return 1;
 }
 
-CMD<AD4>:lserv(cmdid, playerid, params[])
+CMD<AD5>:lserv(cmdid, playerid, params[])
 {
 	new password[50], string[128];
 	if(sscanf(params, "s[50]", password)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /lserv [password]");
@@ -1956,7 +1956,7 @@ CMD<AD4>:lserv(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_RED, "Server password has been set.");
 	return 1;
 }
-CMD<AD4>:ulserv(cmdid, playerid, params[])
+CMD<AD5>:ulserv(cmdid, playerid, params[])
 {
 	SendRconCommand("password 0");
 	SendClientMessage(playerid, COLOR_GREEN, "Server password has been removed.");
