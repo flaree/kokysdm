@@ -31,7 +31,7 @@ CMD<CLN>:claninvite(cmdid, playerid, params[])
 	invitedby[pid] = playerid;
 	SendClientMessage(pid, -1, sprintf("{31AEAA}Clan Invite: {%06x}%s {FFFFFF}has invited you join the clan %s.", GetPlayerColor(playerid) >>> 8, GetName(playerid), Account[playerid][ClanName]));
 
-	SendClientMessage(playerid, -1, sprintf("{31AEAA}Clan Invite: {FFFFFF}You have invited {%06x}%s to join your clan!", GetPlayerColor(pid) >>> 8, GetName(pid)));
+	SendClientMessage(playerid, -1, sprintf("{31AEAA}Clan Invite: {FFFFFF}You have invited {%06x}%s{FFFFFF} to join your clan!", GetPlayerColor(pid) >>> 8, GetName(pid)));
 
 	return true;
 }
