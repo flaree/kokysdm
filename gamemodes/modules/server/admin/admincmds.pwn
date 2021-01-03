@@ -49,7 +49,7 @@ CMD<AD6>:givetokens(cmdid, playerid, params[])
 	if(sscanf(params, "ui", pID, tokenamount)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /givetoken [id] [amount]");
 
 	Account[pID][Tokens] += tokenamount;
-	SendClientMessage(pID, COLOR_LIGHTRED, sprintf("NOTICE: You were given %i tokens by %s.", tokenamount, GetName(playerid)));
+	SendClientMessage(pID, COLOR_RED, sprintf("NOTICE: You were given %i tokens by %s.", tokenamount, GetName(playerid)));
 	SendClientMessage(playerid, -1, "You gave the player KDM Tokens.");
 	return true;
 }
@@ -83,7 +83,7 @@ CMD<AD3>:freezelocal(cmdid, playerid, params[])
 		if(IsPlayerInRangeOfPoint(i, range, x, y, z))
 		{
 			TogglePlayerControllable(i, false);
-			SendClientMessage(i, COLOR_LIGHTRED, sprintf("Local Freeze: Admin %s has frozen all local players within %i meters of their position.", GetName(playerid), range));
+			SendClientMessage(i, COLOR_RED, sprintf("Local Freeze: Admin %s has frozen all local players within %i meters of their position.", GetName(playerid), range));
 		}
 	}
 	return true;
@@ -92,6 +92,7 @@ CMD<AD1>:forcelanguage(cmdid, playerid, params[])
 {
 	new pid;
  	if(sscanf(params, "u", pid)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /forcelanguage [playerid/playername]");
+	if(!IsPlayerConnected(pid)) return SendErrorMessage(playerid, "No player connected.");
 
  	SendClientMessage(playerid, -1, sprintf("{bf0000}NOTICE: {FFFFFF}You have forced the language dialog upon %s.", GetName(pid)));
  	SendClientMessage(pid, -1, sprintf("{bf0000}NOTICE: {FFFFFF}You have been forced to select a language by %s.", GetName(playerid)));
@@ -121,7 +122,7 @@ CMD<AD3>:unfreezelocal(cmdid, playerid, params[])
 			countdowntime[i] = time;
 			SetTimerEx("UnfreezePlayer", time * 1000 , false, "i", i);
 			countdowntimer[i] = SetTimerEx("LocalCountDown", 1000, true, "i", i);
-			SendClientMessage(i, COLOR_LIGHTRED, sprintf("Local Freeze: Admin %s has unfrozen all local players within %i meters of their position.", GetName(playerid), range));
+			SendClientMessage(i, COLOR_RED, sprintf("Local Freeze: Admin %s has unfrozen all local players within %i meters of their position.", GetName(playerid), range));
 		}
 	}
 	return true;
@@ -140,7 +141,7 @@ CMD<AD1>:sendlocalmessage(cmdid, playerid, params[])
 	{
 		if(IsPlayerInRangeOfPoint(i, range, x, y, z))
 		{
-			SendClientMessage(i, COLOR_LIGHTRED, string);
+			SendClientMessage(i, COLOR_RED, string);
 		}
 	}
 	return true;
@@ -161,7 +162,7 @@ CMD<AD1>:localcount(cmdid, playerid, params[])
 		}
 	}
 
-	SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("[LOCAL COUNT]: {FFFFFF}There is a local count of {31AEAA}%i {FFFFFF}players including you.", count));
+	SendClientMessage(playerid, COLOR_RED, sprintf("[LOCAL COUNT]: {FFFFFF}There is a local count of {31AEAA}%i {FFFFFF}players including you.", count));
 	return true;
 }
 CMD<AD4>:setskin(cmdid, playerid, params[])
@@ -209,7 +210,7 @@ CMD<AD1>:whois(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_GREY, sprintf("[WHOIS] IP Address: {FFFFFF}%s {D3D3D3}| Location: {FFFFFF}%s", ip, country));
 	SendClientMessage(playerid, COLOR_GREY, sprintf("[WHOIS] ISP: {FFFFFF}%s", isp));
 	if(Account[id][pVPN] == 1)
-	SendClientMessage(playerid, COLOR_LIGHTRED, "[WHOIS] This player is using a VPN/proxy!");
+	SendClientMessage(playerid, COLOR_RED, "[WHOIS] This player is using a VPN/proxy!");
 	if(Account[id][pVPN] != 1)
 	SendClientMessage(playerid, COLOR_GREY, sprintf("[WHOIS] This player has a %d%s chance of using a VPN/proxy.", Account[id][pVPN]*100, "%%"));
 	return 1;
@@ -286,7 +287,7 @@ CMD<AD2>:giveweapon(cmdid, playerid, params[])
 	if(gWeaponAmmo > 1000) return SendErrorMessage(playerid, ERROR_VALUE);
 
 	GivePlayerWeapon(Player, WeaponID, gWeaponAmmo);
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}Admin %s has given %s weapon: %s (Ammo:%d)", GetName(playerid), GetName(Player), WeaponNameList[WeaponID], gWeaponAmmo));
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {808080}Admin %s has given %s weapon: %s (Ammo:%d)", GetName(playerid), GetName(Player), WeaponNameList[WeaponID], gWeaponAmmo));
 	SendClientMessage(Player, COLOR_GRAY, sprintf("{bf0000}NOTICE: {FFFFFF}Admin %s has given %s weapon: %s (Ammo:%d)", GetName(playerid), GetName(Player), WeaponNameList[WeaponID], gWeaponAmmo));
 	return 1;
 }
@@ -337,10 +338,10 @@ CMD<AD3>:staffreward(cmdid, playerid, params[])
 {
 	if(Account[playerid][Donator] != 4)
 	{
-		SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("%s has activated their staff reward!", GetName(playerid)));
+		SendAdminsMessage(1, COLOR_RED, sprintf("%s has activated their staff reward!", GetName(playerid)));
 		ActivateUpgrades(playerid, 3);
 	}
-	else SendClientMessage(playerid, COLOR_LIGHTRED, "You already have Diamond V.I.P active!");
+	else SendClientMessage(playerid, COLOR_RED, "You already have Diamond V.I.P active!");
 	return true;
 }
 CMD<AD1>:fpscheck(cmdid, playerid, params[])
@@ -423,7 +424,7 @@ CMD<AD1>:mute(cmdid, playerid, params[])
 	else {
 		SendPunishmentMessage(sprintf("Admin %s has muted %s for %i minutes. Reason: %s", GetName(playerid), GetName(pID), time, reason));
 	}
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {C0C0C0}%s has muted %s for %i minutes! Reason: %s", GetName(playerid), GetName(pID), time, reason));
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {C0C0C0}%s has muted %s for %i minutes! Reason: %s", GetName(playerid), GetName(pID), time, reason));
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/mute', '%e', '%d')", GetName(playerid), GetName(pID), reason, gettime()));
 	Account[playerid][AdminActions]++;
 	return 1;
@@ -501,7 +502,7 @@ CMD<AD1>:ajail(cmdid, playerid, params[])
 	SetPlayerPosEx(target, 2577.2522,2695.4265,22.9507, 0, 0);
 
 	SendPunishmentMessage(sprintf("Admin %s has a-jailed %s for %d minutes! Reason: %s", GetName(playerid), GetName(target), time, reason));
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s a-jailed %s! Reason: %s", GetName(playerid), GetName(target), reason));
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {808080}%s a-jailed %s! Reason: %s", GetName(playerid), GetName(target), reason));
 
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp, ajailtime) VALUES('%e', '%e', '/ajail', '%e', '%d', '%i')", GetName(playerid), GetName(target), reason, gettime(), time));
 	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE Accounts SET ajail_minutes = %i WHERE SQLID = %i", time, Account[target][SQLID]));
@@ -519,7 +520,7 @@ CMD<AD1>:aunjail(cmdid, playerid, params[])
 	if(!Account[pID][AJailTime]) return SendErrorMessage(playerid, "This player is not in ajail.");
 
 	SendClientMessage(pID, -1, sprintf("{bf0000}NOTICE: {FFFFFF}You have been unjailed by %s.", GetName(playerid)));
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has unjailed %s!", GetName(playerid), GetName(pID)));
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {808080}%s has unjailed %s!", GetName(playerid), GetName(pID)));
 	Account[pID][AJailTime] = 0;
 	SendPlayerToLobby(pID);
 
@@ -535,7 +536,7 @@ CMD<AD1>:unmute(cmdid, playerid, params[])
 
 	Account[pID][Muted] = 0;
 
-	SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("PUNISHMENT: %s has unmuted %s!", GetName(playerid), GetName(pID)));
+	SendAdminsMessage(1, COLOR_RED, sprintf("PUNISHMENT: %s has unmuted %s!", GetName(playerid), GetName(pID)));
 	SendClientMessage(pID, COLOR_GRAY, sprintf("{bf0000}NOTICE: {FFFFFF}Admin %s has unmuted you.", GetName(playerid)));
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/unmute', 'N/A', '%d')", GetName(playerid), GetName(pID), gettime()));
 	return 1;
@@ -544,10 +545,10 @@ CMD<AD1>:freeze(cmdid, playerid, params[])
 {
 	new pID;
 	if(sscanf(params, "u", pID)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /freeze [id]");
-	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid, ERROR_OPTION);
+	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid, "No player connected.");
 
 	TogglePlayerControllable(pID, 0);
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}Admin %s has frozen %s.", GetName(playerid), GetName(pID)));
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {808080}Admin %s has frozen %s.", GetName(playerid), GetName(pID)));
 	SendClientMessage(pID, COLOR_GRAY, "{bf0000}NOTICE: {FFFFFF}You have been frozen by an admin.");
 	Account[playerid][AdminActions]++;
 	return 1;
@@ -556,6 +557,7 @@ CMD<AD1>:slap(cmdid, playerid, params[])
 {
 	new pID;
 	if(sscanf(params, "u", pID)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /slap [id]");
+	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid, "No player connected.");
 	PlayerPlaySound(playerid, 1190, 0.0, 0.0, 0.0);
 
 	new Float:px, Float:py, Float:pz;
@@ -565,16 +567,18 @@ CMD<AD1>:slap(cmdid, playerid, params[])
 		SetPlayerPos(pID, px, py, pz+4);
 		PlayerPlaySound(pID, 1190, 0.0, 0.0, 0.0);
 		if (GetPlayerAdminHidden(playerid))
-			SendClientMessage(pID, COLOR_LIGHTRED, "PUNISHMENT: An admin has slapped you.");
+			SendClientMessage(pID, COLOR_RED, "PUNISHMENT: An admin has slapped you.");
 		else
-			SendClientMessage(pID, COLOR_LIGHTRED, sprintf("PUNISHMENT: Admin %s has slapped you.", GetName(playerid)));
+			SendClientMessage(pID, COLOR_RED, sprintf("PUNISHMENT: Admin %s has slapped you.", GetName(playerid)));
 	}
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {808080}Admin %s has slapped %s.", GetName(playerid), GetName(pID)));
 	return 1;
 }
 CMD<AD1>:downslap(cmdid, playerid, params[])
 {
 	new pID;
 	if(sscanf(params, "u", pID)) return SendUsageMessage(playerid, "/downslap [id]");
+	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid, "No player connected.");
 	PlayerPlaySound(playerid, 1190, 0.0, 0.0, 0.0);
 
 	new Float:px, Float:py, Float:pz;
@@ -583,7 +587,7 @@ CMD<AD1>:downslap(cmdid, playerid, params[])
 		GetPlayerPos(pID, px, py, pz);
 		SetPlayerPos(pID, px, py, pz-4);
 		PlayerPlaySound(pID, 1190, 0.0, 0.0, 0.0);
-		SendClientMessage(pID, COLOR_LIGHTRED, sprintf("PUNISHMENT: Admin %s has downslapped you.", GetName(playerid)));
+		SendClientMessage(pID, COLOR_RED, sprintf("PUNISHMENT: Admin %s has downslapped you.", GetName(playerid)));
 	}
 	return 1;
 }
@@ -620,7 +624,7 @@ CMD<AD1>:agoto(cmdid, playerid, params[])
 CMD<AD2>:aget(cmdid, playerid, params[])
 {
 	new TargetPlayer;
-	if(sscanf(params, "u", TargetPlayer)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /getp [playerid]");
+	if(sscanf(params, "u", TargetPlayer)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /aget [playerid]");
 	if(!IsPlayerConnected(TargetPlayer)) return SendErrorMessage(playerid, ERROR_OPTION);
 
 	new Float:X, Float:Y, Float:Z;
@@ -689,7 +693,7 @@ CMD<AD6>:giveupgrades(cmdid, playerid, params[])
 	Account[playerid][DiamondPackages]++;
 	Account[playerid][NameChangePackages]++;
 	Account[playerid][PremiumKeyPackages]++;
-	SendClientMessage(playerid, COLOR_LIGHTRED, "{bf0000}NOTICE: {FFFFFF}You have been given all possible upgrades.");
+	SendClientMessage(playerid, COLOR_RED, "{bf0000}NOTICE: {FFFFFF}You have been given all possible upgrades.");
 	return 1;
 }
 CMD<AD2>:delv(cmdid, playerid, params[])
@@ -734,7 +738,7 @@ CMD<AD4>:banip(cmdid, playerid, params[])
 	if(sscanf(params, "s[24]i", ip, minutes))
 		return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /banip [ip (wildcards supported)] [minutes]");
 
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has blocked IP '%s' for '%i' minutes", GetName(playerid), ip, minutes));
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {808080}%s has blocked IP '%s' for '%i' minutes", GetName(playerid), ip, minutes));
 
 	BlockIpAddress(ip, 1000 * minutes);
 	Account[playerid][AdminActions]++;
@@ -747,7 +751,7 @@ CMD<AD4>:unbanip(cmdid, playerid, params[])
 	if(sscanf(params, "s[24]", ip))
 		return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /unbanip [ip (wildcards supported)]");
 
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s un-blocked IP '%s'", GetName(playerid), ip));
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {808080}%s un-blocked IP '%s'", GetName(playerid), ip));
 
 	UnBlockIpAddress(ip);
 	Account[playerid][AdminActions]++;
@@ -770,7 +774,7 @@ CMD<AD1>:remoteban(cmdid, playerid, params[])
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO Bans (PlayerName, IP, C_ID, A_ID, Timestamp, BannedBy, Reason) VALUES('%e', '%e', %d, %d, %d, '%e', '%e')", account, ip, playersqlid, playersqlid, gettime(), GetName(playerid), reason));
 
 	Account[playerid][AdminActions]++;
-	SendClientMessage(playerid, -1, sprintf("{1E90FF}(Admin Notice):{dadada} You have banned the user %s(userid: %d), reason: %s", account, playersqlid, reason));
+	SendClientMessage(playerid, -1, sprintf("{1E90FF}(ADMIN NOTICE):{dadada} You have banned the user %s(userid: %d), reason: %s", account, playersqlid, reason));
 	return 1;
 }
 ALT:offlineban = CMD:remoteban;
@@ -782,7 +786,7 @@ CMD<AD1>:offlinejail(cmdid, playerid, params[])
 
 	Account[playerid][AdminActions]++;
 	SendPunishmentMessage(sprintf("PUNISHMENT: Admin %s has offline jailed %s for %i minutes! (Reason: %s)", GetName(playerid), pID, time, reason));
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s a-jailed %s! Reason: %s", GetName(playerid), pID, reason));
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {808080}%s a-jailed %s! Reason: %s", GetName(playerid), pID, reason));
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/ajail', '%e', '%d')", GetName(playerid), pID, reason, gettime()));
 	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE `Accounts` SET ajail_minutes = %i WHERE `Username` = '%e'", time, pID));
 	return 1;
@@ -796,7 +800,7 @@ CMD<AD5>:giveallkey(cmdid, playerid, params[])
 CMD<AD6>:giveevent(cmdid, playerid,params[])
 {
 	Account[playerid][PlayerEvents]++;
-	SendClientMessage(playerid, -1, sprintf("{1E90FF}(Admin Notice):{dadada} You have given yourself an event and have now have %d events.", Account[playerid][PlayerEvents]));
+	SendClientMessage(playerid, -1, sprintf("{1E90FF}(ADMIN NOTICE):{dadada} You have given yourself an event and have now have %d events.", Account[playerid][PlayerEvents]));
 	return 1;
 }
 CMD<AD5>:setadmin(cmdid, playerid, params[])
@@ -845,6 +849,7 @@ CMD<AD1>:lastajail(cmdid, playerid, params[])
 {
 	new TargetPlayer;
 	if(sscanf(params, "u", TargetPlayer)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /lastajail [playername/id]");
+	if(!IsPlayerConnected(TargetPlayer)) return SendErrorMessage(playerid, "No player connected.");
 
 	yield 1;
 	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * from logs WHERE PlayerName = '%e' AND Command = '/ajail' ORDER BY ID DESC LIMIT 1;", GetName(TargetPlayer)));
@@ -936,7 +941,7 @@ CMD<AD5>:activitycheck(cmdid, playerid, params[]) {
 	cache_get_value_name_int(0, "rules_count", rules);
 	cache_get_value_name_int(0, "mute_count", mutes);
 
-	SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("Viewing Activity for %s in the past %d days:", Username, days));
+	SendClientMessage(playerid, COLOR_RED, sprintf("Viewing Activity for %s in the past %d days:", Username, days));
 	SendClientMessage(playerid, 0xADD8E6FF, sprintf("Bans: %d", bans));
 	SendClientMessage(playerid, 0xADD8E6FF, sprintf("Ajails: %d", ajails));
 	SendClientMessage(playerid, 0xADD8E6FF, sprintf("Force Lobbies: %d", lobbies));
@@ -1034,7 +1039,7 @@ CMD<AD4>:sajail(cmdid, playerid, params[])
 	SetPlayerSkin(target, 20051);
 	SetPlayerPosEx(target, 2518.7590, 602.5683, 45.2066, 0, 0);
 
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s a-jailed %s! Reason: %s", GetName(playerid), GetName(target), reason));
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {808080}%s a-jailed %s! Reason: %s", GetName(playerid), GetName(target), reason));
 
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp, ajailtime) VALUES('%e', '%e', '/ajail', '%e', '%d', '%i')", GetName(playerid), GetName(target), reason, gettime(), time));
 	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE Accounts SET ajail_minutes = %i WHERE SQLID = %i", time, Account[target][SQLID]));
@@ -1049,15 +1054,16 @@ CMD<AD4>:sslap(cmdid, playerid, params[])
 {
 	new pID;
 	if(sscanf(params, "u", pID)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /sslap [id]");
+	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid, "No player connected.");
 	PlayerPlaySound(playerid, 1190, 0.0, 0.0, 0.0);
 
 	new Float:px, Float:py, Float:pz;
 	if(!IsPlayerInAnyVehicle(pID))
 	{
 		GetPlayerPos(pID, px, py, pz);
-		SetPlayerPos(pID, px, py, pz+9999999);
+		SetPlayerPos(pID, px, py, pz+99999999999);
 		PlayerPlaySound(pID, 1190, 0.0, 0.0, 0.0);
-		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s slapped %s!", GetName(playerid), GetName(pID)));
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {808080}%s super-slapped %s!", GetName(playerid), GetName(pID)));
 	}
 	return 1;
 }
@@ -1229,45 +1235,14 @@ CMD<AD4>:fakeban(cmdid, playerid, params[])
 	if(Account[targetid][Admin] > 1) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You cannot ban an admin.");
 
 	if (GetPlayerAdminHidden(playerid)) {
-		SendClientMessageToAll(COLOR_LIGHTRED, sprintf("An admin has banned %s. Reason: %s", GetName(targetid), reason));
+		SendClientMessageToAll(COLOR_RED, sprintf("An admin has banned %s. Reason: %s", GetName(targetid), reason));
 	} else {
-		SendClientMessageToAll(COLOR_LIGHTRED, sprintf("Admin %s has banned %s. Reason: %s", GetName(playerid), GetName(targetid), reason));
+		SendClientMessageToAll(COLOR_RED, sprintf("Admin %s has banned %s. Reason: %s", GetName(playerid), GetName(targetid), reason));
 	}
 
 	return 1;
 }
 
-CMD<AD1>:get(cmdid, playerid, params[])
-{
-	new targetid;
-	if(sscanf(params, "u", targetid)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /get [player id]");
-	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
-	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
-	if(GetPlayerState(targetid) == PLAYER_STATE_SPECTATING) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: The specified player is not spawned.");
-	if(GetPlayerAdminLevel(playerid) < Account[targetid][Admin]) return SendClientMessage(playerid, COLOR_RED, NOLEVEL);
-	if(targetid == playerid) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You can't get yourself.");
-	SetPlayerInterior(targetid, GetPlayerInterior(playerid));
-	SetPlayerVirtualWorld(targetid, GetPlayerVirtualWorld(playerid));
-	new Float:x, Float:y, Float:z;
-	GetPlayerPos(playerid, x, y, z);
-	if (GetPlayerState(targetid) == PLAYER_STATE_DRIVER)
-	{
-	    new vehicleid = GetPlayerVehicleID(targetid);
-		SetVehiclePos(vehicleid, x, y + 2.5, z+1);
-		LinkVehicleToInterior(vehicleid, GetPlayerInterior(playerid));
-		SetVehicleVirtualWorld(vehicleid, GetPlayerVirtualWorld(playerid));
-	}
-	else
-	{
-		SetPlayerPos(targetid, x, y + 2.0, z+1);
-	}
-	new buf[85];
-	format(buf, sizeof(buf), "[AdmCmd]: Administrator %s has teleported you to his position.", GetName(playerid));
-	SendClientMessage(targetid, COLOR_RED, buf);
-	format(buf, sizeof(buf), "[AdmCmd]: You have teleported %s to your position.", GetName(targetid));
-	SendClientMessage(playerid, COLOR_RED, buf);
-	return 1;
-}
 CMD<AD3>:rw(cmdid, playerid, params[])
 {
 	new targetid;
@@ -1400,7 +1375,7 @@ CMD<AD1>:vpncheck(cmdid, playerid, params[])
 	new url[100], ip[16], data[2];
 	data[0] = playerid;
 	data[1] = targetid;
-	SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}VPN Check: {808080}%s is checking %s for a VPN. ", GetName(playerid), GetName(targetid)));
+	SendAdminsMessage(1, COLOR_RED, sprintf("{bf0000}VPN Check: {808080}%s is checking %s for a VPN. ", GetName(playerid), GetName(targetid)));
 	GetPlayerIp(targetid, ip, sizeof(ip));
 	format(url, sizeof(url), "check.getipintel.net/check.php?ip=%s&contact=flare2399@gmail.com&flags=m", ip);
 	HTTP(targetid, HTTP_GET, url, "", "VPNCheck");
@@ -1443,7 +1418,7 @@ CMD<AD3>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have healed players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {808080}%s has healed players within %dm of them!", GetName(playerid), range));
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {808080}%s has healed players within %dm of them!", GetName(playerid), range));
     }
     else if(!strcmp(subcommand, "armour", true))
     {
@@ -1459,7 +1434,7 @@ CMD<AD3>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have armoured players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {808080}%s has armoured players within %dm of them!", GetName(playerid), range));
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {808080}%s has armoured players within %dm of them!", GetName(playerid), range));
     }
     else if(!strcmp(subcommand, "weap", true))
     {
@@ -1480,7 +1455,7 @@ CMD<AD3>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You gave weapon %s with %d ammo players in range of %d.", weaponname, ammo, range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {808080}%s has given players within %dm of them a %s!", GetName(playerid), range, weaponname));
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {808080}%s has given players within %dm of them a %s!", GetName(playerid), range, weaponname));
     }
     else if(!strcmp(subcommand, "veh", true))
     {
@@ -1509,7 +1484,7 @@ CMD<AD3>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have spawned vehicle %s to players in range of %d.", VehicleNames[vID - 400],  range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {808080}%s has spawned vehicle %s to players within %dm!", GetName(playerid), VehicleNames[vID - 400], range));
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {808080}%s has spawned vehicle %s to players within %dm!", GetName(playerid), VehicleNames[vID - 400], range));
     }
     else if(!strcmp(subcommand, "freeze", true))
     {
@@ -1525,7 +1500,7 @@ CMD<AD3>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have frozen players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {808080}%s has frozen players within %dm of them!", GetName(playerid), range));
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {808080}%s has frozen players within %dm of them!", GetName(playerid), range));
     }
     else if(!strcmp(subcommand, "unfreeze", true))
     {
@@ -1541,7 +1516,7 @@ CMD<AD3>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have unfrozen players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {808080}%s has unfrozen players within %dm of them!", GetName(playerid), range));
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {808080}%s has unfrozen players within %dm of them!", GetName(playerid), range));
     }
     else if(!strcmp(subcommand, "skin", true))
     {
@@ -1559,7 +1534,7 @@ CMD<AD3>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have changed players skin in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {808080}%s has set players skin within %dm to %d!", GetName(playerid), skin, range));
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {808080}%s has set players skin within %dm to %d!", GetName(playerid), skin, range));
     }
     else if(!strcmp(subcommand, "nos", true))
     {
@@ -1576,7 +1551,7 @@ CMD<AD3>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have added nos to players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {808080}%s gave all players within %dm of them nos!", GetName(playerid), range));
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {808080}%s gave all players within %dm of them nos!", GetName(playerid), range));
     }
     else if(!strcmp(subcommand, "disarm", true))
     {
@@ -1593,7 +1568,7 @@ CMD<AD3>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have disarmed players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {808080}%s disarmed all players within %dm of them!", GetName(playerid), range));
+		SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {808080}%s disarmed all players within %dm of them!", GetName(playerid), range));
     }
 	else {
 		return SendClientMessage(playerid, COLOR_RED, "/area [heal/armour/weap/veh/freeze/unfreeze/skin/nos/disarm]");
@@ -1661,7 +1636,7 @@ CMD<AD4>:giveallweapon(cmdid, playerid, params[])
     GetWeaponName(GetID, weaponname, sizeof(weaponname));
 	new string[128];
 	format(string, sizeof(string), "Administrator %s gave all players weapon %s with %d ammo.", GetName(playerid), weaponname, ammo);
-	SendClientMessageToAll(COLOR_ORANGE, string);
+	SendClientMessageToAll(COLOR_RED, string);
 	return 1;
 }
 CMD<AD2>:vget(cmdid, playerid, params[])
@@ -1794,12 +1769,12 @@ CMD<AD4>:watchpmall(cmdid, playerid, params[])
 CMD<AD3>:watchpm(cmdid, playerid, params[])
 {
 	new iTargetID;
-	if(!sscanf(params, "u", iTargetID)) {
-		WatchPM[playerid][iTargetID] = !WatchPM[playerid][iTargetID];
-		new szString[144];
-		format(szString, 144, "You are %s watching %s's PMs.", (WatchPM[playerid][iTargetID])?"now":"no longer", GetName(iTargetID));
-		SendClientMessage(playerid, COLOR_LIGHTBLUE, szString);
-	} else SendClientMessage(playerid, COLOR_RED, "/watchpm [ID]");
+	if(sscanf(params, "u", iTargetID)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /watchpm [player id]");
+	if(!IsPlayerConnected(iTargetID)) return SendErrorMessage(playerid, "No player connected.");
+	WatchPM[playerid][iTargetID] = !WatchPM[playerid][iTargetID];
+	new szString[144];
+	format(szString, 144, "You are %s watching %s's PMs.", (WatchPM[playerid][iTargetID])?"now":"no longer", GetName(iTargetID));
+	SendClientMessage(playerid, COLOR_LIGHTBLUE, szString);
 	return 1;
 }
 
