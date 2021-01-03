@@ -433,18 +433,18 @@ CMD:changepassword(cmdid, playerid, params[])
 
 CMD:togglehud(cmdid, playerid, params[])
 {
-	if(HudHide[playerid])
+	if(!HudShow[playerid])
 	{
 		ShowSessionStats(playerid);
 		ShowNetworkTDs(playerid);
-		HudHide[playerid] = false;
+		HudShow[playerid] = true;
 		SendClientMessage(playerid, COLOR_GREEN, "HUD enabled.");
 	}
 	else
 	{
 		HideSessionStats(playerid);
 		HideNetworkTDs(playerid);
-		HudHide[playerid] = true;
+		HudShow[playerid] = false;
 		SendClientMessage(playerid, COLOR_RED, "HUD disabled.");
 	}
 	return true;
