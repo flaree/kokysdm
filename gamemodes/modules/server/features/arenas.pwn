@@ -326,7 +326,7 @@ ShowArenaDialog(playerid)
 		if(Iter_Count(ArenaOccupants[i]) < ArenaInfo[i][ArenaLimit]) available = "{00FF00}Joinable";
 		else available = "{FF0000}Full";
 
-		strcat(string, sprintf("{FF5959}%s\t{33919E}%d\t%s\n", ArenaInfo[i][ArenaName], Iter_Count(ArenaOccupants[i]), available));
+		strcat(string, sprintf("{FF0000}%s\t{FFFFFF}%d\t%s\n", ArenaInfo[i][ArenaName], Iter_Count(ArenaOccupants[i]), available));
 	}
 
 	yield 1;

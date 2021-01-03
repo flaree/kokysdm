@@ -177,13 +177,13 @@ hook public OnPlayerEnterCheckpoint(playerid)
 {
 	if(ActivityState[playerid] == ACTIVITY_TDM && cancapture[playerid])
 	{
-		if(turfholder == ActivityStateID[playerid]) return SendClientMessage(playerid, COLOR_LIGHTRED, "TURF: Your team already holds this turf!");
-		if(capturecooldown != 0) return SendClientMessage(playerid, COLOR_LIGHTRED, "TURF: The turf was recently captured, please wait for the next capture availability.");
-		if(capturingturf[playerid] == 1) return SendClientMessage(playerid, COLOR_LIGHTRED, "TURF: You are already capturing this turf!");
-		if(beingcaptured != -1) return SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("TURF: {%06x}%s {ffffff}is capturing the turf! Kill him to capture it!", GetPlayerColor(beingcaptured) >>> 8, GetName(beingcaptured)));
+		if(turfholder == ActivityStateID[playerid]) return SendClientMessage(playerid, COLOR_LIGHTRED, "{49FF00}TURF: Your team already holds this turf!");
+		if(capturecooldown != 0) return SendClientMessage(playerid, COLOR_LIGHTRED, "{49FF00}TURF: The turf was recently captured, please wait for the next capture availability.");
+		if(capturingturf[playerid] == 1) return SendClientMessage(playerid, COLOR_LIGHTRED, "{49FF00}TURF: You are already capturing this turf!");
+		if(beingcaptured != -1) return SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("{49FF00}TURF: %s is capturing the turf! Kill him to capture it!", GetName(beingcaptured)));
 		if(allowcapture == 0) return SendClientMessage(playerid, COLOR_LIGHTRED, "TURF: The turf cannot be captured at this time!");
-		if(IsPlayerInVehicle(playerid, GetPlayerVehicleID(playerid))) return SendClientMessage(playerid, COLOR_LIGHTRED, "TURF: You cannot be in a vehicle while capturing the turf!");
-		SendTDMMessage(COLOR_LIGHTRED, sprintf("TURF: {%06x}%s {ffffff}is capturing the turf! Kill him to stop the capture.", GetPlayerColor(playerid) >>> 8, GetName(playerid)));
+		if(IsPlayerInVehicle(playerid, GetPlayerVehicleID(playerid))) return SendClientMessage(playerid, COLOR_LIGHTRED, "{49FF00}TURF: You cannot be in a vehicle while capturing the turf!");
+		SendTDMMessage(COLOR_LIGHTRED, sprintf("{49FF00}TURF: %s is capturing the turf! Kill him to stop the capture.", GetName(playerid)));
 		capturingturf[playerid] = 1;
 		capturingtimer[playerid] = SetTimerEx("CapturingTurf", 45000, false, "ii", playerid, ActivityStateID[playerid]);
 		GangZoneFlashForTDM(GetPlayerColor(playerid));
@@ -198,7 +198,7 @@ hook public OnPlayerUpdate(playerid)
 	{
 		if(!IsPlayerInArea(playerid, TDM_TURFPOS))
 		{
-			SendTDMMessage(COLOR_LIGHTRED, sprintf("TURF: {%06x}%s {ffffff}has left the turf while capturing. The turf is now available for capture!", GetPlayerColor(playerid) >>> 8, GetName(playerid)));
+			SendTDMMessage(COLOR_LIGHTRED, sprintf("{49FF00}TURF: %s has left the turf while capturing. The turf is now available for capture!", GetName(playerid)));
 			KillTimer(capturingtimer[playerid]);
 			capturingturf[playerid] = 0;
 			beingcaptured = -1;
@@ -212,8 +212,7 @@ hook public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 	{
 		if(capturingturf[playerid] == 1)
 		{
-			SendTDMMessage(COLOR_LIGHTRED, sprintf("TURF: {%06x}%s {ffffff}has entered a vehicle while capturing the turf. The turf is now available for capture!",
-				GetPlayerColor(playerid) >>> 8, GetName(playerid)));
+			SendTDMMessage(COLOR_LIGHTRED, sprintf("{49FF00}TURF: %s has entered a vehicle while capturing the turf. The turf is now available for capture!", GetName(playerid)));
 			KillTimer(capturingtimer[playerid]);
 			capturingturf[playerid] = 0;
 			beingcaptured = -1;
@@ -316,7 +315,7 @@ ShowTeamSelectionDialog(playerid)
 		ActivityStateID[playerid] = teamchoice;
 		SendPlayerToTDM(playerid, ActivityStateID[playerid]);
 		CreateTDMMapping(playerid);
-		SendClientMessage(playerid, COLOR_LIGHTRED, "Use /tc [text] to speak with your teammates.");
+		SendClientMessage(playerid, COLOR_LIGHTRED, "{9f9f9f}Use /g [text] to speak with your teammates.");
 	}
 	if(teamchoice == 5 && Account[playerid][Admin] > 0)
 	{
@@ -325,7 +324,7 @@ ShowTeamSelectionDialog(playerid)
 		ActivityStateID[playerid] = teamchoice;
 		SendPlayerToTDM(playerid, ActivityStateID[playerid]);
 		CreateTDMMapping(playerid);
-		SendClientMessage(playerid, COLOR_LIGHTRED, "Use /tc [text] to speak with your teammates.");
+		SendClientMessage(playerid, COLOR_LIGHTRED, "{9f9f9f}Use /g [text] to speak with your teammates.");
 	}
 	if(teamchoice == 6 && Account[playerid][Admin] > 0)
 	{
@@ -383,7 +382,7 @@ DrivebyCheck(playerid)
 public SpawnProtection(playerid)
 {
 	Account[playerid][CopChaseDead] = 0;
-	SendClientMessage(playerid, 0xbf0000FF, "Spawn Protection: {FFFFFF}Your spawn protection has been disabled.");
+	SendClientMessage(playerid, 0xbf0000FF, "SPAWN PROTECTION: {FFFFFF}Your spawn protection has been disabled.");
 
 	Account[playerid][CopChaseDead] = 0;
 
@@ -392,7 +391,7 @@ public SpawnProtection(playerid)
 public CapturingTurf(playerid, team)
 {
 	turfholder = team;
-	SendTDMMessage(COLOR_LIGHTRED, sprintf("TURF: {%06x}%s {ffffff}has captured the turf for their team! It will be available for capture in 20 minutes.", GetPlayerColor(playerid) >>> 8, GetName(playerid)));
+	SendTDMMessage(COLOR_LIGHTRED, sprintf("{49FF00}TURF: %s has captured the turf for their team! It will be available for capture in 20 minutes.", GetName(playerid)));
 	GangZoneStopFlashForAll(igsturf);
 	GangZoneCapturedTDM(GetPlayerColor(playerid));
 	SetTimer("AllowTurfCapture", 900000, false);
@@ -427,7 +426,7 @@ GangZoneCapturedTDM(color)
 public AllowTurfCapture()
 {
 	capturecooldown = 0;
-	SendTDMMessage(COLOR_LIGHTRED, "TURF: The turf is now available for capture! Go grab it for your team.");
+	SendTDMMessage(COLOR_LIGHTRED, "{49FF00}TURF: The turf is now available for capture! Go grab it for your team.");
 	beingcaptured = -1;
 	allowcapture = 1;
 	return true;
@@ -441,7 +440,7 @@ public RemoveFromTDM(playerid, team)
 		KillTimer(capturingtimer[playerid]);
 		capturingturf[playerid] = 0;
 		beingcaptured = -1;
-		SendTDMMessage(COLOR_LIGHTRED, sprintf("TURF: {%06x}%s {FFFFFF}returned to lobby while capturing the turf. The turf is now available for capture!", GetPlayerColor(playerid) >>> 8, GetName(playerid)));
+		SendTDMMessage(COLOR_LIGHTRED, sprintf("{49FF00}TURF: %s returned to lobby while capturing the turf. The turf is now available for capture!", GetName(playerid)));
 		GangZoneStopFlashForAll(igsturf);
 	}
 	SetPlayerTeam(playerid, NO_TEAM);
@@ -517,7 +516,7 @@ GiveTDMAmmunation(playerid)
 	{
 		GivePlayerWeapon(playerid, WEAPON_SNIPER, 25);
 		GivePlayerWeapon(playerid, WEAPON_PARACHUTE, 1);
-		SendClientMessage(playerid, -1, "{fdff00}Donator: You have been given a Sniper for being Diamond Donator!");
+		SendClientMessage(playerid, -1, "{fdff00}DONATOR: You have been given a Sniper for being Diamond Donator!");
 	}
 
 	if(Account[playerid][Donator] == 3)
@@ -529,7 +528,7 @@ GiveTDMAmmunation(playerid)
 	{
 		SetPlayerArmour(playerid, 100);
 		GivePlayerWeapon(playerid, WEAPON_M4, 125);
-		SendClientMessage(playerid, -1, "{31AEAA}Turf: {FFFFFF}You have been given 100 armour and an M4 as your team holds the turf.");
+		SendClientMessage(playerid, -1, "{49FF00}TURF: You have been given 100 Armour and an M4 as your team holds the turf.");
 	}
 
 	Account[playerid][CopChaseDead] = 0;
@@ -587,20 +586,21 @@ CMD<TDM>:tdm(cmdid, playerid, params[])
 	ShowTeamSelectionDialog(playerid);
 	return true;
 }
-CMD<TDM>:tc(cmdid, playerid, params[])
+CMD<TDM>:g(cmdid, playerid, params[])
 {
 	if(ActivityState[playerid] != ACTIVITY_TDM) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}TDM: {FFFFFF}You must be in TDM to use this command..");
-	if(isnull(params)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /tc [text]");
+	if(isnull(params)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /g [text]");
 
 	foreach(new i: Player)
 	{
 		if(ActivityState[i] == ACTIVITY_TDM && ActivityStateID[playerid] == ActivityStateID[i])
 		{
-			SendClientMessage(i, -1, sprintf("Team Chat: {%06x}%s(%i){FFFFFF}: %s", GetPlayerColor(playerid) >>> 8, GetName(playerid), playerid, params));
+			SendClientMessage(i, -1, sprintf("{4CB6FF}TEAM CHAT: %s(%i): %s", GetName(playerid), playerid, params));
 		}
 	}
 	return 1;
 }
+ALT:tc = CMD:g;
 HandleTDMSpawn(playerid)
 {
 	if(GetPlayerTeam(playerid) < 100)

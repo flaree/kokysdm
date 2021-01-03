@@ -1437,7 +1437,7 @@ public OnPlayerConnect(playerid)
 
 	Account_Reset(playerid);
 	SetPlayerColor(playerid, PlayerColors[playerid]);
-	SendClientMessageToAll(COLOR_GRAY, sprintf("{bf0000}Connection: {9f9f9f}%s {ffffff}has joined the server.", GetName(playerid)));
+	SendClientMessageToAll(COLOR_GRAY, sprintf("{bf0000}CONNECTION: {9f9f9f}%s has joined the server.", GetName(playerid)));
 	TogglePlayerSpectating(playerid, 1);
 	SetPlayerColor(playerid, PlayerColors[playerid]);
 	dmessage2[playerid] = SetTimerEx("CheckDonations", 30000, true, "i", playerid);
@@ -2219,7 +2219,7 @@ public OnPlayerUpdate(playerid)
             UpdateNameTag(playerid, wfps);
 			pDrunkLevelLast[playerid] = drunknew;
 			if(pFPS[playerid] > 110 && !AlreadySentFPSWarn[playerid]) {
-				sendFormatMessage(playerid, 0xFFFFFFFF, "Your FPS is too high! It must be lower than 110.", pFPSWarn[playerid]);
+				sendFormatMessage(playerid, 0xFF49FF00, "WARNING: Your FPS is too high! It must be lower than 110.", pFPSWarn[playerid]);
 				AlreadySentFPSWarn[playerid] = true;
 				SetTimerEx("ResetFPSWarn", 120000, 0, "d", playerid);
 				pFPSWarn[playerid] ++;
@@ -2604,7 +2604,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 			if(capturingturf[playerid] == 1)
 			{
 				capturingturf[playerid] = 0;
-				SendTDMMessage(COLOR_LIGHTRED, sprintf("TURF: {%06x}%s {000000}was killed by {%06x}%s{000000} while capturing the turf. The turf is now available for capture!", GetPlayerColor(playerid) >>> 8, GetName(playerid), GetPlayerColor(killerid) >>> 8, GetName(killerid)));
+				SendTDMMessage(COLOR_LIGHTRED, sprintf("{49FF00}TURF: %s was killed by %s while capturing the turf. The turf is now available for capture!", GetName(playerid), GetName(killerid)));
 				KillTimer(capturingtimer[playerid]);
 				GangZoneStopFlashForAll(igsturf);
 				beingcaptured = -1;
@@ -2919,7 +2919,7 @@ SendDonatorsMessage(level, color, str[])
 		new astr[128];
 		if(Account[i][Donator] >= level)
 		{
-			format(astr, sizeof(astr), "(Donator-Chat) %s", str);
+			format(astr, sizeof(astr), "DONATOR CHAT: %s", str);
 			SendClientMessage(i, color, astr);
 		}
 	}
