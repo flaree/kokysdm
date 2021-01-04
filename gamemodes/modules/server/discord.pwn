@@ -190,7 +190,7 @@ DCMD:unban(user, channel, params[])
 			DCC_GetUserName(user, admin, sizeof admin);
 		}
 		DCC_SendChannelMessage(channel, sprintf("**PUNISHMENT:** %s was unbanned from the server by %s.", params, admin));
-		SendAdminsMessage(1, 0xFF0000FF, sprintf("**PUNISHMENT:** %s was unbanned from the server by %s.", params, admin));
+		SendAdminsMessage(1, 0xFF0000FF, sprintf("PUNISHMENT: %s was unbanned from the server by %s.", params, admin));
 		mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/unban', 'N/A', '%d')", admin, params, gettime()));
 	}
 	else DCC_SendChannelMessage(channel, sprintf("%s is not currently banned from the server.", params));
