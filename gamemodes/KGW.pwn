@@ -569,13 +569,17 @@ new WeaponNameList[][] =
 
 stock AdminNames(const level)
 {
-	new adminName[24];
+	new adminName[32];
     if (level <= 0) {
         format(adminName, sizeof adminName, "None");
-    } else if (level >= 1 && level <= 6) {
-        format(adminName, sizeof adminName, "%i", level);
+    } else if (level >= 1 && level <= 4) {
+        format(adminName, sizeof adminName, "Level {bf0000}%i{FFFFFF} Admin", level);
+    } else if (level == 5) {
+        format(adminName, sizeof adminName, "{1d7cf2}Lead Admin");
+    } else if (level == 6) {
+        format(adminName, sizeof adminName, "{662884}Developer");
     } else {
-        format(adminName, sizeof adminName, "SM");
+        format(adminName, sizeof adminName, "{bf0000}Management");
     }
 	return adminName;
 }
@@ -3878,14 +3882,13 @@ CMD:admins(cmdid, playerid, params[])
         return true;
     }
     else {
-        SendClientMessage(playerid, 0xBF0000FF, "Admins online:");
-        SendClientMessage(playerid, 0xBF0000FF, "______________________________________________");
+        SendClientMessage(playerid, 0xBF0000FF, "________________[Admins Online]________________");
     }
     list_sort(adminlist, 1, -1, true);
     for_list(i: adminlist)
     {
         iter_get_arr(i, admin);
-        SendClientMessage(playerid, COLOR_WHITE, sprintf("(Level {bf0000}%s {ffffff}Admin) {%06x}%s {ffffff}(ID %i) {bf0000}%s", AdminNames(admin[1]), GetPlayerColor(admin[0]) >>> 8, GetName(admin[0]), admin[0], Account[admin[0]][pAdminHide] == 1 ? "(HIDDEN)" : ""));
+        SendClientMessage(playerid, COLOR_WHITE, sprintf("(ID %i) {%06x}%s - {FFFFFF}(%s{FFFFFF}) {bf0000}%s", admin[0], GetPlayerColor(admin[0]) >>> 8, GetName(admin[0]), AdminNames(admin[1]), Account[admin[0]][pAdminHide] == 1 ? "(HIDDEN)" : ""));
     }
     SendClientMessage(playerid, 0xBF0000FF, "______________________________________________");
 	if(!GetPlayerAdminLevel(playerid)) SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}Admin NOTICE: {FFFFFF}%s has just typed /admins.", GetName(playerid)));
