@@ -810,8 +810,8 @@ CMD<AD5>:setadmin(cmdid, playerid, params[])
 	if(!IsPlayerConnected(TargetPlayer)) return SendErrorMessage(playerid, ERROR_OPTION);
 	if(Account[TargetPlayer][Admin] > Account[playerid][Admin]) return SendClientMessage(playerid, COLOR_GRAY, "You cannot set an admin level to a person who is a higher rank than you.");
 	if(level > Account[playerid][Admin]) return SendClientMessage(playerid, COLOR_GRAY, "You cannot set a person's admin level to a higher level than your own!");
-	SendClientMessage(playerid, COLOR_INDIANRED, sprintf("{bf0000}NOTICE: {FFFFFF}You have set %s's staff level to %d.", GetName(TargetPlayer), level));
-	SendClientMessage(TargetPlayer, COLOR_INDIANRED, sprintf("{bf0000}NOTICE: {FFFFFF}Admin %s has set you staff level to %d.", GetName(playerid), level));
+	SendClientMessage(playerid, COLOR_INDIANRED, sprintf("{bf0000}NOTICE: {FFFFFF}You have set %s's admin level to %d.", GetName(TargetPlayer), level));
+	SendClientMessage(TargetPlayer, COLOR_INDIANRED, sprintf("{bf0000}NOTICE: {FFFFFF}Admin %s has set your admin level to %d.", GetName(playerid), level));
 	Account[TargetPlayer][Admin] = level;
 	return 1;
 }
