@@ -2886,14 +2886,41 @@ SendAdminsMessage(level, color, str[])
 	}
 }
 
-SendLeadsMessage(color, str[])
+SendDiscordAdmMessage(level, color, str[])
 {
+    #pragma unused color
 	foreach(new i: Player)
 	{
 		new astr[128];
+		if(Account[i][Admin] >= level)
+		{
+			format(astr, sizeof(astr), "{808080}(Discord AdmChat) {bf0000}%s", str);
+			SendClientMessage(i, 0xFFFFFFFF, astr);
+		}
+	}
+}
+
+SendLeadsMessage(color, str[])
+{
+    new astr[128];
+    format(astr, sizeof(astr), "(LeadAdmChat) %s", str);
+	foreach(new i: Player)
+	{
 		if(Account[i][Admin] >= 4)
 		{
-			format(astr, sizeof(astr), "(LeadAdmChat) %s", str);
+			SendClientMessage(i, color, astr);
+		}
+	}
+}
+
+SendLeadsDiscordMessage(color, str[])
+{
+    new astr[128];
+    format(astr, sizeof(astr), "(Discord LeadAdmChat) %s", str);
+	foreach(new i: Player)
+	{
+		if(Account[i][Admin] >= 4)
+		{
 			SendClientMessage(i, color, astr);
 		}
 	}
@@ -3169,6 +3196,7 @@ public OnPlayerText(playerid, const text[])
 		TextOutput[0] = ' '; // Replacing the . with space
 		format(TextOutput, sizeof(TextOutput), "{FFFF80}%s:%s", GetName(playerid), TextOutput);
 		SendAdminsMessage(1, 0x09F7DFC8, TextOutput);
+        DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("%s: %s", GetName(playerid), TextOutput));
 		return 0; // Don't send the message publicly.
 	}
 
@@ -3179,6 +3207,7 @@ public OnPlayerText(playerid, const text[])
 		TextOutput[0] = ' '; // Replacing the . with space
 		format(TextOutput, sizeof(TextOutput), "%s: %s", GetName(playerid), TextOutput);
 		SendLeadsMessage(0x3FE629FF, TextOutput);
+        DCC_SendChannelMessage(DCC_FindChannelById("795532161842544670"), TextOutput);
 		return 0; // Don't send the message publicly.
 	}
 
@@ -3269,6 +3298,7 @@ public OnPlayerText(playerid, const text[])
 	{
 		format(str, sizeof( str), "~{FFFFFF} {%06x}%s(%i):{FFFFFF} %s", GetPlayerColor(playerid) >>> 8, GetName(playerid), playerid, text);
 	}
+    if(!Account[playerid][pLanguage]) DCC_SendChannelMessage(DCC_FindChannelById("795532352759267359"), sprintf("%s: %s", GetName(playerid), text));
 
 	ChatSend(Account[playerid][pLanguage], str);
 
