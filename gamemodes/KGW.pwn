@@ -3253,7 +3253,10 @@ public OnPlayerText(playerid, const text[])
 	else if (tmpLevel == 5) {
         passport = "({1D7CF2}LA{FFFFFF})";
     }
-	else if (tmpLevel >= 6) {
+	else if (tmpLevel == 6) {
+        passport = "({662884}DEV{FFFFFF})";
+    }
+    else if (tmpLevel >= 7) {
         passport = "({CD2626}SM{FFFFFF})";
     }
 
