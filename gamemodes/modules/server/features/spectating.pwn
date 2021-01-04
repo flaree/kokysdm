@@ -195,6 +195,7 @@ new PlayerText:SpecPlayerPingTD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ..
 new PlayerText:SpecPlayerPLTD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
 new PlayerText:SpecPlayerNameTD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
 new PlayerText:SpecPlayerIPTD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
+new PlayerText:SpecPlayerIDTD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
 
 DestroySpecTDs(playerid)
 {
@@ -203,6 +204,7 @@ DestroySpecTDs(playerid)
 	PlayerTextDrawDestroy(playerid, SpecPlayerPLTD[playerid]);
 	PlayerTextDrawDestroy(playerid, SpecPlayerNameTD[playerid]);
 	PlayerTextDrawDestroy(playerid, SpecPlayerIPTD[playerid]);
+	PlayerTextDrawDestroy(playerid, SpecPlayerIDTD[playerid]);
 }
 
 CreateSpecTDs(playerid, targetid)
@@ -252,6 +254,15 @@ CreateSpecTDs(playerid, targetid)
 	PlayerTextDrawSetOutline(playerid, SpecPlayerPLTD[playerid], 1);
 	PlayerTextDrawSetProportional(playerid, SpecPlayerPLTD[playerid], 1);
 	PlayerTextDrawSetSelectable(playerid, SpecPlayerPLTD[playerid], 0);
+
+	SpecPlayerIDTD[playerid] = CreatePlayerTextDraw(playerid, 547.000000, 61.000000, sprintf("ID:~W~ %i", targetid));
+	PlayerTextDrawBackgroundColor(playerid, SpecPlayerIDTD[playerid], 255);
+	PlayerTextDrawFont(playerid, SpecPlayerIDTD[playerid], 1);
+	PlayerTextDrawLetterSize(playerid, SpecPlayerIDTD[playerid], 0.200000, 1.000000);
+	PlayerTextDrawColor(playerid, SpecPlayerIDTD[playerid], -1397969665);
+	PlayerTextDrawSetOutline(playerid, SpecPlayerIDTD[playerid], 1);
+	PlayerTextDrawSetProportional(playerid, SpecPlayerIDTD[playerid], 1);
+	PlayerTextDrawSetSelectable(playerid, SpecPlayerIDTD[playerid], 0);
 	
 
 	PlayerTextDrawShow(playerid, SpecPlayerFPSTD[playerid]);
@@ -259,6 +270,7 @@ CreateSpecTDs(playerid, targetid)
 	PlayerTextDrawShow(playerid, SpecPlayerPLTD[playerid]);
 	PlayerTextDrawShow(playerid, SpecPlayerIPTD[playerid]);
 	PlayerTextDrawShow(playerid, SpecPlayerNameTD[playerid]);
+	PlayerTextDrawShow(playerid, SpecPlayerIDTD[playerid]);
 	return true;
 }
 
