@@ -1,7 +1,7 @@
 #define TEAM_GROVE 0
 #define TEAM_BALLAS 1
 #define TEAM_HOBOS 2
-#define TEAM_LOCOTES 3
+#define TEAM_LARAZA 3
 #define TEAM_DONATORS 4
 #define TEAM_STAFF 5
 #define MAX_TEAMS 6
@@ -39,7 +39,7 @@ new tdmskins[][] =
 	{106, 107},
 	{102, 104},
 	{134, 137},
-	{114, 116},
+	{108, 109},
 	{20107, 20108},
 	{20067, 20067}
 };
@@ -48,7 +48,7 @@ new tdmcolors[] =
 	0x3bce0eFF, //grove color
 	0xac1bd2FF, //ballas color
 	0xc2a36cFF, //hobo color
-	0x2dbfd4FF, //locotes color
+	0xffe700FF, //la raza color
 	0xEB8686FF,	//donators color
 	0x403F3FFF //staff color
 };
@@ -112,12 +112,12 @@ InitTDM()
 	tdmVehicles[4] = CreateVehicleEx(422, 1761.1118, -1854.8752, 13.4023, 270.6712, 102, 102, 30, "{c2a36c}HOBO 4"); // hoboveh5
 	tdmVehicles[5] = CreateVehicleEx(487, 1759.4092, -1836.8032, 13.7505, 276.2609, 102, 102, 30, "{c2a36c}HOBO 5"); // hoboveh6
 
-	tdmVehicles[6] = CreateVehicleEx(560, 1877.9275, -2021.8860, 13.1674, 179.8829, 2, 2, 30, "{2dbfd4}LOCOTES 0"); // locotoesveh1
-	tdmVehicles[7] = CreateVehicleEx(560, 1887.9025, -2028.5708, 13.1677, 179.0292, 2, 2, 30, "{2dbfd4}LOCOTES 1"); // locotoesveh2
-	tdmVehicles[8] = CreateVehicleEx(487, 1883.5277, -2033.9568, 13.6556, 177.4556, 2, 2, 30, "{2dbfd4}LOCOTES 2"); // locotoesveh3
-	tdmVehicles[9] = CreateVehicleEx(522, 1881.2020, -2008.6865, 13.1201, 1.5313, 2, 2, 30, "{2dbfd4}LOCOTES 3"); // locotoesveh4
-	tdmVehicles[10] = CreateVehicleEx(522, 1884.8480, -2008.5251, 13.1174, 354.4152, 2, 2, 30, "{2dbfd4}LOCOTES 4"); // locotoesveh5
-	tdmVehicles[11] = CreateVehicleEx(422, 1897.8478, -2048.9944, 13.3768, 270.9300, 2, 2, 30, "{2dbfd4}LOCOTES 5"); // locotoesveh6
+	tdmVehicles[6] = CreateVehicleEx(560, 1877.9275, -2021.8860, 13.1674, 179.8829, 194, 1, 30, "{ffe700}LA RAZA 0"); // locotoesveh1
+	tdmVehicles[7] = CreateVehicleEx(560, 1887.9025, -2028.5708, 13.1677, 179.0292, 194, 1, 30, "{ffe700}LA RAZA 1"); // locotoesveh2
+	tdmVehicles[8] = CreateVehicleEx(487, 1883.5277, -2033.9568, 13.6556, 177.4556, 194, 1, 30, "{ffe700}LA RAZA 2"); // locotoesveh3
+	tdmVehicles[9] = CreateVehicleEx(522, 1881.2020, -2008.6865, 13.1201, 1.5313, 194, 1, 30, "{ffe700}LA RAZA 3"); // locotoesveh4
+	tdmVehicles[10] = CreateVehicleEx(522, 1884.8480, -2008.5251, 13.1174, 354.4152, 194, 1, 30, "{ffe700}LA RAZA 4"); // locotoesveh5
+	tdmVehicles[11] = CreateVehicleEx(422, 1897.8478, -2048.9944, 13.3768, 270.9300, 194, 1, 30, "{ffe700}LA RAZA 5"); // locotoesveh6
 
 	tdmVehicles[12] = CreateVehicleEx(422, 2282.3079, -1663.7507, 15.0281, 92.1032, 86, 86, 30, "{3bce0e}GROVE 0"); // groveveh1
 	tdmVehicles[13] = CreateVehicleEx(560, 2292.3096, -1656.0493, 14.4923, 92.6113, 86, 86, 30, "{3bce0e}GROVE 1"); // groveveh2
@@ -290,7 +290,7 @@ ShowTeamSelectionDialog(playerid)
 	strcat(str, sprintf("{3bce0e}Grove\t\t{dddf33} %i Members\n", Iter_Count(TDMPlayers[TEAM_GROVE])));
 	strcat(str, sprintf("{ac1bd2}Ballas\t\t{dddf33} %i Members\n", Iter_Count(TDMPlayers[TEAM_BALLAS])));
 	strcat(str, sprintf("{c2a36c}Hobos\t\t{dddf33} %i Members\n", Iter_Count(TDMPlayers[TEAM_HOBOS])));
-	strcat(str, sprintf("{2dbfd4}Locotes\t{dddf33} %i Members\n", Iter_Count(TDMPlayers[TEAM_LOCOTES])));
+	strcat(str, sprintf("{ffe700}La Raza\t{dddf33} %i Members\n", Iter_Count(TDMPlayers[TEAM_LARAZA])));
 	strcat(str, sprintf("{EB8686}Donators\t{dddf33} %i Members\n", Iter_Count(TDMPlayers[TEAM_DONATORS])));
 	if(Account[playerid][Admin] > 0)
 	{
@@ -481,7 +481,7 @@ public LimitTeams()
 	new const team1 = Iter_Count(TDMPlayers[TEAM_GROVE]);
 	new const team2 = Iter_Count(TDMPlayers[TEAM_BALLAS]);
 	new const team3 = Iter_Count(TDMPlayers[TEAM_HOBOS]);
-	new const team4 = Iter_Count(TDMPlayers[TEAM_LOCOTES]);
+	new const team4 = Iter_Count(TDMPlayers[TEAM_LARAZA]);
 
 	if(team1 <= 0 && team2 <= 0 && team3 <= 0 && team4 <= 0)
 	{
@@ -501,7 +501,7 @@ public LimitTeams()
 	}
 	else if(team4 > team1 && team4 > team2 && team4 > team3)
 	{
-		teamfull = TEAM_LOCOTES;
+		teamfull = TEAM_LARAZA;
 	}
 }
 GiveTDMAmmunation(playerid)
