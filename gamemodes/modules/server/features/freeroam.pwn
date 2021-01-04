@@ -155,9 +155,6 @@ CMD:setweather(cmdid, playerid, params[])
 CMD:settime(cmdid, playerid, params[])
 {
 	if(Account[playerid][TimeAccess] <= 0 && ActivityState[playerid] != ACTIVITY_FREEROAM) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Freeroam:{FFFFFF} You must be in freeroam to use this command.");
-	
-	new value = strval(params);
-	printf("%d", value);
 
 	SetPlayerTime(playerid, strval(params), 0);
 	return 1;
