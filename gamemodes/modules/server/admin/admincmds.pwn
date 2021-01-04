@@ -65,6 +65,36 @@ CMD<AD1>:sv(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_RED, "[AdmCmd]: Vehicle respawned.");
 	return 1;
 }
+CMD<AD3>:aveh(cmdid, playerid, params[])
+{
+	new vehicleid[20], color1, color2, State = GetPlayerState(playerid);
+	if(State == PLAYER_STATE_DRIVER) return SendErrorMessage(playerid, "You are currently driving a vehicle.");
+	if(sscanf(params, "s[20]D(-1)D(-1)", vehicleid, color1, color2)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /aveh [modelid] [color1 optional] [color2 optional]");
+	new vID = FindVehicleByNameID(vehicleid);
+	if(vID == INVALID_VEHICLE_ID)
+	{
+		vID = strval(vehicleid);
+		if(!(399 < vID < 612)) return SendErrorMessage(playerid, ERROR_OPTION);
+	}
+	new Float: curX, Float: curY, Float: curZ, Float: curR;
+
+	if(FreeroamVehicle[playerid] != -1) {
+		DestroyVehicle(FreeroamVehicle[playerid]);
+		FreeroamVehicle[playerid] = -1;
+	}
+	GetPlayerPos(playerid, curX, curY, curZ);
+	GetPlayerFacingAngle(playerid, curR);
+	FreeroamVehicle[playerid] = CreateVehicle(vID, curX+1, curY+1, curZ, curR, color1, color2, -1);
+	LinkVehicleToInterior(FreeroamVehicle[playerid], GetPlayerInterior(playerid));
+	SetVehicleVirtualWorld(FreeroamVehicle[playerid], GetPlayerVirtualWorld(playerid));
+
+	PutPlayerInVehicle(playerid, FreeroamVehicle[playerid], 0);
+	SetVehicleNumberPlate(FreeroamVehicle[playerid], "SSR");
+	SetVehicleParamsEx(FreeroamVehicle[playerid], 1, 1, 0, 0, 0, 0, 0);
+	SendClientMessage(playerid, 0xFF0000FF, sprintf("You have successfully spawned a %s.", vehNames[vID-400]));
+	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}ADMIN NOTICE: {808080}%s spawned an %s", GetName(playerid), vehNames[vID-400]));
+	return 1;
+}
 CMD<AD6>:resetmonthdmer(cmid, playerid, params[])
 {
 	CheckDateForNPC();
