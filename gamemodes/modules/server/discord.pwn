@@ -2,9 +2,86 @@
 #include <discord-connector>
 #include <discord-commands>
 
-#define ANTICHEAT "610721144567496704"
-#define REPORTS "610780079521529856"
-#define DISCORD_GUILD "658341890516844575"
+#define DISCORD_GUILD "795532086605774859"
+#define ANTICHEAT "795532204461391892"
+#define REPORTS_G "795532280734679081"
+#define ADMIN_CHANNEL "795532135812300811"
+#define LEAD_CHANNEL "795532161842544670"
+#define IG_CHANNEL "795532352759267359"
+#define BOT_NAME "kdm test"
+
+public DCC_OnMessageCreate(DCC_Message:message)
+{
+	new DCC_Channel:channel, DCC_User: author;
+	new DCC_Guild:guildId = DCC_FindGuildById(DISCORD_GUILD);
+	new content[1000],  username[33], channelid[DCC_ID_SIZE], bot_id[DCC_ID_SIZE];
+	DCC_GetMessageChannel(message, channel);
+	DCC_GetMessageContent(message, content, sizeof content);
+	DCC_GetMessageAuthor(message, author);
+	DCC_GetGuildMemberNickname(guildId, author, username, sizeof username);
+	DCC_GetUserId(author, bot_id, sizeof bot_id);
+
+	if(isequal(username, ""))
+	{
+		DCC_GetUserName(author, username, sizeof username);
+	}
+
+	if(isequal(bot_id, "794703578832437268")){
+		return 1;
+	}
+	DCC_GetChannelId(channel, channelid, sizeof channelid);
+	if(isequal(channelid, ADMIN_CHANNEL))
+	{
+		SendDiscordAdmMessage(1, COLOR_RED, sprintf("{FFFF80}%s: %s", username, content));
+	} else if(isequal(channelid, LEAD_CHANNEL))
+	{
+		SendLeadsDiscordMessage(0x3FE629FF, sprintf("%s: %s", username, content));
+	} else if(isequal(channelid, IG_CHANNEL))
+	{
+		new DCC_Role:leadAdminRole,
+			DCC_Role:adminRole,
+			DCC_Role:devRole,
+			DCC_Role:managementRole,
+			DCC_Role:seniorAdminRole,
+			bool: hasRole = false;
+		leadAdminRole = DCC_FindRoleByName(guildId, "Lead Admin");
+		seniorAdminRole = DCC_FindRoleByName(guildId, "Senior Admin");
+		devRole = DCC_FindRoleByName(guildId, "Server Developer");
+		adminRole = DCC_FindRoleByName(guildId, "Admin");
+		managementRole = DCC_FindRoleByName(guildId, "Management");
+		new color[16] = "FFFFFF";
+		if(adminRole) {
+			DCC_HasGuildMemberRole(guildId, author, adminRole, hasRole);
+			if(hasRole) color = "00af33";
+		} 
+		if(seniorAdminRole) {
+			DCC_HasGuildMemberRole(guildId, author, seniorAdminRole, hasRole);
+			if(hasRole) color = "0a990f";
+		} 
+		if(leadAdminRole) {
+			DCC_HasGuildMemberRole(guildId, author, leadAdminRole, hasRole);
+
+			if(hasRole) color = "1d7cf2";
+		}
+		if(devRole) {
+			DCC_HasGuildMemberRole(guildId, author, devRole, hasRole);
+
+			if(hasRole) color = "9b59b6";
+		}
+		if(managementRole) {
+			DCC_HasGuildMemberRole(guildId, author, managementRole, hasRole);
+
+			if(hasRole) color = "e7210d";
+		}
+		foreach(new i: Player)
+		{
+			if(!Account[i][pLanguage]) SendClientMessage(i, -1, sprintf("~{FF0000} [DISCORD] {%s}%s:{FFFFFF} %s", color, username, content));
+		}
+	}
+	return 1;
+}
+
+
 
 stock IsUserDiscordAdmin(DCC_User: user)
 {
@@ -13,11 +90,12 @@ stock IsUserDiscordAdmin(DCC_User: user)
 		DCC_Role:adminRole,
 		DCC_Role:devRole,
 		DCC_Role:managementRole,
+		DCC_Role:seniorAdminRole,
 		bool: hasRole = false;
-	
 	leadAdminRole = DCC_FindRoleByName(guildId, "Lead Admin");
-	adminRole = DCC_FindRoleByName(guildId, "Admin");
 	devRole = DCC_FindRoleByName(guildId, "Server Developer");
+	seniorAdminRole = DCC_FindRoleByName(guildId, "Senior Admin");
+	adminRole = DCC_FindRoleByName(guildId, "Admin");
 	managementRole = DCC_FindRoleByName(guildId, "Management");
 
 	if(leadAdminRole) {
@@ -25,7 +103,10 @@ stock IsUserDiscordAdmin(DCC_User: user)
 
 		if(hasRole) return 1;
 	}
-
+	if(seniorAdminRole) {
+		DCC_HasGuildMemberRole(guildId, user, seniorAdminRole, hasRole);
+		if(hasRole) return 1;
+	} 
 	if(adminRole) {
 		DCC_HasGuildMemberRole(guildId, user, adminRole, hasRole);
 
@@ -46,42 +127,53 @@ stock IsUserDiscordAdmin(DCC_User: user)
 	return 0;
 }
 
-DQCMD:kick(DCC_Channel:channel, DCC_User:user, params[])
+DCMD:kick(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
 	extract params -> new player:target, string:reason[128]; else return DCC_SendChannelMessage(channel, "**USAGE:** !kick [player name/playerid] [reason]");
 	if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not connected.");
-
-	new admin[64];
-	DCC_GetUserName(user, admin, sizeof(admin));
+	if(Account[target][Admin] >= 1) return DCC_SendChannelMessage(channel, "**ERROR:** You cannot ban other admins.");
+	new DCC_Guild:guildId = DCC_FindGuildById(DISCORD_GUILD);
+	new admin[33];
+	DCC_GetGuildMemberNickname(guildId, user, admin, sizeof admin);
+	if(isequal(admin, ""))
+	{
+		DCC_GetUserName(user, admin, sizeof admin);
+	}
 	DCC_SendChannelMessage(channel, sprintf("**PUNISHMENT:** %s was kicked from the server, reason: %s", GetName(target), reason));
-	SendClientMessageToAll(COLOR_LIGHTRED, sprintf("PUNISHMENT: %s was kicked from the server by %s, reason: %s", GetName(target), admin, reason));
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has been kicked via Discord.", GetName(target)));
+
+	SendPunishmentMessage(sprintf("Admin %s has kicked %s. Reason: %s", admin, GetName(target), reason));
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/kick', '%e', %d)", admin, GetName(target), reason, gettime()));
 	Account[target][Kicks]++;
 	KickPlayer(target);
 	return 1;
 }
 
-DQCMD:ban(DCC_Channel:channel, DCC_User:user, params[])
+DCMD:ban(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
 	extract params -> new player:target, string:reason[128]; else return DCC_SendChannelMessage(channel, "**USAGE:** !ban [player name/playerid] [reason]");
 	if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not connected.");
-	if(Account[target][Admin] >= 1) return DCC_SendChannelMessage(channel, "**ERROR:** You can't ban an admin.");
+	if(Account[target][Admin] >= 1) return DCC_SendChannelMessage(channel, "**ERROR:** You cannot ban other admins.");
 
-	new admin[64];
-	DCC_GetUserName(user, admin, sizeof(admin));
-	SendClientMessageToAll(COLOR_LIGHTRED, sprintf("PUNISHMENT: %s was banned from the server by %s via Discord, reason: %s", GetName(target), admin, reason));
-	DCC_SendChannelMessage(channel, sprintf("**PUNISHMENT:** %s was banned from the server by %s, reason: %s", GetName(target), admin, reason));
+	new DCC_Guild:guildId = DCC_FindGuildById(DISCORD_GUILD);
+	new admin[33];
+	DCC_GetGuildMemberNickname(guildId, user, admin, sizeof admin);
+	if(isequal(admin, ""))
+	{
+		DCC_GetUserName(user, admin, sizeof admin);
+	}
+	SendPunishmentMessage(sprintf("[DISCORD] Admin %s has banned %s. Reason: %s", admin, GetName(target), reason));
+	DCC_SendChannelMessage(channel, sprintf("Admin %s has banned %s. Reason: %s", admin, GetName(target), reason));
+
 	IssueBan(target, admin, reason);
 	KickPlayer(target);
 	return 1;
 }
 
-DQCMD:unban(DCC_Channel:channel, DCC_User:user, params[])
+DCMD:unban(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
@@ -90,79 +182,30 @@ DQCMD:unban(DCC_Channel:channel, DCC_User:user, params[])
 
 	if(cache_affected_rows()) //a row was found, player was unbanned
 	{
-		new admin[64];
-		DCC_GetUserName(user, admin, sizeof(admin));
+		new DCC_Guild:guildId = DCC_FindGuildById(DISCORD_GUILD);
+		new admin[33];
+		DCC_GetGuildMemberNickname(guildId, user, admin, sizeof admin);
+		if(isequal(admin, ""))
+		{
+			DCC_GetUserName(user, admin, sizeof admin);
+		}
 		DCC_SendChannelMessage(channel, sprintf("**PUNISHMENT:** %s was unbanned from the server by %s.", params, admin));
+		SendAdminsMessage(1, 0xFF0000FF, sprintf("PUNISHMENT: %s was unbanned from the server by %s.", params, admin));
 		mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/unban', 'N/A', '%d')", admin, params, gettime()));
 	}
 	else DCC_SendChannelMessage(channel, sprintf("%s is not currently banned from the server.", params));
 	return 1;
 }
-	
-DQCMD:asay(DCC_Channel:channel, DCC_User:user, params[])
-{
-	if(!IsUserDiscordAdmin(user)) return 0;
-	if(isnull(params)) return DCC_SendChannelMessage(channel, "```USAGE: !asay [message]```");
 
-	new admin[64];
-	DCC_GetUserName(user, admin, sizeof(admin));
-
-	new string[256];
-	format(string, sizeof(string), "[Discord Announcement] %s: %s", admin, params);
-	DCC_SendChannelMessage(channel, string);
-	foreach(new i: Player)
-	{
-		if(Account[i][LoggedIn] == 1)
-		{
-			SendClientMessage(i, COLOR_VIOLET, string);
-		}
-	}
-	return 1;
-}
-
-DQCMD:cmds(DCC_Channel:channel, DCC_User:user, params[])
+DCMD:cmds(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
-	DCC_SendChannelMessage(channel, "```cmds, ip, mute, kick, ajail (to-do), offlinejail (to-do), aunjail, ban, remoteban (to-do), unban, asay, freeze, unfreeze, fpscheck, flinchcheck, aimprofile, players, admins, whois (to-do)```");
+	DCC_SendChannelMessage(channel, "```!cmds, !kick, !ban, !ajail, !mute, !unban, !unjail, !unmute, !fpscheck, !flinchcheck, !aimbotprofile, !ip, !players, !admins```");
 	return 1;
 }
 
-DQCMD:freeze(DCC_Channel:channel, DCC_User:user, params[])
-{
-	if(!IsUserDiscordAdmin(user)) return 0;
-
-	extract params -> new player:target; else return DCC_SendChannelMessage(channel, "```USAGE: !freeze [player name/playerid]```");
-	if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(channel, "**ERROR: Invalid player id!**");
-
-	new admin[64];
-	DCC_GetUserName(user, admin, sizeof(admin));
-
-	TogglePlayerControllable(target, false);
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has been frozen via discord.", GetName(target)));
-	SendClientMessage(target, COLOR_GRAY, sprintf("{bf0000}Notice: {FFFFFF}You have been frozen by an admin.", GetName(target)));
-	DCC_SendChannelMessage(channel, sprintf("**PUNISHMENT:** %s was frozen by %s.", GetName(target), admin));
-	return 1;
-}
-
-DQCMD:unfreeze(DCC_Channel:channel, DCC_User:user, params[])
-{
-	if(!IsUserDiscordAdmin(user)) return 0;
-
-	extract params -> new player:target; else return DCC_SendChannelMessage(channel, "USAGE: !unfreeze [player name/playerid]");
-	if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(channel, "**ERROR:** Invalid player id!");
-
-	new admin[64];
-	DCC_GetUserName(user, admin, sizeof(admin));
-
-	TogglePlayerControllable(target, true);
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has been unfrozen via discord.", GetName(target)));
-	SendClientMessage(target, COLOR_GRAY, sprintf("{bf0000}Notice: {FFFFFF}You have been unfrozen by an admin.", GetName(target)));
-	DCC_SendChannelMessage(channel, sprintf("**PUNISHMENT:** %s was unfrozen by %s.", GetName(target), admin));
-	return 1;
-}
-
-DQCMD:players(DCC_Channel:channel, DCC_User:user, params[])
+DCMD:players(user, channel, params[])
 {
 	if(!Iter_Count(Player)) return DCC_SendChannelMessage(channel, "There are no players online.");
 
@@ -177,7 +220,7 @@ DQCMD:players(DCC_Channel:channel, DCC_User:user, params[])
 	return 1;
 }
 
-DQCMD:admins(DCC_Channel:channel, DCC_User:user, params[])
+DCMD:admins(user, channel, params[])
 {
 	new List:adminlist = list_new(), admin[2];
 	foreach(new i: Player)
@@ -208,7 +251,7 @@ DQCMD:admins(DCC_Channel:channel, DCC_User:user, params[])
 	return true;
 }
 
-DQCMD:fpscheck(DCC_Channel:channel, DCC_User:user, params[])
+DCMD:fpscheck(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
@@ -219,7 +262,7 @@ DQCMD:fpscheck(DCC_Channel:channel, DCC_User:user, params[])
 	return 1;
 }
 
-DQCMD:aimprofile(DCC_Channel:channel, DCC_User:user, params[])
+DCMD:aimprofile(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
@@ -238,21 +281,13 @@ DQCMD:aimprofile(DCC_Channel:channel, DCC_User:user, params[])
 		BustAim::GetPlayerWeaponProfile(target, WeaponID, allshots, hitshots, max_cont_shots, out_of_range_warns, random_aim_warns, proaim_tele_warns);
 		format(wepname, 32, WeaponNameList[WeaponID]);
 	}
-
-	DCC_SendChannelMessage(channel, "\n");
-	DCC_SendChannelMessage(channel, sprintf("Aim Profile of %s (%i) - %s", GetName(target), target, wepname));
-	DCC_SendChannelMessage(channel, sprintf("Bullets Fired: %i", allshots));
-	DCC_SendChannelMessage(channel, sprintf("Bullets Hit: %i", hitshots));
-	DCC_SendChannelMessage(channel, sprintf("Hit Percentage: %.2f%%", ((hitshots*100.0) / allshots)));
-	DCC_SendChannelMessage(channel, sprintf("Highest Continuous Shots: %i", max_cont_shots));
-	DCC_SendChannelMessage(channel, sprintf("Out of Range Shots: %i", out_of_range_warns));
-	DCC_SendChannelMessage(channel, sprintf("Random Aim Warnings: %i", random_aim_warns));
-	DCC_SendChannelMessage(channel, sprintf("Proaim Teleport Warnings: %i", proaim_tele_warns));
-	DCC_SendChannelMessage(channel, "\n");
+	new msg[1000];
+	format(msg, sizeof msg, "Aim Profile of %s (%i) - %s\nBullets Fired: %i\nBullets Hit: %i\nHit Percentage: %.2f%%\nHighest Continuous Shots: %i\nOut of Range Shots: %i\nRandom Aim Warnings: %i\nProaim Teleport Warnings: %i", GetName(target), target, wepname, allshots, hitshots, hitshots*100.0 / allshots, max_cont_shots, out_of_range_warns, random_aim_warns, proaim_tele_warns);
+	DCC_SendChannelMessage(channel, msg);
 	return true;
 }
 
-DQCMD:flinchcheck(DCC_Channel:channel, DCC_User:user, params[])
+DCMD:flinchcheck(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
@@ -264,36 +299,22 @@ DQCMD:flinchcheck(DCC_Channel:channel, DCC_User:user, params[])
 	return true;
 }
 
-DQCMD:whois(DCC_Channel:channel, DCC_User:user, params[])
+DCMD:ajail(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
-	extract params -> new player:target; else return DCC_SendChannelMessage(channel, "**USAGE:** !whois [player name/playerid]");
+	extract params -> new player:target, time, string:reason[64]; else return DCC_SendChannelMessage(channel, "**USAGE:** !ajail [player name/playerid] [minutes] [reason]");
 	if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not connected!");
 
-	new ip[16], country[64], isp[256];
-	GetPlayerIp(target, ip, sizeof(ip));
-	GetPlayerCountry(target, country, sizeof(country));
-	GetPlayerISP(target, isp, sizeof(isp));
+	new DCC_Guild:guildId = DCC_FindGuildById(DISCORD_GUILD);
+	new admin[33];
+	DCC_GetGuildMemberNickname(guildId, user, admin, sizeof admin);
+	if(isequal(admin, ""))
+	{
+		DCC_GetUserName(user, admin, sizeof admin);
+	}
 
-	DCC_SendChannelMessage(channel, sprintf("**[WHOIS]** IP Address info for %s (ID %d) (current session):", GetName(target), target));
-	DCC_SendChannelMessage(channel, sprintf("**[WHOIS]** IP Address: %s | Location: %s", ip, country));
-	DCC_SendChannelMessage(channel, sprintf("**[WHOIS]** ISP: %s", isp));
-	if(Account[target][pVPN] == 1) DCC_SendChannelMessage(channel, "**[WHOIS]** This player is using a VPN/proxy!");
-	return 1;
-}
-
-DQCMD:ajail(DCC_Channel:channel, DCC_User:user, params[])
-{
-	if(!IsUserDiscordAdmin(user)) return 0;
-
-	extract params -> new player:target, minutes, string:reason[64]; else return DCC_SendChannelMessage(channel, "**USAGE:** /ajail [player name/playerid] [minutes] [reason]");
-	if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not connected!");
-
-	new admin[64];
-	DCC_GetUserName(user, admin, sizeof(admin));
-
-	Account[target][AJailTime] = minutes;
+	Account[target][AJailTime] = time;
 	if(ActivityState[target] == ACTIVITY_TDM)
 	{
 		if(GetPlayerTeam(target) < 100)
@@ -302,8 +323,7 @@ DQCMD:ajail(DCC_Channel:channel, DCC_User:user, params[])
 		}
 		if(GetPlayerTeam(target) > 100 || ActivityState[target] == ACTIVITY_COPCHASE)
 		{
-			if(Account[target][pCopchase] == 2)
-			{
+			if(Account[target][pCopchase] == 2){
 				new msg[128];
 				format(msg, sizeof(msg), "%s has left. [%d players remaining]", GetName(target), GetCopchaseTotalPlayers() - 1);
 				SendCopchaseMessage(msg);
@@ -358,28 +378,34 @@ DQCMD:ajail(DCC_Channel:channel, DCC_User:user, params[])
 
 	CreateLobby(target);
 	SetPlayerSkin(target, 20051);
-	SetPlayerPosEx(target, 2518.7590, 602.5683, 45.2066, 0, 0);
+	SetPlayerPosEx(target, 2577.2522,2695.4265,22.9507, 0, 0);
 
-	SendClientMessageToAll(COLOR_LIGHTRED, sprintf("PUNISHMENT: Admin %s via discord has a-jailed %s for %d minutes! Reason: %s", admin, GetName(target), minutes, reason));
-	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s via discord has a-jailed %s! Reason: %s", admin, GetName(target), reason));
+	SendPunishmentMessage(sprintf("Admin %s has a-jailed %s for %d minutes! Reason: %s", admin, GetName(target), time, reason));
+	DCC_SendChannelMessage(channel, sprintf("**PUNISHMENT:** %s has a-jailed %s for %d minutes! Reason: %s.", admin, GetName(target), time, reason));
+	
 
-	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp, ajailtime) VALUES('%e', '%e', '/ajail', '%e', '%d', '%i')", admin, GetName(target), reason, gettime(), minutes));
-	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE Accounts SET ajail_minutes = %i WHERE SQLID = %i", minutes, Account[target][SQLID]));
+	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp, ajailtime) VALUES('%e', '%e', '/ajail', '%e', '%d', '%i')", admin, GetName(target), reason, gettime(), time));
+	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE Accounts SET ajail_minutes = %i WHERE SQLID = %i", time, Account[target][SQLID]));
 
 	ResetPlayerWeapons(target);
 	return 1;
 }
 
-DQCMD:aunjail(DCC_Channel:channel, DCC_User:user, params[])
+DCMD:unjail(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
-	extract params -> new player:target; else return DCC_SendChannelMessage(channel, "**USAGE:** /unjail [player name/playerid]");
+	extract params -> new player:target; else return DCC_SendChannelMessage(channel, "**USAGE:** !unjail [player name/playerid]");
 	if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not connected!");
 	if(!Account[target][AJailTime]) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not in ajail.");
 
-	new admin[64];
-	DCC_GetUserName(user, admin, sizeof(admin));
+	new DCC_Guild:guildId = DCC_FindGuildById(DISCORD_GUILD);
+	new admin[33];
+	DCC_GetGuildMemberNickname(guildId, user, admin, sizeof admin);
+	if(isequal(admin, ""))
+	{
+		DCC_GetUserName(user, admin, sizeof admin);
+	}
 
 	Account[target][AJailTime] = 0;
 	SendPlayerToLobby(target);
@@ -391,35 +417,45 @@ DQCMD:aunjail(DCC_Channel:channel, DCC_User:user, params[])
 	return 1;
 }
 
-DQCMD:mute(DCC_Channel:channel, DCC_User:user, params[])
+DCMD:mute(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
-	extract params -> new player:target, minutes, string:reason[64]; else return DCC_SendChannelMessage(channel, "**USAGE:** /mute [player name/playerid] [minutes] [reason]");
+	extract params -> new player:target, minutes, string:reason[64]; else return DCC_SendChannelMessage(channel, "**USAGE:** !mute [player name/playerid] [minutes] [reason]");
 	if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not connected!");
 
-	new admin[64];
-	DCC_GetUserName(user, admin, sizeof(admin));
+	new DCC_Guild:guildId = DCC_FindGuildById(DISCORD_GUILD);
+	new admin[33];
+	DCC_GetGuildMemberNickname(guildId, user, admin, sizeof admin);
+	if(isequal(admin, ""))
+	{
+		DCC_GetUserName(user, admin, sizeof admin);
+	}
 
 	Account[target][Muted] = gettime() + minutes*60;
 	Account[target][Mutes]++;
 
-	DCC_SendChannelMessage(channel, sprintf("**PUNISHMENT:** %s was muted by %s, reason: %s", GetName(target), admin, reason));
-	SendClientMessageToAll(COLOR_LIGHTRED, sprintf("PUNISHMENT: %s was muted by %s via Discord, reason: %s", GetName(target), admin, reason));
+	DCC_SendChannelMessage(channel, sprintf("**PUNISHMENT:** %s was muted by %s for %i minutes, reason: %s", GetName(target), admin, minutes, reason));
+	SendClientMessageToAll(COLOR_LIGHTRED, sprintf("PUNISHMENT: %s was muted by %s via Discord %i minutes, reason: %s", GetName(target), admin, minutes, reason));
 	SendAdminsMessage(1, COLOR_GRAY, sprintf("{bf0000}Admin Notice: {FFFFFF}%s has muted %s via Discord for %i minutes! Reason: %s", admin, GetName(target), minutes, reason));
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/mute', '%e', '%d')", admin, GetName(target), reason, gettime()));
 	return 1;
 }
 
-DQCMD:unmute(DCC_Channel:channel, DCC_User:user, params[])
+DCMD:unmute(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
-	extract params -> new player:target; else return DCC_SendChannelMessage(channel, "**USAGE:** /unmute [player name/playerid]");
+	extract params -> new player:target; else return DCC_SendChannelMessage(channel, "**USAGE:** !unmute [player name/playerid]");
 	if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not connected!");
 
-	new admin[64];
-	DCC_GetUserName(user, admin, sizeof(admin));
+	new DCC_Guild:guildId = DCC_FindGuildById(DISCORD_GUILD);
+	new admin[33];
+	DCC_GetGuildMemberNickname(guildId, user, admin, sizeof admin);
+	if(isequal(admin, ""))
+	{
+		DCC_GetUserName(user, admin, sizeof admin);
+	}
 
 	Account[target][Muted] = 0;
 
@@ -431,11 +467,11 @@ DQCMD:unmute(DCC_Channel:channel, DCC_User:user, params[])
 	return 1;
 }
 
-DQCMD:ip(DCC_Channel:channel, DCC_User:user, params[])
+DCMD:ip(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
-	extract params -> new player:target; else return DCC_SendChannelMessage(channel, "**USAGE:** /ip [player name/playerid]");
+	extract params -> new player:target; else return DCC_SendChannelMessage(channel, "**USAGE:** !ip [player name/playerid]");
 	if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not connected!");
 
 	new countryname[40], countryregion[40], playerisp[40], ipaddress[18];
@@ -444,7 +480,129 @@ DQCMD:ip(DCC_Channel:channel, DCC_User:user, params[])
 	GetPlayerRegion(target, countryregion);
 	GetPlayerISP(target, playerisp);
 
-	DCC_SendChannelMessage(channel, sprintf("IP Address: %s, Country: %s, Area: %s", ipaddress, countryname, countryregion));
-	DCC_SendChannelMessage(channel, sprintf("Server Latency: %ims, ISP: %s", GetPlayerPing(target), playerisp));
+	DCC_SendChannelMessage(channel, sprintf("IP Address: %s, Country: %s, Area: %s\nServer Latency: %ims, ISP: %s", ipaddress, countryname, countryregion, GetPlayerPing(target), playerisp));
+	return 1;
+}
+
+
+
+// LEVEL 5 DISCORD COMMANDS
+
+stock IsUserLeadAdmin(DCC_User: user)
+{
+	new DCC_Guild:guildId = DCC_FindGuildById(DISCORD_GUILD),
+		DCC_Role:devRole,
+		DCC_Role:managementRole,
+		DCC_Role:leadAdminRole,
+		bool: hasRole = false;
+	leadAdminRole = DCC_FindRoleByName(guildId, "Lead Admin");
+	devRole = DCC_FindRoleByName(guildId, "Server Developer");
+	managementRole = DCC_FindRoleByName(guildId, "Management");
+
+	if(leadAdminRole) {
+		DCC_HasGuildMemberRole(guildId, user, leadAdminRole, hasRole);
+
+		if(hasRole) return 1;
+	}
+	if(devRole) {
+		DCC_HasGuildMemberRole(guildId, user, devRole, hasRole);
+
+		if(hasRole) return 1;
+	}
+
+	if(managementRole) {
+		DCC_HasGuildMemberRole(guildId, user, managementRole, hasRole);
+
+		if(hasRole) return 1;
+	}
+	return 0;
+}
+
+
+DCMD:activitycheck(user, channel, params[])
+{
+	if(!IsUserLeadAdmin(user)) return 0;
+	new Username[MAX_PLAYER_NAME + 1], days;
+	if(sscanf(params, "s[24]d", Username, days)) return DCC_SendChannelMessage(channel, "**USAGE**: !activitycheck [AdminName] [Time (in days)]");
+	new admin[64];
+	DCC_GetUserName(user, admin, sizeof(admin));
+	print(sprintf("%s", Username));
+	if(days <= 0) return DCC_SendChannelMessage(channel,"**ERROR**: Days has to be atleast 1.");
+
+    new daystoseconds = 86400 * days, timestamp = gettime() - daystoseconds;
+
+	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT SQLID FROM `Accounts` WHERE `Username` = '%s'", Username));
+
+	if(!cache_num_rows()) return DCC_SendChannelMessage(channel, "**ERROR**: That name was not found in our database!");
+
+	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT (SELECT COUNT(*) FROM Bans WHERE BannedBy = '%s' AND TIMESTAMP >= %d) AS ban_count,\
+	 	(SELECT COUNT(*) FROM `logs` WHERE `AdminName` = '%s' AND `Timestamp` >= %d AND `Command` = '/ajail') AS ajail_count,\
+		(SELECT COUNT(*) FROM `logs` WHERE `AdminName` = '%s' AND `Timestamp` >= %d AND `Command` = '/forcelobby') AS lobby_count,\
+		(SELECT COUNT(*) FROM `logs` WHERE `AdminName` = '%s' AND `Timestamp` >= %d AND `Command` = '/forcerules') AS rules_count,\
+		(SELECT COUNT(*) FROM `logs` WHERE `AdminName` = '%s' AND `Timestamp` >= %d AND `Command` = '/mute') AS mute_count",\
+		Username, timestamp, Username, timestamp, Username, timestamp, Username, timestamp, Username, timestamp));
+
+	if(!cache_num_rows()) return DCC_SendChannelMessage(channel, "**ERROR**: Something went wrong. Couldn't find those stats.");
+
+	new bans,
+		ajails,
+		lobbies,
+		rules,
+		mutes;
+
+	cache_get_value_name_int(0, "ban_count", bans);
+	cache_get_value_name_int(0, "ajail_count", ajails);
+	cache_get_value_name_int(0, "lobby_count", lobbies);
+	cache_get_value_name_int(0, "rules_count", rules);
+	cache_get_value_name_int(0, "mute_count", mutes);
+	
+	DCC_SendChannelMessage(channel, sprintf("```prolog\nViewing Activity for %s in the past %d days:\nBans: %d\nAjails: %d\nForce Lobbies: %d\nForce Rules: %d\nMutes: 5d```", Username, days, bans, ajails, lobbies, rules, mutes));
+    return 1;
+}
+
+DCMD:setadmin(user, channel, params[])
+{
+	if(!IsUserLeadAdmin(user)) return 0;
+	new TargetPlayer, level;
+	if(sscanf(params, "ui", TargetPlayer, level)) return DCC_SendChannelMessage(channel, "**USAGE**: !setadmin [id] [level]");
+	if(!IsPlayerConnected(TargetPlayer)) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not connected!");
+	if(Account[TargetPlayer][Admin] >= 5) return DCC_SendChannelMessage(channel, "**ERROR:** You cannot set an admin level to a person who is level 5 or above.");
+	new DCC_Guild:guildId = DCC_FindGuildById(DISCORD_GUILD);
+	new admin[33];
+	DCC_GetGuildMemberNickname(guildId, user, admin, sizeof admin);
+	if(isequal(admin, ""))
+	{
+		DCC_GetUserName(user, admin, sizeof admin);
+	}
+	if(level >= 5) return DCC_SendChannelMessage(channel, "**ERROR:** You cannot set a person's admin level to higher than 4 from discord!");
+	DCC_SendChannelMessage(channel, sprintf("NOTICE: %s has set %s's staff level to %d.", admin, GetName(TargetPlayer), level));
+	SendClientMessage(TargetPlayer, COLOR_INDIANRED, sprintf("{bf0000}NOTICE: {FFFFFF}%s has set your staff level to %d.", admin, level));
+	Account[TargetPlayer][Admin] = level;
+	return 1;
+}
+DCMD:osetadmin(user, channel, params[])
+{
+	if(!IsUserLeadAdmin(user)) return 0;
+	new PlayerName[MAX_PLAYER_NAME + 1], level;
+	if(sscanf(params, "s[26]i", PlayerName, level)) return DCC_SendChannelMessage(channel, "**USAGE**: !osetadmin [name] [level]");
+
+	yield 1;
+	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT Admin FROM Accounts WHERE Username = '%e'", PlayerName));
+	if(!cache_num_rows()) return DCC_SendChannelMessage(channel, sprintf("**ERROR**: Nobody has been found with the name %s.", PlayerName));
+
+	new OldLevel;
+	cache_get_value_name_int(0, "Admin", OldLevel);
+	if(OldLevel >= 5) return DCC_SendChannelMessage(channel, "**ERROR**: You cannot set a person's admin level to a higher level than your own!");
+
+	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE Accounts SET Admin = %d WHERE Username = '%e'", level, PlayerName));
+	DCC_SendChannelMessage(channel,  sprintf("You have successfully set %s's admin level to %d", PlayerName, level));
+	return 1;
+}
+
+DCMD:lacmds(user, channel, params[])
+{
+	if(!IsUserLeadAdmin(user)) return 0;
+
+	DCC_SendChannelMessage(channel, "```!activitycheck, !setadmin, !osetadmin```");
 	return 1;
 }
