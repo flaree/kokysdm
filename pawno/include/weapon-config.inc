@@ -4977,7 +4977,7 @@ static DamageFeedUpdate(playerid, bool:modified = false)
 	}
 
 	if (s_DamageFeedGiven[playerid] == PlayerText:INVALID_TEXT_DRAW) {
-		new PlayerText:td = CreatePlayerTextDraw(playerid, 200.0, 365.0, "_");
+		new PlayerText:td = CreatePlayerTextDraw(playerid, 118.052719, 358.000091, "_");
 
 		if (td == PlayerText:INVALID_TEXT_DRAW) {
 			printf("(wc) WARN: Unable to create damage feed textdraw");
@@ -4997,7 +4997,7 @@ static DamageFeedUpdate(playerid, bool:modified = false)
 	}
 
 	if (s_DamageFeedTaken[playerid] == PlayerText:INVALID_TEXT_DRAW) {
-		new PlayerText:td = CreatePlayerTextDraw(playerid, 440.0, 365.0, "_");
+		new PlayerText:td = CreatePlayerTextDraw(playerid, 118.521240, 370.833343, "_");
 
 		if (td == PlayerText:INVALID_TEXT_DRAW) {
 			printf("(wc) WARN: Unable to create damage feed textdraw");
@@ -5112,11 +5112,11 @@ static DamageFeedUpdateText(playerid)
 			format(
 				buf,
 				sizeof(buf),
-				"%s%s - %s +%.2f~n~",
+				"%s+%.2f damage to %s(%i)~n~",
 				buf,
+				s_DamageFeedHitsGiven[playerid][i][e_Amount] + 0.009,
 				s_DamageFeedHitsGiven[playerid][i][e_Name],
-				weapon,
-				s_DamageFeedHitsGiven[playerid][i][e_Amount] + 0.009
+				s_DamageFeedHitsGiven[playerid][i][e_Issuer]
 			);
 		}
 	}
@@ -5160,11 +5160,11 @@ static DamageFeedUpdateText(playerid)
 			format(
 				buf,
 				sizeof(buf),
-				"%s%s - %s -%.2f~n~",
+				"%s-%.2f damage from %s(%i)~n~~n~",
 				buf,
+				s_DamageFeedHitsTaken[playerid][i][e_Amount] + 0.009,
 				s_DamageFeedHitsTaken[playerid][i][e_Name],
-				weapon,
-				s_DamageFeedHitsTaken[playerid][i][e_Amount] + 0.009
+				s_DamageFeedHitsTaken[playerid][i][e_Issuer]
 			);
 		}
 	}

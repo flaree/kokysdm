@@ -10,9 +10,10 @@
 														*Developed by Koky*
 
 ==============================================================================================================
-Update K:DM 0.43
+Update K:DM 0.52.0
 Memorial Developers -> Koky ~ TommyB ~ J0sh ES ~ Graber
 Developers -> SimoSbara ~ Davis ~ westham ~ Bauer ~ josef
+Thanks to -> PatrickGTR :)
 Losers -> BanksDM - LSDM - CarnageTDM!
 
 */
@@ -2525,7 +2526,7 @@ public OnPlayerClickPlayer(playerid, clickedplayerid, source)
     if (!GetPlayerAdminLevel(playerid)) {
 	    ShowStatsForPlayer(playerid, clickedplayerid);
     } else {
-        new networkStats[400];
+        new networkStats[500];
         GetPlayerNetworkStats(clickedplayerid, networkStats, sizeof networkStats);
         ShowPlayerDialog(playerid, 0, DIALOG_STYLE_MSGBOX, sprintf("%s Networkstats", GetName(clickedplayerid)), networkStats, "Okay", "");
     }

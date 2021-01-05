@@ -116,8 +116,8 @@ CMD<AD1>:denyreport(cmdid, playerid, params[])
 {
 	if(!pool_valid(Reports)) return SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Reports:{FFFFFF}  There are currently no reports.");
 
-	new id, reason[128];
-	if(sscanf(params, "is[128]", id, reason)) return SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Reports:{FFFFFF}  /denyreport [report ID from /reports] [reason]");
+	new id;
+	if(sscanf(params, "is[128]", id)) return SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Reports:{FFFFFF}  /denyreport [report ID from /reports]");
 	if(!pool_has(Reports, id)) return SendErrorMessage(playerid, "Invalid report ID.");
 
 	new report[REPORT_DATA];
@@ -126,12 +126,12 @@ CMD<AD1>:denyreport(cmdid, playerid, params[])
 
 	pool_remove(Reports, id);
 	if (GetPlayerAdminHidden(playerid))
-		SendClientMessage(reporter, COLOR_LIGHTRED, sprintf("{bf0000}Reports:{FFFFFF} An admin has denied your report on %s (%i)! Reason: %s", GetName(target), target, reason));
+		SendClientMessage(reporter, COLOR_LIGHTRED, sprintf("{bf0000}Reports:{FFFFFF} An admin has denied your report on %s (%i)!", GetName(target), target));
 	else 
-		SendClientMessage(reporter, COLOR_LIGHTRED, sprintf("{bf0000}Reports:{FFFFFF} Admin %s has denied your report on %s (%i)! Reason: %s", GetName(playerid), GetName(target), target, reason));
-	SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("{bf0000}Reports:{FFFFFF} You have denied report %i for the reason \"%s\"", id, reason));
-	SendAdminsMessage(1, COLOR_INDIANRED, sprintf("{bf0000}Reports:{FFFFFF} %s has denied report %i for the reason \"%s\"", GetName(playerid), id, reason));
-	DCC_SendChannelMessage(DCC_FindChannelByName("in-game-reports"), sprintf("**Reports:** %s has denied report %i, reason: %s", GetName(playerid), id, reason));
+		SendClientMessage(reporter, COLOR_LIGHTRED, sprintf("{bf0000}Reports:{FFFFFF} Admin %s has denied your report on %s (%i)!", GetName(playerid), GetName(target), target));
+	SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("{bf0000}Reports:{FFFFFF} You have denied report %", id));
+	SendAdminsMessage(1, COLOR_INDIANRED, sprintf("{bf0000}Reports:{FFFFFF} %s has denied report %i", GetName(playerid), id));
+	DCC_SendChannelMessage(DCC_FindChannelByName("in-game-reports"), sprintf("**Reports:** %s has denied report %i", GetName(playerid), id));
 	return true;
 }
 ALT:dr = CMD:denyreport;
@@ -162,6 +162,7 @@ HasReportedPlayer(playerid, target)
 	}
 	return false;
 }
+
 ShowReportDialog(playerid)
 {
 	if(!pool_valid(Reports) || !pool_size(Reports)) return SendErrorMessage(playerid, "There are currently no reports.");
@@ -170,9 +171,15 @@ ShowReportDialog(playerid)
 
 	new report[REPORT_DATA];
 	strcat(reportstr, "Report ID\tReporter\tReported\n");
+	new tmpString[16];
+	new count = 0;
 	for_pool(i: Reports)
 	{
 		iter_get_arr(i, report);
+		format(tmpString, sizeof(tmpString), "ReportID_%i", count);
+		SetPVarInt(playerid, tmpString, iter_get_key(i));
+		count ++;
+
 		strcat(reportstr, sprintf("%i\t%s\t%s\n", iter_get_key(i), GetName(report[ReportingPlayer]), GetName(report[ReportedPlayer])));
 	}
 	Dialog_Show(playerid, ReportList, DIALOG_STYLE_TABLIST_HEADERS, sprintf("Active Reports - %i", pool_size(Reports)), reportstr, "Select", "Cancel");
@@ -180,7 +187,10 @@ ShowReportDialog(playerid)
 }
 SubmitReport(playerid, target, const reason[])
 {
-	if(!pool_valid(Reports)) Reports = pool_new();
+	if(!pool_valid(Reports)) {
+		Reports = pool_new();
+		pool_set_ordered(Reports, true);
+	}
 
 	new report[REPORT_DATA];
 	report[ReportingPlayer] = playerid;
@@ -195,12 +205,56 @@ Dialog:ReportList(playerid, response, listitem, inputtext[])
 {
 	if(!response) return true;
 
+	new tmpString[16];
+	format(tmpString, sizeof(tmpString), "ReportID_%i", listitem);
+	new id = GetPVarInt(playerid, tmpString);
+
 	new report[REPORT_DATA];
-	pool_get_arr(Reports, listitem, report);
+	pool_get_arr(Reports, id, report);
 	format(reportstr, sizeof(reportstr), report[ReportReason]);
 	if(strlen(reportstr) > 100) strins(reportstr, "\n", 101);
 
-	Dialog_Show(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "Report Details", sprintf("Report From %s (%i) Against %s (%i)\n\n%s", GetName(report[ReportingPlayer]), report[ReportingPlayer], GetName(report[ReportedPlayer]), report[ReportedPlayer], reportstr), "Neat!", "");
+	yield 1;
+	new dialogResponse[e_DIALOG_RESPONSE_INFO];
+	AwaitAsyncDialog(playerid, dialogResponse, DIALOG_STYLE_MSGBOX, "Report Details", sprintf("Report From %s (%i) Against %s (%i)\n\n%s", GetName(report[ReportingPlayer]), report[ReportingPlayer], GetName(report[ReportedPlayer]), report[ReportedPlayer], reportstr), "Accept", "Deny");
+
+	if (dialogResponse[E_DIALOG_RESPONSE_Response]) {
+		if(!pool_has(Reports, id)) return SendErrorMessage(playerid, "Invalid report ID.");
+
+		new reporter = report[ReportingPlayer], target = report[ReportedPlayer];
+
+		pool_remove(Reports, id);
+
+		if (GetPlayerAdminHidden(playerid))
+			SendClientMessage(reporter, COLOR_LIGHTRED, sprintf("{bf0000}Reports:{FFFFFF} An admin is now looking into your report on %s (%i). They will contact you if any further information is required.", GetName(target), target));
+		else
+			SendClientMessage(reporter, COLOR_LIGHTRED, sprintf("{bf0000}Reports:{FFFFFF} Admin %s is now looking into your report on %s (%i). They will contact you if any further information is required.", GetName(playerid), GetName(target), target));
+		
+		SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("{bf0000}Reports:{FFFFFF} You are now handling report %i.", id));
+		SendAdminsMessage(1, COLOR_INDIANRED, sprintf("{bf0000}Reports: %s {808080}is handling report %i.", GetName(playerid), id));
+
+		DCC_SendChannelMessage(DCC_FindChannelByName("in-game-reports"), sprintf("**Reports:** %s is handling report %i by %s.", GetName(playerid), id, GetName(reporter)));
+
+		DeletePVar(playerid, tmpString);
+	} else {
+		if(!pool_has(Reports, id)) return SendErrorMessage(playerid, "Invalid report ID.");
+
+		new reporter = report[ReportingPlayer], target = report[ReportedPlayer];
+
+		pool_remove(Reports, id);
+
+		if (GetPlayerAdminHidden(playerid))
+			SendClientMessage(reporter, COLOR_LIGHTRED, sprintf("{bf0000}Reports:{FFFFFF} An admin has denied your report on %s (%i)!", GetName(target), target));
+		else 
+			SendClientMessage(reporter, COLOR_LIGHTRED, sprintf("{bf0000}Reports:{FFFFFF} Admin %s has denied your report on %s (%i)!", GetName(playerid), GetName(target), target));
+		
+		SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("{bf0000}Reports:{FFFFFF} You have denied report %i", id));
+		SendAdminsMessage(1, COLOR_INDIANRED, sprintf("{bf0000}Reports:{FFFFFF} %s has denied report %i", GetName(playerid), id));
+		DCC_SendChannelMessage(DCC_FindChannelByName("in-game-reports"), sprintf("**Reports:** %s has denied report %i", GetName(playerid), id));
+
+		DeletePVar(playerid, tmpString);
+	}
+
 	return true;
 }
 Dialog:ReportDescription(playerid, response, listitem, inputtext[]) return ShowReportDialog(playerid);
