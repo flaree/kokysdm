@@ -10,9 +10,10 @@
 														*Developed by Koky*
 
 ==============================================================================================================
-Update K:DM 0.43
+Update K:DM 0.52.0
 Memorial Developers -> Koky ~ TommyB ~ J0sh ES ~ Graber
 Developers -> SimoSbara ~ Davis ~ westham ~ Bauer ~ josef
+Thanks to -> PatrickGTR :)
 Losers -> BanksDM - LSDM - CarnageTDM!
 
 */
@@ -569,13 +570,17 @@ new WeaponNameList[][] =
 
 stock AdminNames(const level)
 {
-	new adminName[24];
+	new adminName[32];
     if (level <= 0) {
         format(adminName, sizeof adminName, "None");
-    } else if (level >= 1 && level <= 6) {
-        format(adminName, sizeof adminName, "%i", level);
+    } else if (level >= 1 && level <= 4) {
+        format(adminName, sizeof adminName, "Level {bf0000}%i{FFFFFF} Admin", level);
+    } else if (level == 5) {
+        format(adminName, sizeof adminName, "{1d7cf2}Lead Admin");
+    } else if (level == 6) {
+        format(adminName, sizeof adminName, "{662884}Developer");
     } else {
-        format(adminName, sizeof adminName, "SM");
+        format(adminName, sizeof adminName, "{bf0000}Management");
     }
 	return adminName;
 }
@@ -1306,7 +1311,7 @@ public SendRandomMessage()
 		"[Koky's Deathmatch]{FFFFFF}: Use /top to view the top kills, headshots and deaths!",
 		"[Koky's Deathmatch]{FFFFFF}: You can duel your friend and foes, use /duel!",
 		"[Koky's Deathmatch]{FFFFFF}: Not having fun? Start your own event! (/startevent)",
-		"[Koky's Deathmatch]{FFFFFF}: Double click on a players name to view their stats in the tablist!",
+		"[Koky's Deathmatch]{FFFFFF}: /stats [player] to view their stats!",
 		"[Koky's Deathmatch]{FFFFFF}: Did you know? You can donate to the server and receive perks! (/donate)",
 		"[Koky's Deathmatch]{FFFFFF}: Join our official Discord! discord.gg/TCVdvdV",
 		"[Koky's Deathmatch]{FFFFFF}: Did you know? You can start your own clan and make it official! /createclan!"
@@ -1369,6 +1374,8 @@ public OnGameModeInit()
 	SetTimer("SecondCheck", 1000, true);
 
 	mysql_tquery(SQL_CONNECTION, "SELECT * FROM `serversettings` LIMIT 1", "LoadSettings");
+
+    mysql_tquery(SQL_CONNECTION, "UPDATE Accounts SET LoggedIn = 0");
 
 	new ClockHours;
 	gettime(ClockHours);
@@ -1435,7 +1442,7 @@ public OnPlayerConnect(playerid)
 
 	Account_Reset(playerid);
 	SetPlayerColor(playerid, PlayerColors[playerid]);
-	SendClientMessageToAll(COLOR_GRAY, sprintf("{bf0000}Connection: {9f9f9f}%s {ffffff}has joined the server.", GetName(playerid)));
+	SendClientMessageToAll(COLOR_GRAY, sprintf("{bf0000}CONNECTION: {9f9f9f}%s has joined the server.", GetName(playerid)));
 	TogglePlayerSpectating(playerid, 1);
 	SetPlayerColor(playerid, PlayerColors[playerid]);
 	dmessage2[playerid] = SetTimerEx("CheckDonations", 30000, true, "i", playerid);
@@ -2217,7 +2224,7 @@ public OnPlayerUpdate(playerid)
             UpdateNameTag(playerid, wfps);
 			pDrunkLevelLast[playerid] = drunknew;
 			if(pFPS[playerid] > 110 && !AlreadySentFPSWarn[playerid]) {
-				sendFormatMessage(playerid, 0xFFFFFFFF, "Your FPS is too high! It must be lower than 110.", pFPSWarn[playerid]);
+				sendFormatMessage(playerid, 0xFF49FF00, "WARNING: Your FPS is too high! It must be lower than 110.", pFPSWarn[playerid]);
 				AlreadySentFPSWarn[playerid] = true;
 				SetTimerEx("ResetFPSWarn", 120000, 0, "d", playerid);
 				pFPSWarn[playerid] ++;
@@ -2519,7 +2526,7 @@ public OnPlayerClickPlayer(playerid, clickedplayerid, source)
     if (!GetPlayerAdminLevel(playerid)) {
 	    ShowStatsForPlayer(playerid, clickedplayerid);
     } else {
-        new networkStats[400];
+        new networkStats[500];
         GetPlayerNetworkStats(clickedplayerid, networkStats, sizeof networkStats);
         ShowPlayerDialog(playerid, 0, DIALOG_STYLE_MSGBOX, sprintf("%s Networkstats", GetName(clickedplayerid)), networkStats, "Okay", "");
     }
@@ -2560,13 +2567,6 @@ public OnPlayerEnterCheckpoint(playerid)
 }
 public OnPlayerExitVehicle(playerid, vehicleid)
 {
-	if(ActivityState[playerid] == ACTIVITY_TDM)
-	{
-		if(GetVehicleSpeed(vehicleid) > 50)
-		{
-			ClearAnimations(playerid, 0);
-		}
-	}
 	return 1;
 }
 public OnVehicleDamageStatusUpdate(vehicleid, playerid)
@@ -2602,7 +2602,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 			if(capturingturf[playerid] == 1)
 			{
 				capturingturf[playerid] = 0;
-				SendTDMMessage(COLOR_LIGHTRED, sprintf("TURF: {%06x}%s was killed by {%06x}%s while capturing the turf. The turf is now available for capture!", GetPlayerColor(playerid) >>> 8, GetName(playerid), GetPlayerColor(killerid) >>> 8, GetName(killerid)));
+				SendTDMMessage(COLOR_LIGHTRED, sprintf("{49FF00}TURF: %s was killed by %s while capturing the turf. The turf is now available for capture!", GetName(playerid), GetName(killerid)));
 				KillTimer(capturingtimer[playerid]);
 				GangZoneStopFlashForAll(igsturf);
 				beingcaptured = -1;
@@ -2884,14 +2884,54 @@ SendAdminsMessage(level, color, str[])
 	}
 }
 
-SendLeadsMessage(color, str[])
+SendAdmcmdMessage(level, str[])
 {
 	foreach(new i: Player)
 	{
 		new astr[128];
+		if(Account[i][Admin] >= level)
+		{
+			format(astr, sizeof(astr), "{808080}[ADMCMD] {C0C0C0}%s", str);
+			SendClientMessage(i, 0xFFFFFFFF, astr);
+		}
+	}
+}
+
+SendDiscordAdmMessage(level, color, str[])
+{
+    #pragma unused color
+	foreach(new i: Player)
+	{
+		new astr[128];
+		if(Account[i][Admin] >= level)
+		{
+			format(astr, sizeof(astr), "{808080}(Discord AdmChat) {bf0000}%s", str);
+			SendClientMessage(i, 0xFFFFFFFF, astr);
+		}
+	}
+}
+
+SendLeadsMessage(color, str[])
+{
+    new astr[128];
+    format(astr, sizeof(astr), "(LeadAdmChat) %s", str);
+	foreach(new i: Player)
+	{
 		if(Account[i][Admin] >= 4)
 		{
-			format(astr, sizeof(astr), "(LeadAdmChat) %s", str);
+			SendClientMessage(i, color, astr);
+		}
+	}
+}
+
+SendLeadsDiscordMessage(color, str[])
+{
+    new astr[128];
+    format(astr, sizeof(astr), "(Discord LeadAdmChat) %s", str);
+	foreach(new i: Player)
+	{
+		if(Account[i][Admin] >= 4)
+		{
 			SendClientMessage(i, color, astr);
 		}
 	}
@@ -2917,7 +2957,7 @@ SendDonatorsMessage(level, color, str[])
 		new astr[128];
 		if(Account[i][Donator] >= level)
 		{
-			format(astr, sizeof(astr), "(Donator-Chat) %s", str);
+			format(astr, sizeof(astr), "DONATOR CHAT: %s", str);
 			SendClientMessage(i, color, astr);
 		}
 	}
@@ -3106,23 +3146,23 @@ public OnPlayerGiveDamageActor(playerid, damaged_actorid, Float:amount, weaponid
 {
 	return 1;
 }
-GetVehicleSpeed( vehicleid )
-{
-	// Function: GetVehicleSpeed( vehicleid )
+// GetVehicleSpeed( vehicleid )
+// {
+// 	// Function: GetVehicleSpeed( vehicleid )
 
-	new
-	    Float:x,
-	    Float:y,
-	    Float:z,
-		vel;
+// 	new
+// 	    Float:x,
+// 	    Float:y,
+// 	    Float:z,
+// 		vel;
 
-	GetVehicleVelocity( vehicleid, x, y, z );
+// 	GetVehicleVelocity( vehicleid, x, y, z );
 
-	vel = floatround( floatsqroot( x*x + y*y + z*z ) * 180 );			// KM/H
-//	vel = floatround( floatsqroot( x*x + y*y + z*z ) * 180 / MPH_KMH ); // MPH
+// 	vel = floatround( floatsqroot( x*x + y*y + z*z ) * 180 );			// KM/H
+// //	vel = floatround( floatsqroot( x*x + y*y + z*z ) * 180 / MPH_KMH ); // MPH
 
-	return vel;
-}
+// 	return vel;
+// }
 GetLanguage(language)
 {
 	new lang[64];
@@ -3162,9 +3202,13 @@ public OnPlayerText(playerid, const text[])
 
 	if(text[0] == ADMCHATKEY && GetPlayerAdminLevel(playerid) >= 1)
 	{
-		new TextOutput[128];
+		new TextOutput[128], Text2[128];
 		format(TextOutput, sizeof(TextOutput), text);
+        format(Text2, sizeof(Text2), text);
 		TextOutput[0] = ' '; // Replacing the . with space
+        Text2[0] = ' ';
+        strtrim(Text2);
+        DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**%s**: `%s`", GetName(playerid), Text2));
 		format(TextOutput, sizeof(TextOutput), "{FFFF80}%s:%s", GetName(playerid), TextOutput);
 		SendAdminsMessage(1, 0x09F7DFC8, TextOutput);
 		return 0; // Don't send the message publicly.
@@ -3172,9 +3216,13 @@ public OnPlayerText(playerid, const text[])
 
 	else if(text[0] == LEADCHATKEY && GetPlayerAdminLevel(playerid) >= 3)
 	{
-	    new TextOutput[128];
+	    new TextOutput[128], Text2[128];
 		format(TextOutput, sizeof(TextOutput), text);
+        format(Text2, sizeof(Text2), text);
 		TextOutput[0] = ' '; // Replacing the . with space
+        Text2[0] = ' ';
+        strtrim(Text2);
+        DCC_SendChannelMessage(DCC_FindChannelById("796073976463491082"), sprintf("**%s**: `%s`", GetName(playerid), Text2));
 		format(TextOutput, sizeof(TextOutput), "%s: %s", GetName(playerid), TextOutput);
 		SendLeadsMessage(0x3FE629FF, TextOutput);
 		return 0; // Don't send the message publicly.
@@ -3270,6 +3318,7 @@ public OnPlayerText(playerid, const text[])
 	{
 		format(str, sizeof( str), "~{FFFFFF} {%06x}%s(%i):{FFFFFF} %s", GetPlayerColor(playerid) >>> 8, GetName(playerid), playerid, text);
 	}
+    if(!Account[playerid][pLanguage]) DCC_SendChannelMessage(DCC_FindChannelById("796074251412570192"), sprintf("**%s**: `%s`", GetName(playerid), text));
 
 	ChatSend(Account[playerid][pLanguage], str);
 
@@ -3706,9 +3755,8 @@ ALT:w2 = CMD:giveweapon;
 CMD:stats(cmdid, playerid, params[])
 {
     new targetid;
-    if(sscanf(params, "u", targetid)) 
+    if(sscanf(params, "u", targetid))
     {
-        print(pName[playerid]);
         InfoBoxForPlayer(playerid, "~g~Gathering players information, please wait...");
 	    ShowStatsForPlayer(playerid, playerid);
         return 1;
@@ -3840,14 +3888,13 @@ CMD:admins(cmdid, playerid, params[])
         return true;
     }
     else {
-        SendClientMessage(playerid, 0xBF0000FF, "Admins online:");
-        SendClientMessage(playerid, 0xBF0000FF, "______________________________________________");
+        SendClientMessage(playerid, 0xBF0000FF, "________________[Admins Online]________________");
     }
     list_sort(adminlist, 1, -1, true);
     for_list(i: adminlist)
     {
         iter_get_arr(i, admin);
-        SendClientMessage(playerid, COLOR_WHITE, sprintf("(Level {bf0000}%s {ffffff}Admin) {%06x}%s {ffffff}(ID %i) {bf0000}%s", AdminNames(admin[1]), GetPlayerColor(admin[0]) >>> 8, GetName(admin[0]), admin[0], Account[admin[0]][pAdminHide] == 1 ? "(HIDDEN)" : ""));
+        SendClientMessage(playerid, COLOR_WHITE, sprintf("(ID %i) {%06x}%s {FFFFFF}- (%s{FFFFFF}) {bf0000}%s", admin[0], GetPlayerColor(admin[0]) >>> 8, GetName(admin[0]), AdminNames(admin[1]), Account[admin[0]][pAdminHide] == 1 ? "(HIDDEN)" : ""));
     }
     SendClientMessage(playerid, 0xBF0000FF, "______________________________________________");
 	if(!GetPlayerAdminLevel(playerid)) SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}Admin NOTICE: {FFFFFF}%s has just typed /admins.", GetName(playerid)));
@@ -4522,7 +4569,7 @@ CreateServerTextDraws()
 	TextDrawFont(DutyTextDraw, 1);
 	TextDrawSetProportional(DutyTextDraw, 1);
 	TextDrawSetShadow(DutyTextDraw, 0);
-    TextDrawSetString(DutyTextDraw, "~n~~w~-_~r~ON_DUTY~w~-");    
+    TextDrawSetString(DutyTextDraw, "~n~~w~-_~r~ON_DUTY~w~-");
 
 	//login
 	logintd = TextDrawCreate(183.5000, -41.0000, "mdl-1087:Koky_DM");

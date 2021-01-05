@@ -77,7 +77,7 @@ CreateLobbyActors()
 	SetActorInvulnerable(monthlydm_actor, false);
 	SetActorHealth(monthlydm_actor, 1000);
 
-	playerinfo = Create3DTextLabel("{EE5133}Arena Players: X{33C4EE}\n{EE5133}TDM Players: X{33C4EE}\n{EE5133}Cop Chase Players: X{33C4EE}\n{EE5133}Freeroam Players: X{33C4EE}\n", -1, 2742.0884, -1743.7566, 1026.5292, 40.0, 0);
+	playerinfo = Create3DTextLabel("{EE5133}Arena Players: X{33C4EE}\n{EE5133}TDM Players: X{33C4EE}\n{EE5133}Cop Chase Players: X{33C4EE}\n{EE5133}Freeroam Players: X{33C4EE}\n", -1, 2741.7312, -1743.7566, 1026.5292, 40.0, 0);
 }
 ResetLobbyActorPositions()
 {
