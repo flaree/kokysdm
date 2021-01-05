@@ -201,7 +201,7 @@ DCMD:cmds(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
-	DCC_SendChannelMessage(channel, "```!cmds, !kick, !ban, !ajail, !mute, !unban, !unjail, !unmute, !fpscheck, !flinchcheck, !aimbotprofile, !ip, !players, !admins```");
+	DCC_SendChannelMessage(channel, "```!cmds, !kick, !ban, !ajail, !mute, !unban, !unjail, !unmute, !fpscheck, !flinchcheck, !aimprofile, !ip, !players, !admins```");
 	return 1;
 }
 
@@ -245,7 +245,7 @@ DCMD:admins(user, channel, params[])
 	for_list(i: adminlist)
 	{
 		iter_get_arr(i, admin);
-		DCC_SendChannelMessage(channel, sprintf("(Level %s Admin) %s (ID %i)", AdminNames(admin[1]), GetName(admin[0]), admin[0]));
+		DCC_SendChannelMessage(channel, sprintf("(%s) %s (ID %i)", AdminNames(admin[1], false), GetName(admin[0]), admin[0]));
 	}
 	list_delete(adminlist);
 	return true;
