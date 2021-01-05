@@ -410,18 +410,46 @@ ALT:fr = CMD:forcerules;
 CMD<AD1>:announcement(cmdid, playerid, params[])
 {
 	if(isnull(params)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /announcement [message]");
+	new TextOutput[128];
+	if (GetPlayerAdminHidden(playerid)) {
+		format(TextOutput, sizeof TextOutput, "[Announcement] %s", params);
+	} else {
+		format(TextOutput, sizeof TextOutput, "[Announcement] %s: %s", GetName(playerid), params);
+	}
 
 	foreach(new i: Player)
 	{
 		if(Account[i][LoggedIn] == 1)
 		{
-			SendClientMessage(i, COLOR_VIOLET, sprintf("[Announcement] %s: %s", GetName(playerid), params));
+			SendClientMessage(i, COLOR_VIOLET, TextOutput);
 		}
 	}
 	return 1;
 }
 ALT:ann = CMD:announcement;
 ALT:announ = CMD:announcement;
+
+CMD<AD1>:announcement2(cmdid, playerid, params[])
+{
+	if(isnull(params)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /announcement2 [message]");
+	new TextOutput[128];
+	if (GetPlayerAdminHidden(playerid)) {
+		format(TextOutput, sizeof TextOutput, "%s", params);
+	} else {
+		format(TextOutput, sizeof TextOutput, "~g~%s says:~w~~n~%s", GetName(playerid), params);
+	}
+
+	foreach(new i: Player)
+	{
+		if(Account[i][LoggedIn] == 1)
+		{
+			GameTextForPlayer(i, TextOutput, 5000, 5);
+		}
+	}
+	return 1;
+}
+ALT:ann2 = CMD:announcement2;
+ALT:announ2 = CMD:announcement2;
 
 CMD<AD1>:kick(cmdid, playerid, params[])
 {
