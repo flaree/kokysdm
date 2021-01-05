@@ -568,19 +568,35 @@ new WeaponNameList[][] =
 //==========================================================================
 //==========================================================================
 
-stock AdminNames(const level)
+stock AdminNames(const level, color = true)
 {
 	new adminName[32];
     if (level <= 0) {
         format(adminName, sizeof adminName, "None");
     } else if (level >= 1 && level <= 4) {
-        format(adminName, sizeof adminName, "Level {bf0000}%i{FFFFFF} Admin", level);
+        if(!color) {
+            format(adminName, sizeof adminName, "Level %i Admin", level);
+        } else {
+            format(adminName, sizeof adminName, "Level {bf0000}%i{FFFFFF} Admin", level);
+        }
     } else if (level == 5) {
-        format(adminName, sizeof adminName, "{1d7cf2}Lead Admin");
+        if(color) {
+            format(adminName, sizeof adminName, "{1d7cf2}Lead Admin");
+        } else {
+            format(adminName, sizeof adminName, "Lead Admin");
+        }
     } else if (level == 6) {
-        format(adminName, sizeof adminName, "{662884}Developer");
+        if(color) {
+            format(adminName, sizeof adminName, "{662884}Developer");
+        } else {
+            format(adminName, sizeof adminName, "Developer");
+        }
     } else {
-        format(adminName, sizeof adminName, "{bf0000}Management");
+        if(color) {
+            format(adminName, sizeof adminName, "{bf0000}Management");
+        } else {
+            format(adminName, sizeof adminName, "Management");
+        }
     }
 	return adminName;
 }
