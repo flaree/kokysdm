@@ -3133,23 +3133,23 @@ public OnPlayerGiveDamageActor(playerid, damaged_actorid, Float:amount, weaponid
 {
 	return 1;
 }
-GetVehicleSpeed( vehicleid )
-{
-	// Function: GetVehicleSpeed( vehicleid )
+// GetVehicleSpeed( vehicleid )
+// {
+// 	// Function: GetVehicleSpeed( vehicleid )
 
-	new
-	    Float:x,
-	    Float:y,
-	    Float:z,
-		vel;
+// 	new
+// 	    Float:x,
+// 	    Float:y,
+// 	    Float:z,
+// 		vel;
 
-	GetVehicleVelocity( vehicleid, x, y, z );
+// 	GetVehicleVelocity( vehicleid, x, y, z );
 
-	vel = floatround( floatsqroot( x*x + y*y + z*z ) * 180 );			// KM/H
-//	vel = floatround( floatsqroot( x*x + y*y + z*z ) * 180 / MPH_KMH ); // MPH
+// 	vel = floatround( floatsqroot( x*x + y*y + z*z ) * 180 );			// KM/H
+// //	vel = floatround( floatsqroot( x*x + y*y + z*z ) * 180 / MPH_KMH ); // MPH
 
-	return vel;
-}
+// 	return vel;
+// }
 GetLanguage(language)
 {
 	new lang[64];
