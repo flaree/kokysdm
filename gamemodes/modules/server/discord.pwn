@@ -503,9 +503,9 @@ stock IsUserLeadAdmin(DCC_User: user)
 		DCC_Role:managementRole,
 		DCC_Role:leadAdminRole,
 		bool: hasRole = false;
-	leadAdminRole = DCC_FindRoleById("Lead Admin");
-	devRole = DCC_FindRoleById("Server Developer");
-	managementRole = DCC_FindRoleById("Management");
+	devRole = DCC_FindRoleById(DEV_ROLE);
+	leadAdminRole = DCC_FindRoleById(LEADS_ROLE);
+	managementRole = DCC_FindRoleById(MANAGEMENT_ROLE);
 
 	if(leadAdminRole) {
 		DCC_HasGuildMemberRole(guildId, user, leadAdminRole, hasRole);
