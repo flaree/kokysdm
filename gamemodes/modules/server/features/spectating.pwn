@@ -196,6 +196,8 @@ new PlayerText:SpecPlayerPLTD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...}
 new PlayerText:SpecPlayerNameTD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
 new PlayerText:SpecPlayerIPTD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
 new PlayerText:SpecPlayerIDTD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
+new PlayerText:SpecPlayerHITPCTD[MAX_PLAYERS] = {PlayerText:INVALID_TEXT_DRAW, ...};
+
 
 DestroySpecTDs(playerid)
 {
@@ -205,6 +207,7 @@ DestroySpecTDs(playerid)
 	PlayerTextDrawDestroy(playerid, SpecPlayerNameTD[playerid]);
 	PlayerTextDrawDestroy(playerid, SpecPlayerIPTD[playerid]);
 	PlayerTextDrawDestroy(playerid, SpecPlayerIDTD[playerid]);
+	PlayerTextDrawDestroy(playerid, SpecPlayerHITPCTD[playerid]);
 }
 
 CreateSpecTDs(playerid, targetid)
@@ -255,7 +258,18 @@ CreateSpecTDs(playerid, targetid)
 	PlayerTextDrawSetProportional(playerid, SpecPlayerPLTD[playerid], 1);
 	PlayerTextDrawSetSelectable(playerid, SpecPlayerPLTD[playerid], 0);
 
-	SpecPlayerIDTD[playerid] = CreatePlayerTextDraw(playerid, 547.000000, 61.000000, sprintf("ID:~W~ %i", targetid));
+	new allshots, hitshots, max_cont_shots, out_of_range_warns, random_aim_warns, proaim_tele_warns;
+	BustAim::GetPlayerProfile(targetid, allshots, hitshots, max_cont_shots, out_of_range_warns, random_aim_warns, proaim_tele_warns);
+	SpecPlayerHITPCTD[playerid] = CreatePlayerTextDraw(playerid, 547.000000, 61.000000, sprintf("HIT%:~W~ %.2f%%", ((hitshots*100.0) / allshots)));
+	PlayerTextDrawBackgroundColor(playerid, SpecPlayerHITPCTD[playerid], 255);
+	PlayerTextDrawFont(playerid, SpecPlayerHITPCTD[playerid], 1);
+	PlayerTextDrawLetterSize(playerid, SpecPlayerHITPCTD[playerid], 0.200000, 1.000000);
+	PlayerTextDrawColor(playerid, SpecPlayerHITPCTD[playerid], -1397969665);
+	PlayerTextDrawSetOutline(playerid, SpecPlayerHITPCTD[playerid], 1);
+	PlayerTextDrawSetProportional(playerid, SpecPlayerHITPCTD[playerid], 1);
+	PlayerTextDrawSetSelectable(playerid, SpecPlayerHITPCTD[playerid], 0);
+
+	SpecPlayerIDTD[playerid] = CreatePlayerTextDraw(playerid, 547.000000, 70.000000, sprintf("ID:~W~ %i", targetid));
 	PlayerTextDrawBackgroundColor(playerid, SpecPlayerIDTD[playerid], 255);
 	PlayerTextDrawFont(playerid, SpecPlayerIDTD[playerid], 1);
 	PlayerTextDrawLetterSize(playerid, SpecPlayerIDTD[playerid], 0.200000, 1.000000);
@@ -271,6 +285,7 @@ CreateSpecTDs(playerid, targetid)
 	PlayerTextDrawShow(playerid, SpecPlayerIPTD[playerid]);
 	PlayerTextDrawShow(playerid, SpecPlayerNameTD[playerid]);
 	PlayerTextDrawShow(playerid, SpecPlayerIDTD[playerid]);
+	PlayerTextDrawShow(playerid, SpecPlayerHITPCTD[playerid]);
 	return true;
 }
 
@@ -279,5 +294,8 @@ UpdateSpecTDs(playerid, targetid)
     PlayerTextDrawSetString(playerid, SpecPlayerFPSTD[playerid], sprintf("FPS:~W~ %i", pFPS[targetid]));
     PlayerTextDrawSetString(playerid, SpecPlayerPingTD[playerid], sprintf("PING:~W~ %i", GetPlayerPing(targetid)));
 	PlayerTextDrawSetString(playerid, SpecPlayerPLTD[playerid], sprintf("P/L:~W~ %.2f%", NetStats_PacketLossPercent(targetid)));
+	new allshots, hitshots, max_cont_shots, out_of_range_warns, random_aim_warns, proaim_tele_warns;
+	BustAim::GetPlayerProfile(targetid, allshots, hitshots, max_cont_shots, out_of_range_warns, random_aim_warns, proaim_tele_warns);
+	PlayerTextDrawSetString(playerid, SpecPlayerHITPCTD[playerid], sprintf("HIT%:~W~ %.2f%%", ((hitshots*100.0) / allshots)));
     return true;
 }
