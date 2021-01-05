@@ -92,7 +92,7 @@ CMD<AD3>:aveh(cmdid, playerid, params[])
 	SetVehicleNumberPlate(FreeroamVehicle[playerid], "SSR");
 	SetVehicleParamsEx(FreeroamVehicle[playerid], 1, 1, 0, 0, 0, 0, 0);
 	SendClientMessage(playerid, 0xFF0000FF, sprintf("You have successfully spawned a %s.", vehNames[vID-400]));
-	SendAdmcmdMessage(1, sprintf("{808080}%s spawned an %s", GetName(playerid), vehNames[vID-400]));
+	SendAdmcmdMessage(1, sprintf("%s spawned an %s", GetName(playerid), vehNames[vID-400]));
 	return 1;
 }
 CMD<AD6>:resetmonthdmer(cmid, playerid, params[])
@@ -585,7 +585,7 @@ CMD<AD1>:aunjail(cmdid, playerid, params[])
 	if(!Account[pID][AJailTime]) return SendErrorMessage(playerid, "This player is not in ajail.");
 
 	SendClientMessage(pID, -1, sprintf("{bf0000}NOTICE: {FFFFFF}You have been unjailed by %s.", GetName(playerid)));
-	SendAdmcmdMessage(1, sprintf("{808080}%s has unjailed %s!", GetName(playerid), GetName(pID)));
+	SendAdmcmdMessage(1, sprintf("%s has unjailed %s!", GetName(playerid), GetName(pID)));
 	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** %s has unjailed %s!", GetName(playerid), GetName(pID)));
 	Account[pID][AJailTime] = 0;
 	SendPlayerToLobby(pID);
@@ -615,7 +615,7 @@ CMD<AD1>:freeze(cmdid, playerid, params[])
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid, "No player connected.");
 
 	TogglePlayerControllable(pID, 0);
-	SendAdmcmdMessage(1, sprintf("{808080}Admin %s has frozen %s.", GetName(playerid), GetName(pID)));
+	SendAdmcmdMessage(1, sprintf("Admin %s has frozen %s.", GetName(playerid), GetName(pID)));
 	SendClientMessage(pID, COLOR_GRAY, "{bf0000}NOTICE: {FFFFFF}You have been frozen by an admin.");
 	Account[playerid][AdminActions]++;
 	return 1;
@@ -638,7 +638,7 @@ CMD<AD1>:slap(cmdid, playerid, params[])
 		else
 			SendClientMessage(pID, COLOR_RED, sprintf("PUNISHMENT: Admin %s has slapped you.", GetName(playerid)));
 	}
-	SendAdmcmdMessage(1, sprintf("{808080}Admin %s has slapped %s.", GetName(playerid), GetName(pID)));
+	SendAdmcmdMessage(1, sprintf("Admin %s has slapped %s.", GetName(playerid), GetName(pID)));
 	return 1;
 }
 CMD<AD1>:downslap(cmdid, playerid, params[])
@@ -857,7 +857,7 @@ CMD<AD1>:offlinejail(cmdid, playerid, params[])
 
 	Account[playerid][AdminActions]++;
 	SendPunishmentMessage(sprintf("PUNISHMENT: Admin %s has offline jailed %s for %i minutes! (Reason: %s)", GetName(playerid), pID, time, reason));
-	SendAdmcmdMessage(1, sprintf("{808080}%s offline a-jailed %s! Reason: %s", GetName(playerid), pID, reason));
+	SendAdmcmdMessage(1, sprintf("%s offline a-jailed %s! Reason: %s", GetName(playerid), pID, reason));
 	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** Admin %s has offline jailed %s for %i minutes! (Reason: %s)", GetName(playerid), pID, time, reason));
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/ajail', '%e', '%d')", GetName(playerid), pID, reason, gettime()));
 	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE `Accounts` SET ajail_minutes = %i WHERE `Username` = '%e'", time, pID));
@@ -1136,7 +1136,7 @@ CMD<AD4>:sslap(cmdid, playerid, params[])
 		GetPlayerPos(pID, px, py, pz);
 		SetPlayerPos(pID, px, py, pz+99999999999);
 		PlayerPlaySound(pID, 1190, 0.0, 0.0, 0.0);
-		SendAdmcmdMessage(1, sprintf("{808080}%s super-slapped %s!", GetName(playerid), GetName(pID)));
+		SendAdmcmdMessage(1, sprintf("%s super-slapped %s!", GetName(playerid), GetName(pID)));
 	}
 	return 1;
 }
@@ -1489,7 +1489,7 @@ CMD<AD3>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have healed players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdmcmdMessage(1, sprintf("{808080}%s has healed players within %dm of them!", GetName(playerid), range));
+		SendAdmcmdMessage(1, sprintf("%s has healed players within %dm of them!", GetName(playerid), range));
     }
     else if(!strcmp(subcommand, "armour", true))
     {
@@ -1505,7 +1505,7 @@ CMD<AD3>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have armoured players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdmcmdMessage(1, sprintf("{808080}%s has armoured players within %dm of them!", GetName(playerid), range));
+		SendAdmcmdMessage(1, sprintf("%s has armoured players within %dm of them!", GetName(playerid), range));
     }
     else if(!strcmp(subcommand, "weap", true))
     {
@@ -1526,7 +1526,7 @@ CMD<AD3>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You gave weapon %s with %d ammo players in range of %d.", weaponname, ammo, range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdmcmdMessage(1, sprintf("{808080}%s has given players within %dm of them a %s!", GetName(playerid), range, weaponname));
+		SendAdmcmdMessage(1, sprintf("%s has given players within %dm of them a %s!", GetName(playerid), range, weaponname));
     }
     else if(!strcmp(subcommand, "veh", true))
     {
@@ -1555,7 +1555,7 @@ CMD<AD3>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have spawned vehicle %s to players in range of %d.", VehicleNames[vID - 400],  range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdmcmdMessage(1, sprintf("{808080}%s has spawned vehicle %s to players within %dm!", GetName(playerid), VehicleNames[vID - 400], range));
+		SendAdmcmdMessage(1, sprintf("%s has spawned vehicle %s to players within %dm!", GetName(playerid), VehicleNames[vID - 400], range));
     }
     else if(!strcmp(subcommand, "freeze", true))
     {
@@ -1571,7 +1571,7 @@ CMD<AD3>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have frozen players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdmcmdMessage(1, sprintf("{808080}%s has frozen players within %dm of them!", GetName(playerid), range));
+		SendAdmcmdMessage(1, sprintf("%s has frozen players within %dm of them!", GetName(playerid), range));
     }
     else if(!strcmp(subcommand, "unfreeze", true))
     {
@@ -1587,7 +1587,7 @@ CMD<AD3>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have unfrozen players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdmcmdMessage(1, sprintf("{808080}%s has unfrozen players within %dm of them!", GetName(playerid), range));
+		SendAdmcmdMessage(1, sprintf("%s has unfrozen players within %dm of them!", GetName(playerid), range));
     }
     else if(!strcmp(subcommand, "skin", true))
     {
@@ -1605,7 +1605,7 @@ CMD<AD3>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have changed players skin in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdmcmdMessage(1, sprintf("{808080}%s has set players skin within %dm to %d!", GetName(playerid), skin, range));
+		SendAdmcmdMessage(1, sprintf("%s has set players skin within %dm to %d!", GetName(playerid), skin, range));
     }
     else if(!strcmp(subcommand, "nos", true))
     {
@@ -1622,7 +1622,7 @@ CMD<AD3>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have added nos to players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdmcmdMessage(1, sprintf("{808080}%s gave all players within %dm of them nos!", GetName(playerid), range));
+		SendAdmcmdMessage(1, sprintf("%s gave all players within %dm of them nos!", GetName(playerid), range));
     }
     else if(!strcmp(subcommand, "disarm", true))
     {
@@ -1639,7 +1639,7 @@ CMD<AD3>:area(cmdid, playerid, params[])
 		}
 		format(string, sizeof(string), "You have disarmed players in range of %d.", range);
 		SendClientMessage(playerid, COLOR_RED, string);
-		SendAdmcmdMessage(1, sprintf("{808080}%s disarmed all players within %dm of them!", GetName(playerid), range));
+		SendAdmcmdMessage(1, sprintf("%s disarmed all players within %dm of them!", GetName(playerid), range));
     }
 	else {
 		return SendClientMessage(playerid, COLOR_RED, "/area [heal/armour/weap/veh/freeze/unfreeze/skin/nos/disarm]");
