@@ -2884,6 +2884,19 @@ SendAdminsMessage(level, color, str[])
 	}
 }
 
+SendAdmcmdMessage(level, str[])
+{
+	foreach(new i: Player)
+	{
+		new astr[128];
+		if(Account[i][Admin] >= level)
+		{
+			format(astr, sizeof(astr), "{808080}[ADMCMD] {C0C0C0}%s", str);
+			SendClientMessage(i, 0xFFFFFFFF, astr);
+		}
+	}
+}
+
 SendDiscordAdmMessage(level, color, str[])
 {
     #pragma unused color
