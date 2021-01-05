@@ -3757,7 +3757,6 @@ CMD:stats(cmdid, playerid, params[])
     new targetid;
     if(sscanf(params, "u", targetid))
     {
-        print(pName[playerid]);
         InfoBoxForPlayer(playerid, "~g~Gathering players information, please wait...");
 	    ShowStatsForPlayer(playerid, playerid);
         return 1;
