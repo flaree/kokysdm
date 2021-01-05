@@ -2,13 +2,13 @@
 #include <discord-connector>
 #include <discord-commands>
 
-#define DISCORD_GUILD "795532086605774859"
-#define ANTICHEAT "795532204461391892"
-#define REPORTS_G "795532280734679081"
-#define ADMIN_CHANNEL "795532135812300811"
-#define LEAD_CHANNEL "795532161842544670"
-#define IG_CHANNEL "795532352759267359"
-#define BOT_NAME "kdm test"
+#define DISCORD_GUILD "450808833388838912"
+#define ANTICHEAT "610721144567496704"
+#define REPORTS_G "610780079521529856"
+#define ADMIN_CHANNEL "796074104577982474"
+#define LEAD_CHANNEL "796073976463491082"
+#define IG_CHANNEL "796074251412570192"
+#define BOT_NAME "KDM"
 
 public DCC_OnMessageCreate(DCC_Message:message)
 {
@@ -26,7 +26,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 		DCC_GetUserName(author, username, sizeof username);
 	}
 
-	if(isequal(bot_id, "794703578832437268")){
+	if(isequal(bot_id, "659130608038969347")){
 		return 1;
 	}
 	DCC_GetChannelId(channel, channelid, sizeof channelid);
@@ -556,7 +556,7 @@ DCMD:activitycheck(user, channel, params[])
 	cache_get_value_name_int(0, "rules_count", rules);
 	cache_get_value_name_int(0, "mute_count", mutes);
 	
-	DCC_SendChannelMessage(channel, sprintf("```prolog\nViewing Activity for %s in the past %d days:\nBans: %d\nAjails: %d\nForce Lobbies: %d\nForce Rules: %d\nMutes: 5d```", Username, days, bans, ajails, lobbies, rules, mutes));
+	DCC_SendChannelMessage(channel, sprintf("```prolog\nViewing Activity for %s in the past %d days:\nBans: %d\nAjails: %d\nForce Lobbies: %d\nForce Rules: %d\nMutes: %d```", Username, days, bans, ajails, lobbies, rules, mutes));
     return 1;
 }
 
