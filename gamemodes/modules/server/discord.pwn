@@ -110,10 +110,9 @@ stock IsUserDiscordAdmin(DCC_User: user)
 
 		if(hasRole) return 1;
 	} 
-	}
 	if(seniorAdminRole) {
 		DCC_HasGuildMemberRole(guildId, user, seniorAdminRole, hasRole);
-		
+
 		if(hasRole) return 1;
 	} 
 	if(adminRole) {
