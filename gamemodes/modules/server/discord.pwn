@@ -108,13 +108,12 @@ stock IsUserDiscordAdmin(DCC_User: user)
 	if(leadAdminRole) {
 		DCC_HasGuildMemberRole(guildId, user, leadAdminRole, hasRole);
 
-		if(hasRole) {
-			print("lead");
-			return 1;
-		}
+		if(hasRole) return 1;
+	} 
 	}
 	if(seniorAdminRole) {
 		DCC_HasGuildMemberRole(guildId, user, seniorAdminRole, hasRole);
+		
 		if(hasRole) return 1;
 	} 
 	if(adminRole) {
