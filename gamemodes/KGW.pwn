@@ -3894,7 +3894,7 @@ CMD:admins(cmdid, playerid, params[])
     for_list(i: adminlist)
     {
         iter_get_arr(i, admin);
-        SendClientMessage(playerid, COLOR_WHITE, sprintf("(ID %i) {%06x}%s - {FFFFFF}(%s{FFFFFF}) {bf0000}%s", admin[0], GetPlayerColor(admin[0]) >>> 8, GetName(admin[0]), AdminNames(admin[1]), Account[admin[0]][pAdminHide] == 1 ? "(HIDDEN)" : ""));
+        SendClientMessage(playerid, COLOR_WHITE, sprintf("(ID %i) {%06x}%s {FFFFFF}- (%s{FFFFFF}) {bf0000}%s", admin[0], GetPlayerColor(admin[0]) >>> 8, GetName(admin[0]), AdminNames(admin[1]), Account[admin[0]][pAdminHide] == 1 ? "(HIDDEN)" : ""));
     }
     SendClientMessage(playerid, 0xBF0000FF, "______________________________________________");
 	if(!GetPlayerAdminLevel(playerid)) SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}Admin NOTICE: {FFFFFF}%s has just typed /admins.", GetName(playerid)));
