@@ -133,7 +133,7 @@ CMD<AD1>:forcelanguage(cmdid, playerid, params[])
  		SendPunishmentMessage(sprintf("An admin has forced language selection upon %s. Reason: English only in main chat!", GetName(pid)));
  	else
  		SendPunishmentMessage(sprintf("Admin %s has forced language selection upon %s. Reason: English only in main chat!", GetName(playerid), GetName(pid)));
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** **%s** has forced language selection upon `%s`", GetName(playerid), GetName(pid)));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** **%s** has forced language selection upon `%s`", GetName(playerid), GetName(pid)));
  	return true;
 }
 ALT:fl = CMD:forcelanguage;
@@ -320,7 +320,7 @@ CMD<AD2>:giveweapon(cmdid, playerid, params[])
 	GivePlayerWeapon(Player, WeaponID, gWeaponAmmo);
 	SendAdmcmdMessage(1, sprintf("Admin %s has given %s weapon: %s (Ammo:%d)", GetName(playerid), GetName(Player), WeaponNameList[WeaponID], gWeaponAmmo));
 	SendClientMessage(Player, COLOR_GRAY, sprintf("{bf0000}NOTICE: {FFFFFF}Admin %s has given %s weapon: %s (Ammo:%d)", GetName(playerid), GetName(Player), WeaponNameList[WeaponID], gWeaponAmmo));
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** Admin %s has given %s weapon: %s (Ammo:%d)", GetName(playerid), GetName(Player), WeaponNameList[WeaponID], gWeaponAmmo));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** Admin %s has given %s weapon: %s (Ammo:%d)", GetName(playerid), GetName(Player), WeaponNameList[WeaponID], gWeaponAmmo));
 	return 1;
 }
 CMD<AD1>:ah(cmdid, playerid, params[])
@@ -364,7 +364,7 @@ CMD<AD1>:a(cmdid, playerid, params[])
 	if(isnull(params)) return SendUsageMessage(playerid, "/a [text]");
 
 	SendAdminsMessage(1, COLOR_TURQUOISE, sprintf("{FFFF80}%s: %s", GetName(playerid), params));
-	DCC_SendChannelMessage(DCC_FindChannelById("796074251412570192"), sprintf("**%s**: `%s`", GetName(playerid), params));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**%s**: `%s`", GetName(playerid), params));
 	return true;
 }
 CMD<AD3>:staffreward(cmdid, playerid, params[])
@@ -401,7 +401,7 @@ CMD<AD1>:forcerules(cmdid, playerid, params[])
 		SendPunishmentMessage(sprintf("An admin has forced rules upon %s! Reason: %s", GetName(pID), reason));
 	else
 		SendPunishmentMessage(sprintf("Admin %s has forced rules upon %s! Reason: %s", GetName(playerid), GetName(pID), reason));
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** Admin %s has forced rules upon %s! Reason: %s", GetName(playerid), GetName(pID), reason));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** Admin %s has forced rules upon %s! Reason: %s", GetName(playerid), GetName(pID), reason));
 	SetTimerEx("ReadRules", 5000, false, "d", pID);
 
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/forcerules', '%e', %d)", GetName(playerid), GetName(pID), reason, gettime()));
@@ -465,7 +465,7 @@ CMD<AD1>:kick(cmdid, playerid, params[])
 		SendPunishmentMessage(sprintf("An admin has kicked %s. Reason: %s", GetName(pID), reason));
 	else
 		SendPunishmentMessage(sprintf("Admin %s has kicked %s. Reason: %s", GetName(playerid), GetName(pID), reason));
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** Admin %s has kicked %s. Reason: %s", GetName(playerid), GetName(pID), reason));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** Admin %s has kicked %s. Reason: %s", GetName(playerid), GetName(pID), reason));
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/kick', '%e', %d)", GetName(playerid), GetName(pID), reason, gettime()));
 	Account[pID][Kicks]++;
 	KickPlayer(pID);
@@ -487,7 +487,7 @@ CMD<AD1>:mute(cmdid, playerid, params[])
 	else {
 		SendPunishmentMessage(sprintf("Admin %s has muted %s for %i minutes. Reason: %s", GetName(playerid), GetName(pID), time, reason));
 	}
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** Admin %s has muted %s for %i minutes. Reason: %s", GetName(playerid), GetName(pID), time, reason));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** Admin %s has muted %s for %i minutes. Reason: %s", GetName(playerid), GetName(pID), time, reason));
 	SendAdmcmdMessage(1, sprintf("%s has muted %s for %i minutes! Reason: %s", GetName(playerid), GetName(pID), time, reason));
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/mute', '%e', '%d')", GetName(playerid), GetName(pID), reason, gettime()));
 	Account[playerid][AdminActions]++;
@@ -567,7 +567,7 @@ CMD<AD1>:ajail(cmdid, playerid, params[])
 
 	SendPunishmentMessage(sprintf("Admin %s has a-jailed %s for %d minutes! Reason: %s", GetName(playerid), GetName(target), time, reason));
 	SendAdmcmdMessage(1, sprintf("%s a-jailed %s! Reason: %s", GetName(playerid), GetName(target), reason));
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** %s a-jailed %s! Reason: %s", GetName(playerid), GetName(target), reason));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** %s a-jailed %s! Reason: %s", GetName(playerid), GetName(target), reason));
 
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp, ajailtime) VALUES('%e', '%e', '/ajail', '%e', '%d', '%i')", GetName(playerid), GetName(target), reason, gettime(), time));
 	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE Accounts SET ajail_minutes = %i WHERE SQLID = %i", time, Account[target][SQLID]));
@@ -586,7 +586,7 @@ CMD<AD1>:aunjail(cmdid, playerid, params[])
 
 	SendClientMessage(pID, -1, sprintf("{bf0000}NOTICE: {FFFFFF}You have been unjailed by %s.", GetName(playerid)));
 	SendAdmcmdMessage(1, sprintf("%s has unjailed %s!", GetName(playerid), GetName(pID)));
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** %s has unjailed %s!", GetName(playerid), GetName(pID)));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** %s has unjailed %s!", GetName(playerid), GetName(pID)));
 	Account[pID][AJailTime] = 0;
 	SendPlayerToLobby(pID);
 
@@ -604,7 +604,7 @@ CMD<AD1>:unmute(cmdid, playerid, params[])
 
 	SendAdmcmdMessage(1, sprintf("%s has unmuted %s!", GetName(playerid), GetName(pID)));
 	SendClientMessage(pID, COLOR_GRAY, sprintf("{bf0000}NOTICE: {FFFFFF}Admin %s has unmuted you.", GetName(playerid)));
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** Admin %s has unmuted %s!", GetName(playerid), GetName(pID)));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** Admin %s has unmuted %s!", GetName(playerid), GetName(pID)));
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/unmute', 'N/A', '%d')", GetName(playerid), GetName(pID), gettime()));
 	return 1;
 }
@@ -793,7 +793,7 @@ CMD<AD1>:ban(cmdid, playerid, params[])
 		SendPunishmentMessage(sprintf("An admin has banned %s. Reason: %s", GetName(pID), reason));
 	else
 		SendPunishmentMessage(sprintf("Admin %s has banned %s. Reason: %s", GetName(playerid), GetName(pID), reason));
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** Admin %s has banned %s. Reason: %s", GetName(playerid), GetName(pID), reason));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** Admin %s has banned %s. Reason: %s", GetName(playerid), GetName(pID), reason));
 	IssueBan(pID, GetName(playerid), reason);
 	KickPlayer(pID);
 	Account[playerid][AdminActions]++;
@@ -806,7 +806,7 @@ CMD<AD4>:banip(cmdid, playerid, params[])
 		return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /banip [ip (wildcards supported)] [minutes]");
 
 	SendAdmcmdMessage(1, sprintf("%s has blocked IP '%s' for '%i' minutes", GetName(playerid), ip, minutes));
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** Admin %s has blocked IP '%s' for '%i' minutes", GetName(playerid), ip, minutes));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** Admin %s has blocked IP '%s' for '%i' minutes", GetName(playerid), ip, minutes));
 
 	BlockIpAddress(ip, 1000 * minutes);
 	Account[playerid][AdminActions]++;
@@ -820,7 +820,7 @@ CMD<AD4>:unbanip(cmdid, playerid, params[])
 		return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /unbanip [ip (wildcards supported)]");
 
 	SendAdmcmdMessage(1, sprintf("%s un-blocked IP '%s'", GetName(playerid), ip));
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** Admin %s un-blocked IP '%s'", GetName(playerid), ip));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** Admin %s un-blocked IP '%s'", GetName(playerid), ip));
 
 	UnBlockIpAddress(ip);
 	Account[playerid][AdminActions]++;
@@ -845,7 +845,7 @@ CMD<AD1>:remoteban(cmdid, playerid, params[])
 	Account[playerid][AdminActions]++;
 	SendClientMessage(playerid, -1, sprintf("{1E90FF}(ADMIN NOTICE):{dadada} You have banned the user %s(userid: %d), reason: %s", account, playersqlid, reason));
 	SendAdmcmdMessage(1, sprintf("Admin %s offline-banned the user %s(userid: %d), reason: %s", account, playersqlid, reason));
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** Admin %s offline-banned the user %s(userid: %d), reason: %s", account, playersqlid, reason));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** Admin %s offline-banned the user %s(userid: %d), reason: %s", account, playersqlid, reason));
 	return 1;
 }
 ALT:offlineban = CMD:remoteban;
@@ -858,7 +858,7 @@ CMD<AD1>:offlinejail(cmdid, playerid, params[])
 	Account[playerid][AdminActions]++;
 	SendPunishmentMessage(sprintf("PUNISHMENT: Admin %s has offline jailed %s for %i minutes! (Reason: %s)", GetName(playerid), pID, time, reason));
 	SendAdmcmdMessage(1, sprintf("%s offline a-jailed %s! Reason: %s", GetName(playerid), pID, reason));
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** Admin %s has offline jailed %s for %i minutes! (Reason: %s)", GetName(playerid), pID, time, reason));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** Admin %s has offline jailed %s for %i minutes! (Reason: %s)", GetName(playerid), pID, time, reason));
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/ajail', '%e', '%d')", GetName(playerid), pID, reason, gettime()));
 	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE `Accounts` SET ajail_minutes = %i WHERE `Username` = '%e'", time, pID));
 	return 1;
@@ -1032,7 +1032,7 @@ CMD<AD4>:sban(cmdid, playerid, params[])
 
 
 	SendAdmcmdMessage(1, sprintf("Admin %s has banned %s. Reason: %s.", GetName(playerid), GetName(pID), reason));
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** Admin %s has banned %s. Reason: %s.", GetName(playerid), GetName(pID), reason));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** Admin %s has banned %s. Reason: %s.", GetName(playerid), GetName(pID), reason));
 	IssueBan(pID, GetName(playerid), reason);
 	KickPlayer(pID);
 	Account[playerid][AdminActions]++;
@@ -1112,7 +1112,7 @@ CMD<AD4>:sajail(cmdid, playerid, params[])
 	SetPlayerPosEx(target, 2518.7590, 602.5683, 45.2066, 0, 0);
 
 	SendAdmcmdMessage(1, sprintf("%s a-jailed %s! Reason: %s", GetName(playerid), GetName(target), reason));
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** Admin %s a-jailed %s! Reason: %s", GetName(playerid), GetName(target), reason));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** Admin %s a-jailed %s! Reason: %s", GetName(playerid), GetName(target), reason));
 
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp, ajailtime) VALUES('%e', '%e', '/ajail', '%e', '%d', '%i')", GetName(playerid), GetName(target), reason, gettime(), time));
 	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE Accounts SET ajail_minutes = %i WHERE SQLID = %i", time, Account[target][SQLID]));
@@ -1708,7 +1708,7 @@ CMD<AD4>:giveallweapon(cmdid, playerid, params[])
 	new string[128];
 	format(string, sizeof(string), "Administrator %s gave all players weapon %s with %d ammo.", GetName(playerid), weaponname, ammo);
 	SendClientMessageToAll(COLOR_RED, string);
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** Admin %s gave all players weapon %s with %d ammo.", GetName(playerid), weaponname, ammo));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** Admin %s gave all players weapon %s with %d ammo.", GetName(playerid), weaponname, ammo));
 
 	return 1;
 }
@@ -1766,7 +1766,7 @@ CMD<AD2>:unfreezeall(cmdid, playerid, params[])
 	}
 	new string[128];
 	format(string, sizeof(string), "Administrator %s has unfreezed all players.", GetName(playerid));
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** %s has unfreezed all players.", GetName(playerid)));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** %s has unfreezed all players.", GetName(playerid)));
 	SendClientMessageToAll(COLOR_RED, string);
 	return 1;
 }
@@ -1780,7 +1780,7 @@ CMD<AD2>:freezeall(cmdid, playerid, params[])
 	}
 	new string[128];
 	format(string, sizeof(string), "Administrator %s has freezed all players.", GetName(playerid));
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** %s has froze all players.", GetName(playerid)));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** %s has froze all players.", GetName(playerid)));
 	SendClientMessageToAll(COLOR_RED, string);
 	return 1;
 }
@@ -1878,7 +1878,7 @@ CMD<AD3>:healall(cmdid, playerid, params[])
 
     new buf[150];
 	format(buf, sizeof(buf), "Admin %s(%i) has healed all players.", GetName(playerid), playerid);
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** %s has healed all players.", GetName(playerid)));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** %s has healed all players.", GetName(playerid)));
     SendClientMessageToAll(COLOR_RED, buf);
 	return 1;
 }
@@ -1892,7 +1892,7 @@ CMD<AD3>:armourall(cmdid, playerid, params[])
 
 	new buf[150];
 	format(buf, sizeof(buf), "Admin %s(%i) has armoured all players.", GetName(playerid), playerid);
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** %s has armoured all players.", GetName(playerid)));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** %s has armoured all players.", GetName(playerid)));
     SendClientMessageToAll(COLOR_RED, buf);
 	return 1;
 }
@@ -1923,7 +1923,7 @@ CMD<AD3>:agivemoney(cmdid, playerid, params[])
 	GivePlayerMoney(targetid, Account[targetid][Cash]);
 	new buf[150];
 	format(buf, sizeof(buf), "Admininistrator %s gave you %d$ cash.", GetName(playerid), amount);
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** %s has spawned %s %d$ cash.", GetName(playerid), GetName(targetid), amount));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** %s has spawned %s %d$ cash.", GetName(playerid), GetName(targetid), amount));
 	SendClientMessage(targetid, COLOR_RED, buf);
 	format(buf, sizeof(buf), "You gave %s %d$ cash.", GetName(targetid), amount);
 	SendClientMessage(playerid, COLOR_RED, buf);
@@ -1991,7 +1991,7 @@ CMD<AD4>:setmoney(cmdid, playerid, params[])
 	format(buf, sizeof(buf), "Admininistrator %s set your cash to %d$.", GetName(playerid), amount);
 	SendClientMessage(targetid, COLOR_RED, buf);
 	format(buf, sizeof(buf), "You have set %s's cash to %d$.", GetName(targetid), amount);
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**[ADMCMD]** %s has set %s's cash to %d$.", GetName(playerid), GetName(targetid), amount));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** %s has set %s's cash to %d$.", GetName(playerid), GetName(targetid), amount));
 	SendClientMessage(playerid, COLOR_RED, buf);
 	return 1;
 }
