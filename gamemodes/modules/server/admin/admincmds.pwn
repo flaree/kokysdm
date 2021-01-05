@@ -364,7 +364,7 @@ CMD<AD1>:a(cmdid, playerid, params[])
 	if(isnull(params)) return SendUsageMessage(playerid, "/a [text]");
 
 	SendAdminsMessage(1, COLOR_TURQUOISE, sprintf("{FFFF80}%s: %s", GetName(playerid), params));
-	DCC_SendChannelMessage(DCC_FindChannelById("795532135812300811"), sprintf("**%s**: `%s`", GetName(playerid), params));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074251412570192"), sprintf("**%s**: `%s`", GetName(playerid), params));
 	return true;
 }
 CMD<AD3>:staffreward(cmdid, playerid, params[])
