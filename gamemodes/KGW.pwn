@@ -568,19 +568,35 @@ new WeaponNameList[][] =
 //==========================================================================
 //==========================================================================
 
-stock AdminNames(const level)
+stock AdminNames(const level, color = true)
 {
 	new adminName[32];
     if (level <= 0) {
         format(adminName, sizeof adminName, "None");
     } else if (level >= 1 && level <= 4) {
-        format(adminName, sizeof adminName, "Level {bf0000}%i{FFFFFF} Admin", level);
+        if(!color) {
+            format(adminName, sizeof adminName, "Level %i Admin", level);
+        } else {
+            format(adminName, sizeof adminName, "Level {bf0000}%i{FFFFFF} Admin", level);
+        }
     } else if (level == 5) {
-        format(adminName, sizeof adminName, "{1d7cf2}Lead Admin");
+        if(color) {
+            format(adminName, sizeof adminName, "{1d7cf2}Lead Admin");
+        } else {
+            format(adminName, sizeof adminName, "Lead Admin");
+        }
     } else if (level == 6) {
-        format(adminName, sizeof adminName, "{662884}Developer");
+        if(color) {
+            format(adminName, sizeof adminName, "{662884}Developer");
+        } else {
+            format(adminName, sizeof adminName, "Developer");
+        }
     } else {
-        format(adminName, sizeof adminName, "{bf0000}Management");
+        if(color) {
+            format(adminName, sizeof adminName, "{bf0000}Management");
+        } else {
+            format(adminName, sizeof adminName, "Management");
+        }
     }
 	return adminName;
 }
@@ -3202,27 +3218,23 @@ public OnPlayerText(playerid, const text[])
 
 	if(text[0] == ADMCHATKEY && GetPlayerAdminLevel(playerid) >= 1)
 	{
-		new TextOutput[128], Text2[128];
+		new TextOutput[128];
 		format(TextOutput, sizeof(TextOutput), text);
-        format(Text2, sizeof(Text2), text);
 		TextOutput[0] = ' '; // Replacing the . with space
-        Text2[0] = ' ';
-        strtrim(Text2);
-        DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**%s**: `%s`", GetName(playerid), Text2));
-		format(TextOutput, sizeof(TextOutput), "{FFFF80}%s:%s", GetName(playerid), TextOutput);
+        strtrim(TextOutput);
+        DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**%s**: `%s`", GetName(playerid), TextOutput));
+		format(TextOutput, sizeof(TextOutput), "{FFFF80}%s: %s", GetName(playerid), TextOutput);
 		SendAdminsMessage(1, 0x09F7DFC8, TextOutput);
 		return 0; // Don't send the message publicly.
 	}
 
 	else if(text[0] == LEADCHATKEY && GetPlayerAdminLevel(playerid) >= 3)
 	{
-	    new TextOutput[128], Text2[128];
+	    new TextOutput[128];
 		format(TextOutput, sizeof(TextOutput), text);
-        format(Text2, sizeof(Text2), text);
 		TextOutput[0] = ' '; // Replacing the . with space
-        Text2[0] = ' ';
-        strtrim(Text2);
-        DCC_SendChannelMessage(DCC_FindChannelById("796073976463491082"), sprintf("**%s**: `%s`", GetName(playerid), Text2));
+        strtrim(TextOutput);
+        DCC_SendChannelMessage(DCC_FindChannelById("796073976463491082"), sprintf("**%s**: `%s`", GetName(playerid), TextOutput));
 		format(TextOutput, sizeof(TextOutput), "%s: %s", GetName(playerid), TextOutput);
 		SendLeadsMessage(0x3FE629FF, TextOutput);
 		return 0; // Don't send the message publicly.
