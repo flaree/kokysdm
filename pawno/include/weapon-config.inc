@@ -5005,7 +5005,7 @@ static DamageFeedUpdate(playerid, bool:modified = false)
 			s_InternalPlayerTextDraw[playerid][td] = true;
 
 			PlayerTextDrawLetterSize(playerid, td, 0.2, 0.9);
-			PlayerTextDrawColor(playerid, td, 0x752c28FF);
+			PlayerTextDrawColor(playerid, td, 0xB41F0FFF);
 			PlayerTextDrawFont(playerid, td, 1);
 			PlayerTextDrawSetShadow(playerid, td, 0);
 			PlayerTextDrawAlignment(playerid, td, 2);
