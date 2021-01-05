@@ -2567,13 +2567,6 @@ public OnPlayerEnterCheckpoint(playerid)
 }
 public OnPlayerExitVehicle(playerid, vehicleid)
 {
-	if(ActivityState[playerid] == ACTIVITY_TDM)
-	{
-		if(GetVehicleSpeed(vehicleid) > 50)
-		{
-			ClearAnimations(playerid, 0);
-		}
-	}
 	return 1;
 }
 public OnVehicleDamageStatusUpdate(vehicleid, playerid)
