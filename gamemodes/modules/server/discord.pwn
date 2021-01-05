@@ -10,6 +10,13 @@
 #define IG_CHANNEL "796074251412570192"
 #define BOT_NAME "KDM"
 
+#define MANAGEMENT_ROLE "450825283726082078"
+#define DEV_ROLE "450825560013275146"
+#define LEADS_ROLE "450824498208309248"
+#define SENIOR_ROLE "742159123235209237"
+#define ADMIN_ROLE "450825940553957389"
+#define DONATOR_ROLE "450835019418697734"
+
 public DCC_OnMessageCreate(DCC_Message:message)
 {
 	new DCC_Channel:channel, DCC_User: author;
@@ -44,11 +51,11 @@ public DCC_OnMessageCreate(DCC_Message:message)
 			DCC_Role:managementRole,
 			DCC_Role:seniorAdminRole,
 			bool: hasRole = false;
-		leadAdminRole = DCC_FindRoleByName(guildId, "Lead Admin");
-		seniorAdminRole = DCC_FindRoleByName(guildId, "Senior Admin");
-		devRole = DCC_FindRoleByName(guildId, "Server Developer");
-		adminRole = DCC_FindRoleByName(guildId, "Admin");
-		managementRole = DCC_FindRoleByName(guildId, "Management");
+		leadAdminRole = DCC_FindRoleById(LEADS_ROLE);
+		seniorAdminRole = DCC_FindRoleById(SENIOR_ROLE);
+		devRole = DCC_FindRoleById(DEV_ROLE);
+		adminRole = DCC_FindRoleById(ADMIN_ROLE);
+		managementRole = DCC_FindRoleById(MANAGEMENT_ROLE);
 		new color[16] = "FFFFFF";
 		if(adminRole) {
 			DCC_HasGuildMemberRole(guildId, author, adminRole, hasRole);
@@ -92,16 +99,19 @@ stock IsUserDiscordAdmin(DCC_User: user)
 		DCC_Role:managementRole,
 		DCC_Role:seniorAdminRole,
 		bool: hasRole = false;
-	leadAdminRole = DCC_FindRoleByName(guildId, "Lead Admin");
-	devRole = DCC_FindRoleByName(guildId, "Server Developer");
-	seniorAdminRole = DCC_FindRoleByName(guildId, "Senior Admin");
-	adminRole = DCC_FindRoleByName(guildId, "Admin");
-	managementRole = DCC_FindRoleByName(guildId, "Management");
+	leadAdminRole = DCC_FindRoleById(LEADS_ROLE);
+	seniorAdminRole = DCC_FindRoleById(SENIOR_ROLE);
+	devRole = DCC_FindRoleById(DEV_ROLE);
+	adminRole = DCC_FindRoleById(ADMIN_ROLE);
+	managementRole = DCC_FindRoleById(MANAGEMENT_ROLE);
 
 	if(leadAdminRole) {
 		DCC_HasGuildMemberRole(guildId, user, leadAdminRole, hasRole);
 
-		if(hasRole) return 1;
+		if(hasRole) {
+			print("lead");
+			return 1;
+		}
 	}
 	if(seniorAdminRole) {
 		DCC_HasGuildMemberRole(guildId, user, seniorAdminRole, hasRole);
@@ -495,9 +505,9 @@ stock IsUserLeadAdmin(DCC_User: user)
 		DCC_Role:managementRole,
 		DCC_Role:leadAdminRole,
 		bool: hasRole = false;
-	leadAdminRole = DCC_FindRoleByName(guildId, "Lead Admin");
-	devRole = DCC_FindRoleByName(guildId, "Server Developer");
-	managementRole = DCC_FindRoleByName(guildId, "Management");
+	leadAdminRole = DCC_FindRoleById("Lead Admin");
+	devRole = DCC_FindRoleById("Server Developer");
+	managementRole = DCC_FindRoleById("Management");
 
 	if(leadAdminRole) {
 		DCC_HasGuildMemberRole(guildId, user, leadAdminRole, hasRole);
