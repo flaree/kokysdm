@@ -12,7 +12,7 @@ public OnPlayerFinishedDownloading(playerid, virtualworld)
 		SendClientMessage(playerid, 0xbf0000FF, sprintf("%s [%s]", Server[Name], Server[Version]));
 		SendClientMessage(playerid, COLOR_WHITE, sprintf("Welcome to the server, %s.", tmpName));
 
-		InfoBoxForPlayer(playerid, "== ~r~[Koky's Deathmatch]~w~==~n~Welcome to Koky's Deathmatch!");
+		InfoBoxForPlayer(playerid, "~r~Koky's Deathmatch~w~~n~Welcome to Koky's Deathmatch!");
 
 		Account[playerid][LoggedIn] = 0;
 		LoginAttempts[playerid] = 0;
