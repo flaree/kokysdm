@@ -524,7 +524,7 @@ DCMD:activitycheck(user, channel, params[])
 	if(!IsUserLeadAdmin(user)) return 0;
 	new Username[MAX_PLAYER_NAME + 1], days;
 	if(sscanf(params, "s[24]d", Username, days)) return DCC_SendChannelMessage(channel, "**USAGE**: !activitycheck [AdminName] [Time (in days)]");
-	new admin[64];
+	new admin[33];
 	DCC_GetUserName(user, admin, sizeof(admin));
 	print(sprintf("%s", Username));
 	if(days <= 0) return DCC_SendChannelMessage(channel,"**ERROR**: Days has to be atleast 1.");
