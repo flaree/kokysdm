@@ -4977,7 +4977,7 @@ static DamageFeedUpdate(playerid, bool:modified = false)
 	}
 
 	if (s_DamageFeedGiven[playerid] == PlayerText:INVALID_TEXT_DRAW) {
-		new PlayerText:td = CreatePlayerTextDraw(playerid, 118.052719, 358.000091, "_");
+		new PlayerText:td = CreatePlayerTextDraw(playerid, 200, 358, "_");
 
 		if (td == PlayerText:INVALID_TEXT_DRAW) {
 			printf("(wc) WARN: Unable to create damage feed textdraw");
@@ -4985,7 +4985,7 @@ static DamageFeedUpdate(playerid, bool:modified = false)
 			s_InternalPlayerTextDraw[playerid][td] = true;
 
 			PlayerTextDrawLetterSize(playerid, td, 0.2, 0.9);
-			PlayerTextDrawColor(playerid, td, 0x30FF50FF);
+			PlayerTextDrawColor(playerid, td, 0x00b803FF);
 			PlayerTextDrawFont(playerid, td, 1);
 			PlayerTextDrawSetShadow(playerid, td, 0);
 			PlayerTextDrawAlignment(playerid, td, 2);
@@ -4997,7 +4997,7 @@ static DamageFeedUpdate(playerid, bool:modified = false)
 	}
 
 	if (s_DamageFeedTaken[playerid] == PlayerText:INVALID_TEXT_DRAW) {
-		new PlayerText:td = CreatePlayerTextDraw(playerid, 118.521240, 370.833343, "_");
+		new PlayerText:td = CreatePlayerTextDraw(playerid, 204, 370, "_");
 
 		if (td == PlayerText:INVALID_TEXT_DRAW) {
 			printf("(wc) WARN: Unable to create damage feed textdraw");
@@ -5005,7 +5005,7 @@ static DamageFeedUpdate(playerid, bool:modified = false)
 			s_InternalPlayerTextDraw[playerid][td] = true;
 
 			PlayerTextDrawLetterSize(playerid, td, 0.2, 0.9);
-			PlayerTextDrawColor(playerid, td, 0x33CCFFFF);
+			PlayerTextDrawColor(playerid, td, 0x752c28FF);
 			PlayerTextDrawFont(playerid, td, 1);
 			PlayerTextDrawSetShadow(playerid, td, 0);
 			PlayerTextDrawAlignment(playerid, td, 2);
@@ -5160,7 +5160,7 @@ static DamageFeedUpdateText(playerid)
 			format(
 				buf,
 				sizeof(buf),
-				"%s-%.2f damage from %s(%i)~n~~n~",
+				"%s-%.2f damage from %s(%i)~n~",
 				buf,
 				s_DamageFeedHitsTaken[playerid][i][e_Amount] + 0.009,
 				s_DamageFeedHitsTaken[playerid][i][e_Name],
