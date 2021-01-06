@@ -2933,7 +2933,7 @@ SendLeadsMessage(color, str[])
     format(astr, sizeof(astr), "(LeadAdmChat) %s", str);
 	foreach(new i: Player)
 	{
-		if(Account[i][Admin] >= 4)
+		if(Account[i][Admin] > 4)
 		{
 			SendClientMessage(i, color, astr);
 		}
@@ -2946,7 +2946,7 @@ SendLeadsDiscordMessage(color, str[])
     format(astr, sizeof(astr), "(Discord LeadAdmChat) %s", str);
 	foreach(new i: Player)
 	{
-		if(Account[i][Admin] >= 4)
+		if(Account[i][Admin] > 4)
 		{
 			SendClientMessage(i, color, astr);
 		}
