@@ -844,8 +844,8 @@ CMD<AD1>:remoteban(cmdid, playerid, params[])
 
 	Account[playerid][AdminActions]++;
 	SendClientMessage(playerid, -1, sprintf("{1E90FF}(ADMIN NOTICE):{dadada} You have banned the user %s(userid: %d), reason: %s", account, playersqlid, reason));
-	SendAdmcmdMessage(1, sprintf("Admin %s offline-banned the user %s(userid: %d), reason: %s", account, playersqlid, reason));
-	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** Admin %s offline-banned the user %s(userid: %d), reason: %s", account, playersqlid, reason));
+	SendAdmcmdMessage(1, sprintf("Admin %s offline-banned the user %s(userid: %d), reason: %s", GetName(playerid),account, playersqlid, reason));
+	DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**[ADMCMD]** Admin %s offline-banned the user %s(userid: %d), reason: %s", GetName(playerid), account, playersqlid, reason));
 	return 1;
 }
 ALT:offlineban = CMD:remoteban;
