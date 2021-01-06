@@ -203,7 +203,16 @@ SubmitReport(playerid, target, const reason[])
 //dialogs
 Dialog:ReportList(playerid, response, listitem, inputtext[])
 {
-	if(!response) return true;
+	if(!response) {
+		new tmpString[16];
+		new count = 0;
+		for_pool(i: Reports) {
+			count ++;
+			format(tmpString, sizeof(tmpString), "ReportID_%i",  count);
+			DeletePVar(playerid, tmpString);
+		}
+		return true;
+	}
 
 	new tmpString[16];
 	format(tmpString, sizeof(tmpString), "ReportID_%i", listitem);
