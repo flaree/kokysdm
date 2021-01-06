@@ -3222,7 +3222,7 @@ public OnPlayerText(playerid, const text[])
 		format(TextOutput, sizeof(TextOutput), text);
 		TextOutput[0] = ' '; // Replacing the . with space
         strtrim(TextOutput);
-        DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**%s**: `%s`", GetName(playerid), TextOutput));
+        DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**%s**(%i): `%s`", GetName(playerid), playerid,  TextOutput));
 		format(TextOutput, sizeof(TextOutput), "{FFFF80}%s: %s", GetName(playerid), TextOutput);
 		SendAdminsMessage(1, 0x09F7DFC8, TextOutput);
 		return 0; // Don't send the message publicly.
