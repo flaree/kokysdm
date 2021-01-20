@@ -16,6 +16,7 @@
 #define SENIOR_ROLE "742159123235209237"
 #define ADMIN_ROLE "450825940553957389"
 #define DONATOR_ROLE "450835019418697734"
+#define OVERWATCH_ROLE "669987200783613974"
 
 public DCC_OnMessageCreate(DCC_Message:message)
 {
@@ -50,13 +51,15 @@ public DCC_OnMessageCreate(DCC_Message:message)
 			DCC_Role:devRole,
 			DCC_Role:managementRole,
 			DCC_Role:seniorAdminRole,
+			DCC_Role:donatorRole,
 			bool: hasRole = false;
+		new color[16] = "FFFFFF";
 		leadAdminRole = DCC_FindRoleById(LEADS_ROLE);
 		seniorAdminRole = DCC_FindRoleById(SENIOR_ROLE);
 		devRole = DCC_FindRoleById(DEV_ROLE);
 		adminRole = DCC_FindRoleById(ADMIN_ROLE);
 		managementRole = DCC_FindRoleById(MANAGEMENT_ROLE);
-		new color[16] = "FFFFFF";
+		donatorRole = DCC_FindRoleById(DONATOR_ROLE);
 		if(adminRole) {
 			DCC_HasGuildMemberRole(guildId, author, adminRole, hasRole);
 			if(hasRole) color = "00af33";
@@ -80,6 +83,11 @@ public DCC_OnMessageCreate(DCC_Message:message)
 
 			if(hasRole) color = "e7210d";
 		}
+		if(donatorRole) {
+			DCC_HasGuildMemberRole(guildId, author, donatorRole, hasRole);
+
+			if(hasRole) color = "3498db";
+		}
 		foreach(new i: Player)
 		{
 			if(!Account[i][pLanguage]) SendClientMessage(i, -1, sprintf("~{FF0000} [DISCORD] {%s}%s:{FFFFFF} %s", color, username, content));
@@ -94,15 +102,13 @@ stock IsUserDiscordAdmin(DCC_User: user)
 {
 	new DCC_Guild:guildId = DCC_FindGuildById(DISCORD_GUILD),
 		DCC_Role:leadAdminRole,
-		DCC_Role:adminRole,
 		DCC_Role:devRole,
 		DCC_Role:managementRole,
-		DCC_Role:seniorAdminRole,
+		DCC_Role:overwatchRole,
 		bool: hasRole = false;
 	leadAdminRole = DCC_FindRoleById(LEADS_ROLE);
-	seniorAdminRole = DCC_FindRoleById(SENIOR_ROLE);
+	overwatchRole = DCC_FindRoleById(OVERWATCH_ROLE);
 	devRole = DCC_FindRoleById(DEV_ROLE);
-	adminRole = DCC_FindRoleById(ADMIN_ROLE);
 	managementRole = DCC_FindRoleById(MANAGEMENT_ROLE);
 
 	if(leadAdminRole) {
@@ -110,16 +116,11 @@ stock IsUserDiscordAdmin(DCC_User: user)
 
 		if(hasRole) return 1;
 	} 
-	if(seniorAdminRole) {
-		DCC_HasGuildMemberRole(guildId, user, seniorAdminRole, hasRole);
+	if(overwatchRole) {
+		DCC_HasGuildMemberRole(guildId, user, overwatchRole, hasRole);
 
 		if(hasRole) return 1;
 	} 
-	if(adminRole) {
-		DCC_HasGuildMemberRole(guildId, user, adminRole, hasRole);
-
-		if(hasRole) return 1;
-	}
 
 	if(devRole) {
 		DCC_HasGuildMemberRole(guildId, user, devRole, hasRole);
@@ -138,8 +139,8 @@ stock IsUserDiscordAdmin(DCC_User: user)
 DCMD:kick(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
-
-	extract params -> new player:target, string:reason[128]; else return DCC_SendChannelMessage(channel, "**USAGE:** !kick [player name/playerid] [reason]");
+	new target, reason[128];
+	if(sscanf(params, "uS(Not specified)[128]", target, reason)) return DCC_SendChannelMessage(channel, "**USAGE:** !kick [player name/playerid] [reason]");
 	if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not connected.");
 	if(Account[target][Admin] >= 1) return DCC_SendChannelMessage(channel, "**ERROR:** You cannot ban other admins.");
 	new DCC_Guild:guildId = DCC_FindGuildById(DISCORD_GUILD);
@@ -161,8 +162,8 @@ DCMD:kick(user, channel, params[])
 DCMD:ban(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
-
-	extract params -> new player:target, string:reason[128]; else return DCC_SendChannelMessage(channel, "**USAGE:** !ban [player name/playerid] [reason]");
+	new target, reason[128];
+	if(sscanf(params, "uS(Not specified)[128]", target, reason)) return DCC_SendChannelMessage(channel, "**USAGE:** !ban [player name/playerid] [reason]");
 	if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not connected.");
 	if(Account[target][Admin] >= 1) return DCC_SendChannelMessage(channel, "**ERROR:** You cannot ban other admins.");
 
@@ -184,6 +185,7 @@ DCMD:ban(user, channel, params[])
 DCMD:unban(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
+	if(isnull(params)) return DCC_SendChannelMessage(channel, "**USAGE:** !unban [player name]");
 
 	yield 1;
 	await mysql_aquery_s(SQL_CONNECTION, str_format("DELETE FROM `Bans` WHERE PlayerName = '%e'", params));
@@ -263,7 +265,8 @@ DCMD:fpscheck(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
-	extract params -> new player:target; else return DCC_SendChannelMessage(channel, "**USAGE:** !fpscheck [player name/playerid]");
+	new target;
+	if(sscanf(params, "u", target)) return DCC_SendChannelMessage(channel, "**USAGE:** !fpscheck [player name/playerid]");
 	if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not connected!");
 
 	DCC_SendChannelMessage(channel, sprintf("**FPS CHECK:** User **%s** has **%d** FRAMES PER SECOND.", GetName(target), pFPS[target]));
@@ -274,7 +277,8 @@ DCMD:aimprofile(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
-	extract params -> new player:target, string:weapon[32] = ""; else return DCC_SendChannelMessage(channel, "**USAGE:** !aimprofile [playerid or name] [optional: weapon]");
+	new target, weapon[32];
+	if(sscanf(params, "uS[32]", target, weapon)) return DCC_SendChannelMessage(channel, "**USAGE:** !aimprofile [player name/playerid] [reason]");
 	if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not connected!");
 
 	new allshots, hitshots, max_cont_shots, out_of_range_warns, random_aim_warns, proaim_tele_warns, wepname[32];
@@ -299,7 +303,8 @@ DCMD:flinchcheck(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
-	extract params -> new player:target; else return DCC_SendChannelMessage(channel, "**USAGE:** !flinchcheck [player name/playerid]");
+	new target;
+	if(sscanf(params, "u", target)) return DCC_SendChannelMessage(channel, "**USAGE:** !flinchcheck [player name/playerid]");
 	if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not connected!");
 	if(TimesHit[target] == 0) return DCC_SendChannelMessage(channel, "**ERROR:** This player has not been shot yet.");
 
@@ -311,7 +316,8 @@ DCMD:ajail(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
-	extract params -> new player:target, time, string:reason[64]; else return DCC_SendChannelMessage(channel, "**USAGE:** !ajail [player name/playerid] [minutes] [reason]");
+	new target, reason[64], time;
+	if(sscanf(params, "uis[64]", target, time, reason)) return DCC_SendChannelMessage(channel, "USAGE: !mute [id] [minutes] [reason]");
 	if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not connected!");
 
 	new DCC_Guild:guildId = DCC_FindGuildById(DISCORD_GUILD);
@@ -403,7 +409,8 @@ DCMD:unjail(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
-	extract params -> new player:target; else return DCC_SendChannelMessage(channel, "**USAGE:** !unjail [player name/playerid]");
+	new target;
+	if(sscanf(params, "u", target)) return DCC_SendChannelMessage(channel, "**USAGE:** !unjail [player name/playerid]");
 	if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not connected!");
 	if(!Account[target][AJailTime]) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not in ajail.");
 
@@ -429,7 +436,8 @@ DCMD:mute(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
-	extract params -> new player:target, minutes, string:reason[64]; else return DCC_SendChannelMessage(channel, "**USAGE:** !mute [player name/playerid] [minutes] [reason]");
+	new target, reason[64], minutes;
+	if(sscanf(params, "uis[64]", target, minutes, reason)) return DCC_SendChannelMessage(channel, "USAGE: !mute [id] [minutes] [reason]");
 	if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not connected!");
 
 	new DCC_Guild:guildId = DCC_FindGuildById(DISCORD_GUILD);
@@ -454,7 +462,8 @@ DCMD:unmute(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
-	extract params -> new player:target; else return DCC_SendChannelMessage(channel, "**USAGE:** !unmute [player name/playerid]");
+	new target;
+	if(sscanf(params, "u", target)) return DCC_SendChannelMessage(channel, "**USAGE:** !unmute [player name/playerid]");
 	if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not connected!");
 
 	new DCC_Guild:guildId = DCC_FindGuildById(DISCORD_GUILD);
@@ -479,7 +488,8 @@ DCMD:ip(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
-	extract params -> new player:target; else return DCC_SendChannelMessage(channel, "**USAGE:** !ip [player name/playerid]");
+	new target;
+	if(sscanf(params, "u", target)) return DCC_SendChannelMessage(channel, "**USAGE:** !ip [player name/playerid]");
 	if(!IsPlayerConnected(target)) return DCC_SendChannelMessage(channel, "**ERROR:** This player is not connected!");
 
 	new countryname[40], countryregion[40], playerisp[40], ipaddress[18];

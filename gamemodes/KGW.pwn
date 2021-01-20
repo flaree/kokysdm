@@ -2472,6 +2472,12 @@ SendSpree(playerid)
 		GivePlayerKillEx(playerid, 25);
 		GameTextForPlayer(playerid, "~R~NUKE SPREE!", 1000, 6);
 	}
+    if(Account[playerid][KillStreak] > 25 && Account[playerid][KillStreak] % 5 == 0)
+	{
+		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{fdff00}KILLSTREAK:{FFFFFF} %s is on a {fdff00}%d {FFFFFF}killing spree!", GetName(playerid), Account[playerid][KillStreak]));
+		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +25 kills for your spree!");
+		SetPlayerArmour(playerid, 100);
+	}
 	else
 	{
 		if(Account[playerid][KillStreak]  < 3)
