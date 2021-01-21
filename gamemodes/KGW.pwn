@@ -3228,7 +3228,7 @@ public OnPlayerText(playerid, const text[])
 		format(TextOutput, sizeof(TextOutput), text);
 		TextOutput[0] = ' '; // Replacing the . with space
         strtrim(TextOutput);
-        DCC_SendChannelMessage(DCC_FindChannelById("796074104577982474"), sprintf("**%s**(%i): `%s`", GetName(playerid), playerid,  TextOutput));
+        DCC_SendChannelMessage(DCC_FindChannelById("796563115343872042"), sprintf("**%s**(%i): `%s`", GetName(playerid), playerid,  TextOutput));
 		format(TextOutput, sizeof(TextOutput), "{FFFF80}%s: %s", GetName(playerid), TextOutput);
 		SendAdminsMessage(1, 0x09F7DFC8, TextOutput);
 		return 0; // Don't send the message publicly.
@@ -3240,7 +3240,7 @@ public OnPlayerText(playerid, const text[])
 		format(TextOutput, sizeof(TextOutput), text);
 		TextOutput[0] = ' '; // Replacing the . with space
         strtrim(TextOutput);
-        DCC_SendChannelMessage(DCC_FindChannelById("796073976463491082"), sprintf("**%s**: `%s`", GetName(playerid), TextOutput));
+        DCC_SendChannelMessage(DCC_FindChannelById("796563115343872041"), sprintf("**%s**: `%s`", GetName(playerid), TextOutput));
 		format(TextOutput, sizeof(TextOutput), "%s: %s", GetName(playerid), TextOutput);
 		SendLeadsMessage(0x3FE629FF, TextOutput);
 		return 0; // Don't send the message publicly.
@@ -3336,7 +3336,7 @@ public OnPlayerText(playerid, const text[])
 	{
 		format(str, sizeof( str), "~{FFFFFF} {%06x}%s(%i):{FFFFFF} %s", GetPlayerColor(playerid) >>> 8, GetName(playerid), playerid, text);
 	}
-    if(!Account[playerid][pLanguage]) DCC_SendChannelMessage(DCC_FindChannelById("796074251412570192"), sprintf("**%s**: `%s`", GetName(playerid), text));
+    if(!Account[playerid][pLanguage]) DCC_SendChannelMessage(DCC_FindChannelById("796563115343872043"), sprintf("**%s**: `%s`", GetName(playerid), text));
 
 	ChatSend(Account[playerid][pLanguage], str);
 
