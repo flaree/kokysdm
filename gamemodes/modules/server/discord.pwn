@@ -115,7 +115,7 @@ stock IsUserDiscordAdmin(DCC_User: user)
 		DCC_HasGuildMemberRole(guildId, user, leadAdminRole, hasRole);
 
 		if(hasRole) return 1;
-	} 
+	}
 	if(overwatchRole) {
 		DCC_HasGuildMemberRole(guildId, user, overwatchRole, hasRole);
 
