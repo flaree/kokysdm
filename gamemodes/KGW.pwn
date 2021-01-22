@@ -1329,7 +1329,7 @@ public SendRandomMessage()
 		"[Koky's Deathmatch]{FFFFFF}: Not having fun? Start your own event! (/startevent)",
 		"[Koky's Deathmatch]{FFFFFF}: /stats [player] to view their stats!",
 		"[Koky's Deathmatch]{FFFFFF}: Did you know? You can donate to the server and receive perks! (/donate)",
-		"[Koky's Deathmatch]{FFFFFF}: Join our official Discord! discord.gg/TCVdvdV",
+		"[Koky's Deathmatch]{FFFFFF}: Join our official Discord! https://discord.gg/JQ9hZvB9vG",
 		"[Koky's Deathmatch]{FFFFFF}: Did you know? You can start your own clan and make it official! /createclan!"
 	};
 
@@ -1398,6 +1398,11 @@ public OnGameModeInit()
 	SetWorldTime(ClockHours);
 
 	AddPlayerClass(1, -318.6522, 1049.3909, 20.3403, 358.4333, 0, 0, 0, 0, 0, 0);
+    for (new i; i < 52; i++) {
+		if (IsAntiCheatEnabled(i)) {
+			EnableAntiCheat(i, false);
+		}
+    }
 	return 1;
 }
 
@@ -2113,8 +2118,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, const inputtext[
 			pCOLOR_GOLD, pCOLOR_INDIGO, pCOLOR_IVORY
 		};
 
-		if(listitem == 0) SetPlayerColor(playerid, PlayerColors[random(sizeof(PlayerColors))]);
-		else SetPlayerColor(playerid, colorlist[listitem - 1]);
+		if(listitem == 0) { 
+            SetPlayerColor(playerid, PlayerColors[random(sizeof(PlayerColors))]);
+            previousColours[playerid] = PlayerColors[random(sizeof(PlayerColors))];
+        }
+		else {
+            SetPlayerColor(playerid, colorlist[listitem - 1]);
+            previousColours[playerid] = colorlist[listitem - 1];
+        }
 		return 1;
 	}
 	if(dialogid == DIALOG_VIPCOLOUR)
@@ -2129,6 +2140,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, const inputtext[
 			pCOLOR_GOLD, pCOLOR_INDIGO, pCOLOR_IVORY
 		};
 		SetPlayerColor(playerid, colorlist[listitem - 1]);
+        previousColours[playerid] = colorlist[listitem - 1];
 		return 1;
 	}
 	return 1;
@@ -2147,7 +2159,6 @@ public CloseInfoOffSet(playerid)
 	PlayerTextDrawHide(playerid, InfoBoxOS[playerid]);
 	return 1;
 }
-
 public OnPlayerStateChange(playerid, newstate, oldstate)
 {
 	if(newstate == PLAYER_STATE_PASSENGER)
@@ -2604,9 +2615,23 @@ public RespawnBrokenVeh(vehicleid)
 
 	return true;
 }
+forward KillCamSpec(playerid);
+// The timer function - the code to be executed when the timer is called goes here
+public KillCamSpec(playerid)
+{
+    TogglePlayerSpectating(playerid, 0);
+    return 1;
+}
 public OnPlayerDeath(playerid, killerid, reason)
 {
 	Account[playerid][KillStreak] = 0;
+    if(killerid != INVALID_PLAYER_ID && (ActivityState[playerid] == ACTIVITY_TDM || ActivityState[playerid] == ACTIVITY_ARENADM))
+    {
+        TogglePlayerSpectating(playerid, true);
+        if(IsPlayerInAnyVehicle(killerid)) PlayerSpectateVehicle(playerid, GetPlayerVehicleID(killerid));
+	    else PlayerSpectatePlayer(playerid, killerid);
+        SetTimerEx("KillCamSpec", 5000, false, "i", playerid);
+    }
 	if(ActivityState[playerid] == ACTIVITY_TDM) //player died in TDM
 	{
 		ResetPlayerWeaponsEx(playerid);
@@ -2644,7 +2669,6 @@ public OnPlayerDeath(playerid, killerid, reason)
 				}
 			}
 		}
-		return true;
 	}
 	else if(ActivityState[playerid] == ACTIVITY_DUEL)
 	{
@@ -2673,7 +2697,6 @@ public OnPlayerDeath(playerid, killerid, reason)
 			ActivityState[playerid] = ACTIVITY_LOBBY;
 			ActivityStateID[playerid] = -1;
 		}
-		return true;
 	}
 	else if(ActivityState[playerid] == ACTIVITY_COPCHASE)
 	{
@@ -3915,7 +3938,7 @@ CMD:admins(cmdid, playerid, params[])
         SendClientMessage(playerid, COLOR_WHITE, sprintf("(ID %i) {%06x}%s {FFFFFF}- (%s{FFFFFF}) {bf0000}%s", admin[0], GetPlayerColor(admin[0]) >>> 8, GetName(admin[0]), AdminNames(admin[1]), Account[admin[0]][pAdminHide] == 1 ? "(HIDDEN)" : ""));
     }
     SendClientMessage(playerid, 0xBF0000FF, "______________________________________________");
-	if(!GetPlayerAdminLevel(playerid)) SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}Admin NOTICE: {FFFFFF}%s has just typed /admins.", GetName(playerid)));
+	if(!GetPlayerAdminLevel(playerid)) SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{FFFFFF}%s has just typed /admins.", GetName(playerid)));
     list_delete(adminlist);
     return true;
 }
