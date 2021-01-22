@@ -132,7 +132,7 @@ new
 	PlayersAccepted[MAX_PLAYERS] = {0, ...},
 	AlliesCount[MAX_PLAYERS] = {0, ...},
 	EnemyCount[MAX_PLAYERS] = {0, ...},
-	Float:DuelArmour[MAX_PLAYERS] = {0.0, ...},
+	Float:DuelArmour[MAX_PLAYERS] = {100.0, ...},
 	Float:DuelHealth[MAX_PLAYERS] = {100.0, ...},
 
 	Iterator:DuelPlayers[MAX_PLAYERS]<MAX_PLAYERS>,
@@ -282,7 +282,6 @@ EndDuel(playerid, bool:cancelled)
 		SpawnPlayer(i);
 		SendPlayerToLobby(i);
 	}
-	ClearDuelVariables(duelhost);
 	return 1;
 }
 
@@ -337,7 +336,7 @@ InitDuel(playerid)
 		TogglePlayerControllable(i, false);
 	}
 
-	DuelCountDown[playerid] = 5;
+	DuelCountDown[playerid] = 3;
 	if(DuelTimer[playerid] != -1)
 		KillTimer(DuelTimer[playerid]);
 
@@ -493,11 +492,11 @@ hook public OnDialogResponse(playerid, dialogid, response, listitem, const input
 				}
 				case 1:
 				{
-					return ShowPlayerDialog(playerid, DIALOG_DUEL_TEAMMATES, DIALOG_STYLE_INPUT, "Duel - Teammate choosing", "Please type in the name/ID of the player you want to add as a team mate.\nExample: 10 Koky 4", "Input", "Cancel");
+					return ShowPlayerDialog(playerid, DIALOG_DUEL_TEAMMATES, DIALOG_STYLE_INPUT, "Duel - Teammate choosing", "Please type in the name/ID of the player(s) you want to add as a team mate.\nExample: 10 Koky 4", "Input", "Cancel");
 				}
 				case 2:
 				{
-					return ShowPlayerDialog(playerid, DIALOG_DUEL_ENEMIES, DIALOG_STYLE_INPUT, "Duel - Enemy choosing", "Please type in the name/ID of the player you want to add as a enemy.\nExample: 10 Koky 4", "Input", "Cancel");
+					return ShowPlayerDialog(playerid, DIALOG_DUEL_ENEMIES, DIALOG_STYLE_INPUT, "Duel - Enemy choosing", "Please type in the name/ID of the player(s) you want to add as a enemy.\nExample: 10 Koky 4", "Input", "Cancel");
 				}
 				case 3:
 				{
@@ -513,68 +512,7 @@ hook public OnDialogResponse(playerid, dialogid, response, listitem, const input
 				}
 				case 6:
 				{
-					new
-						team_mates[120],
-						enemies[120],
-						weapons[229]; // Might need to adjust these.
-					GetDuelTeamMates(playerid, team_mates);
-					GetDuelEnemies(playerid, enemies);
-					GetDuelWeapons(playerid, weapons);
-
-					AlliesCount[playerid] = 0;
-					EnemyCount[playerid] = 0;
-
-					foreach(new i : DuelPlayers[playerid])
-					{
-						new id = DuelInvite[playerid];
-						if((id != -1 && id != playerid) || (ActivityState[playerid] == ACTIVITY_DUEL || ActivityState[playerid] == ACTIVITY_DUEL_PREP))
-						{
-							return SendClientMessage(playerid, -1, sprintf("{bf0000}DUEL: {%06x}%s {FFFFFF}is already invited to another duel or is in one.", GetPlayerColor(playerid) >>> 8, GetName(i)));
-						}
-
-						if(DuelTeam[playerid][i] == HOST_TEAM)
-						{
-							AlliesCount[playerid]++;
-						}
-						else
-						{
-							EnemyCount[playerid]++;
-						}
-					}
-
-					if(EnemyCount[playerid] < 1)
-					{
-						SendClientMessage(playerid, -1, "{bf0000}DUEL: {FFFFFF}You must have at least 1 enemy selected for a duel.");
-						return ShowDuelSettingsDialog(playerid);
-					}
-
-					foreach(new i : DuelPlayers[playerid])
-					{
-						if(i != playerid)
-						{
-							DuelInvite[i] = playerid;
-							SendClientMessage(i, COLOR_LIGHTRED, "==== [DUEL INVITE] ====");
-							SendClientMessage(i, COLOR_LIGHTRED, sprintf("{%06x}%s {FFFFFF}has invited you to a duel. ({31AEAA}%i {FFFFFF}v {31AEAA}%i)", GetPlayerColor(playerid) >>> 8, GetName(playerid), AlliesCount[playerid], EnemyCount[playerid]));
-							SendClientMessage(i, COLOR_LIGHTRED, sprintf("Map: {F07D00}%s", DuelMaps[DuelMap[playerid]]));
-							SendClientMessage(i, COLOR_LIGHTRED, sprintf("Team 1: {8df000}%s", team_mates));
-							SendClientMessage(i, COLOR_LIGHTRED, sprintf("Team 2: {f03000}%s", enemies));
-							SendClientMessage(i, COLOR_LIGHTRED, sprintf("Weapons: {F07D00}%s", weapons));
-							SendClientMessage(i, COLOR_LIGHTRED, sprintf("Armour: {F07D00}%0.1f | Health: %.1f", DuelArmour[playerid], DuelHealth[playerid]));
-							SendClientMessage(i, COLOR_LIGHTRED, "Type \"/duel accept\" or \"/duel deny\" to accept/deny the invite.");
-							SendClientMessage(i, COLOR_LIGHTRED, "Alternatively you can type /ad or /dd.");
-						}
-					}
-					SendClientMessage(playerid, -1, "{bf0000}DUEL: {FFFFFF}You have sent the duel request.");
-
-					ActivityState[playerid] = ACTIVITY_DUEL;
-					ActivityStateID[playerid] = playerid;
-					PlayersAccepted[playerid]++;
-
-					if(InviteCooldown[playerid] != -1)
-						KillTimer(InviteCooldown[playerid]);
-
-					InviteCooldown[playerid] = SetTimerEx("DuelCooldown", 60000, false, "i", playerid);
-					return 1;
+					SendDuel(playerid);
 				}
 			}
 		}
@@ -811,6 +749,12 @@ CMD:duel(cmdid, playerid, params[])
 	return 1;
 }
 
+CMD:reduel(cmdid, playerid, params[])
+{
+	SendDuel(playerid);
+	return 1;
+}
+
 CMD:ad(cmdid, playerid, params[])
 {
 	return EmulateCommand(playerid, "/duel accept");
@@ -826,5 +770,71 @@ InitDuelArenas()
 {
 	Iter_Init(DuelPlayers);
 	Iter_Init(DuelWeapons);
+	return 1;
+}
+
+SendDuel(playerid)
+{
+	new
+		team_mates[120],
+		enemies[120],
+		weapons[229]; // Might need to adjust these.
+	GetDuelTeamMates(playerid, team_mates);
+	GetDuelEnemies(playerid, enemies);
+	GetDuelWeapons(playerid, weapons);
+
+	AlliesCount[playerid] = 0;
+	EnemyCount[playerid] = 0;
+
+	foreach(new i : DuelPlayers[playerid])
+	{
+		new id = DuelInvite[playerid];
+		if((id != -1 && id != playerid) || (ActivityState[playerid] == ACTIVITY_DUEL || ActivityState[playerid] == ACTIVITY_DUEL_PREP))
+		{
+			return SendClientMessage(playerid, -1, sprintf("{bf0000}DUEL: {%06x}%s {FFFFFF}is already invited to another duel or is in one.", GetPlayerColor(playerid) >>> 8, GetName(i)));
+		}
+
+		if(DuelTeam[playerid][i] == HOST_TEAM)
+		{
+			AlliesCount[playerid]++;
+		}
+		else
+		{
+			EnemyCount[playerid]++;
+		}
+	}
+
+	if(EnemyCount[playerid] < 1)
+	{
+		SendClientMessage(playerid, -1, "{bf0000}DUEL: {FFFFFF}You must have at least 1 enemy selected for a duel.");
+		return ShowDuelSettingsDialog(playerid);
+	}
+
+	foreach(new i : DuelPlayers[playerid])
+	{
+		if(i != playerid)
+		{
+			DuelInvite[i] = playerid;
+			SendClientMessage(i, COLOR_LIGHTRED, "==== [DUEL INVITE] ====");
+			SendClientMessage(i, COLOR_LIGHTRED, sprintf("{%06x}%s {FFFFFF}has invited you to a duel. ({31AEAA}%i {FFFFFF}v {31AEAA}%i)", GetPlayerColor(playerid) >>> 8, GetName(playerid), AlliesCount[playerid], EnemyCount[playerid]));
+			SendClientMessage(i, COLOR_LIGHTRED, sprintf("Map: {F07D00}%s", DuelMaps[DuelMap[playerid]]));
+			SendClientMessage(i, COLOR_LIGHTRED, sprintf("Team 1: {8df000}%s", team_mates));
+			SendClientMessage(i, COLOR_LIGHTRED, sprintf("Team 2: {f03000}%s", enemies));
+			SendClientMessage(i, COLOR_LIGHTRED, sprintf("Weapons: {F07D00}%s", weapons));
+			SendClientMessage(i, COLOR_LIGHTRED, sprintf("Armour: {F07D00}%0.1f | Health: %.1f", DuelArmour[playerid], DuelHealth[playerid]));
+			SendClientMessage(i, COLOR_LIGHTRED, "Type \"/duel accept\" or \"/duel deny\" to accept/deny the invite.");
+			SendClientMessage(i, COLOR_LIGHTRED, "Alternatively you can type /ad or /dd.");
+		}
+	}
+	SendClientMessage(playerid, -1, "{bf0000}DUEL: {FFFFFF}You have sent the duel request.");
+
+	ActivityState[playerid] = ACTIVITY_DUEL;
+	ActivityStateID[playerid] = playerid;
+	PlayersAccepted[playerid]++;
+
+	if(InviteCooldown[playerid] != -1)
+		KillTimer(InviteCooldown[playerid]);
+
+	InviteCooldown[playerid] = SetTimerEx("DuelCooldown", 60000, false, "i", playerid);
 	return 1;
 }
