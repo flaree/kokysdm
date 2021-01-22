@@ -505,9 +505,9 @@ public LimitTeams()
 }
 GiveTDMAmmunation(playerid)
 {
-	GivePlayerWeapon(playerid, WEAPON_DEAGLE, 100);
-	GivePlayerWeapon(playerid, WEAPON_AK47, 125);
-	GivePlayerWeapon(playerid, WEAPON_SHOTGUN, 30);
+	GivePlayerWeapon(playerid, WEAPON_DEAGLE, 500);
+	GivePlayerWeapon(playerid, WEAPON_AK47, 205);
+	GivePlayerWeapon(playerid, WEAPON_SHOTGUN, 100);
 
 	SetPlayerHealth(playerid, 100);
 	SetPlayerArmour(playerid, 50);
@@ -527,7 +527,7 @@ GiveTDMAmmunation(playerid)
 	if(turfholder == ActivityStateID[playerid])
 	{
 		SetPlayerArmour(playerid, 100);
-		GivePlayerWeapon(playerid, WEAPON_M4, 125);
+		GivePlayerWeapon(playerid, WEAPON_M4, 300);
 		SendClientMessage(playerid, -1, "{49FF00}TURF: You have been given 100 Armour and an M4 as your team holds the turf.");
 	}
 
