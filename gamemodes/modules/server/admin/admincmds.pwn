@@ -686,6 +686,11 @@ CMD<AD1>:agoto(cmdid, playerid, params[])
 	GetPlayerPos(TargetPlayer, X, Y, Z);
 	SetPlayerPos(playerid, X, Y, Z);
 
+	if(ActivityState[TargetPlayer] == ACTIVITY_TDM)
+	{
+		CreateTDMMapping(playerid);
+	}
+
 	SendClientMessage(playerid, COLOR_INDIANRED, sprintf("{bf0000}NOTICE: {FFFFFF}You have teleported to %s.", GetName(TargetPlayer)));
 	SendClientMessage(TargetPlayer, COLOR_INDIANRED, sprintf("{bf0000}NOTICE: {FFFFFF}Admin %s has teleported to your position.", GetName(playerid)));
 	return 1;
