@@ -336,7 +336,7 @@ InitDuel(playerid)
 		TogglePlayerControllable(i, false);
 	}
 
-	DuelCountDown[playerid] = 3;
+	DuelCountDown[playerid] = 5;
 	if(DuelTimer[playerid] != -1)
 		KillTimer(DuelTimer[playerid]);
 
