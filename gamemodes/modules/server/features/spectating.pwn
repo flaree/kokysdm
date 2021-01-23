@@ -180,6 +180,7 @@ StopSpectating(playerid)
 		HideSessionStats(playerid);
 		HideNetworkTDs(playerid);
 	}
+	WallHack{playerid} = false;
 	return true;
 }
 
