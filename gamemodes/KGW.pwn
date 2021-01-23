@@ -2600,8 +2600,22 @@ public OnPlayerEnterCheckpoint(playerid)
 	}
 	return true;
 }
+forward KillAnim(playerid);
+// The timer function - the code to be executed when the timer is called goes here
+public KillAnim(playerid)
+{
+    ClearAnimations(playerid);
+    return 1;
+}
 public OnPlayerExitVehicle(playerid, vehicleid)
 {
+    if(ActivityState[playerid] == ACTIVITY_TDM)
+	{
+		if(GetVehicleSpeed(vehicleid) > 50 && !IsAPlane(vehicleid))
+		{
+            SetTimerEx("KillAnim", 300, false, "i", playerid);
+        }
+    }
 	return 1;
 }
 public OnVehicleDamageStatusUpdate(vehicleid, playerid)
@@ -3205,23 +3219,34 @@ public OnPlayerGiveDamageActor(playerid, damaged_actorid, Float:amount, weaponid
 {
 	return 1;
 }
-// GetVehicleSpeed( vehicleid )
-// {
-// 	// Function: GetVehicleSpeed( vehicleid )
 
-// 	new
-// 	    Float:x,
-// 	    Float:y,
-// 	    Float:z,
-// 		vel;
+stock IsAPlane(carid)
+{
+	new model = GetVehicleModel(carid);
+	switch(model)
+	{
+	    case 417, 425, 447, 460, 469, 476, 487, 488, 497, 511, 512, 513, 519, 520, 548, 553, 563, 577, 592, 593: return  1;
+	}
+	return 0;
+}
 
-// 	GetVehicleVelocity( vehicleid, x, y, z );
+GetVehicleSpeed( vehicleid )
+{
+	// Function: GetVehicleSpeed( vehicleid )
 
-// 	vel = floatround( floatsqroot( x*x + y*y + z*z ) * 180 );			// KM/H
-// //	vel = floatround( floatsqroot( x*x + y*y + z*z ) * 180 / MPH_KMH ); // MPH
+	new
+	    Float:x,
+	    Float:y,
+	    Float:z,
+		vel;
 
-// 	return vel;
-// }
+	GetVehicleVelocity( vehicleid, x, y, z );
+
+	vel = floatround( floatsqroot( x*x + y*y + z*z ) * 180 );			// KM/H
+//	vel = floatround( floatsqroot( x*x + y*y + z*z ) * 180 / MPH_KMH ); // MPH
+
+	return vel;
+}
 GetLanguage(language)
 {
 	new lang[64];
