@@ -2601,7 +2601,6 @@ public OnPlayerEnterCheckpoint(playerid)
 	return true;
 }
 forward KillAnim(playerid);
-// The timer function - the code to be executed when the timer is called goes here
 public KillAnim(playerid)
 {
     ClearAnimations(playerid);
@@ -2632,7 +2631,6 @@ public RespawnBrokenVeh(vehicleid)
 	return true;
 }
 forward KillCamSpec(playerid);
-// The timer function - the code to be executed when the timer is called goes here
 public KillCamSpec(playerid)
 {
     TogglePlayerSpectating(playerid, 0);
