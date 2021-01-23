@@ -85,6 +85,7 @@ new PlayerSecondTimer[MAX_PLAYERS];
 new pName[MAX_PLAYERS][MAX_PLAYER_NAME + 1];
 new bool:AdminPMRead[MAX_PLAYERS];
 new bool:HudShow[MAX_PLAYERS] = {true, ...};
+new bool:ConnectionMessages[MAX_PLAYERS] = {true, ...};
 
 new WallHack[MAX_PLAYERS char];
 new NameTagNeedsUpdating[MAX_PLAYERS char];
@@ -1460,10 +1461,11 @@ public OnPlayerConnect(playerid)
 	pFPSWarn[playerid] = 0;
 
     HudShow[playerid] = true;
+    ConnectionMessages[playerid] = true;
 
 	Account_Reset(playerid);
 	SetPlayerColor(playerid, PlayerColors[playerid]);
-	SendClientMessageToAll(COLOR_GRAY, sprintf("{bf0000}CONNECTION: {9f9f9f}%s has joined the server.", GetName(playerid)));
+    SendConnectionMessage(sprintf("{9f9f9f}%s has joined the server.", GetName(playerid)));
 	TogglePlayerSpectating(playerid, 1);
 	SetPlayerColor(playerid, PlayerColors[playerid]);
 	dmessage2[playerid] = SetTimerEx("CheckDonations", 30000, true, "i", playerid);
@@ -2907,6 +2909,18 @@ SendPunishmentMessage(str[])
 	return 1;
 }
 
+SendConnectionMessage(str[])
+{
+	foreach(new i: Player)
+	{
+	   if(Account[i][LoggedIn] > 0 && ConnectionMessages[i])
+	   {
+		   SendClientMessage(i, COLOR_GRAY, str);
+	   }
+	}
+	return 1;
+}
+
 SendErrorMessage(playerid, const str[])
 {
 	new astr[128];
@@ -3247,7 +3261,7 @@ public OnPlayerText(playerid, const text[])
 
 	if(text[0] == ADMCHATKEY && GetPlayerAdminLevel(playerid) >= 1)
 	{
-		new TextOutput[128];
+		new TextOutput[156];
 		format(TextOutput, sizeof(TextOutput), text);
 		TextOutput[0] = ' '; // Replacing the . with space
         strtrim(TextOutput);
@@ -3259,7 +3273,7 @@ public OnPlayerText(playerid, const text[])
 
 	else if(text[0] == LEADCHATKEY && GetPlayerAdminLevel(playerid) >= 3)
 	{
-	    new TextOutput[128];
+	    new TextOutput[156];
 		format(TextOutput, sizeof(TextOutput), text);
 		TextOutput[0] = ' '; // Replacing the . with space
         strtrim(TextOutput);
@@ -3271,7 +3285,7 @@ public OnPlayerText(playerid, const text[])
 
 	else if(text[0] == HELPERCHATKEY && Account[playerid][Helper] == 1)
 	{
-		new TextOutput[128];
+		new TextOutput[156];
 		format(TextOutput, sizeof(TextOutput), text);
 		TextOutput[0] = ' '; // Replacing the . with space
 		format(TextOutput, sizeof(TextOutput), "%s: %s", GetName(playerid), TextOutput);
@@ -3693,6 +3707,18 @@ CMD:buytoken(cmdid, playerid, params[])
 
 	GivePlayerMoneyEx(playerid, -5000000);
 	Account[playerid][Tokens]++;
+
+	return true;
+}
+CMD:togglejoin(cmdid, playerid, params[])
+{
+	if(ConnectionMessages[playerid]) {
+        SendClientMessage(playerid, COLOR_LIGHTRED, "Connection messages have been disabled.");
+        ConnectionMessages[playerid] = false;
+    } else {
+        SendClientMessage(playerid, COLOR_LIGHTRED, "Connection messages have been enabled.");
+        ConnectionMessages[playerid] = true;
+    }
 
 	return true;
 }
