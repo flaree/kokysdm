@@ -3761,6 +3761,12 @@ CMD:cry(cmdid, playerid, params[])
 	ApplyAnimation(playerid,"GRAVEYARD","mrnf_loop",4.0,1,0,0,0,0);
 	return 1;
 }
+CMD:stopanim(cmdid, playerid, params[])
+{
+	ClearAnimations(playerid);
+	return 1;
+}
+ALT:sa = CMD:stopanim;
 
 CMD:gsign(cmdid, playerid, params[])
 {
