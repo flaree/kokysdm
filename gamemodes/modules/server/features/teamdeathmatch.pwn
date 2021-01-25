@@ -235,7 +235,7 @@ hook public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 
 OfficialClanSelection(playerid)
 {
-	new clan = Account[playerid][ClanID], Float:xspawn, Float:yspawn, Float:zspawn, skin, isofficial;
+	new clan = Account[playerid][ClanID], Float:xspawn, Float:yspawn, Float:zspawn, skin, isofficial, int:colour;
 
 	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE id = %d", clan));
 	if(!cache_num_rows()) return false;
@@ -245,6 +245,7 @@ OfficialClanSelection(playerid)
 	cache_get_value_name_float(0, "z", zspawn);
 	cache_get_value_int(0, "skin", skin);
 	cache_get_value_int(0, "official", isofficial);
+	cache_get_value_int(0, "color", colour);
 
 	if(isofficial == 0)
 		return SendClientMessage(playerid, COLOR_LIGHTRED, "ERROR: {FFFFFF}Your clan is not official. Create a thread on the forums and post frequently.");
@@ -267,11 +268,8 @@ OfficialClanSelection(playerid)
 		GiveTDMAmmunation(playerid);
 		Account[playerid][CopChaseDead] = 1;
 		SpawnProtTimer[playerid] = SetTimerEx("SpawnProtection", 8000, false, "i", playerid);
-		if ((Account[playerid][ClanID] + 5) < 200) {
-			SetPlayerColor(playerid, PlayerColors[Account[playerid][ClanID] + 5]);
-		} else {
-			SetPlayerColor(playerid, clamp(Account[playerid][ClanID] + 5, 0, 200));
-		}
+		
+		SetPlayerColor(playerid, colour);
 		SetPlayerPosEx(playerid, xspawn, yspawn, zspawn, 0, WORLD_TDM);
 		SetPlayerSkinEx(playerid, skin);
 		SetPlayerCheckpoint(playerid, 1929.8989, -1776.3195, 13.5469, 2);

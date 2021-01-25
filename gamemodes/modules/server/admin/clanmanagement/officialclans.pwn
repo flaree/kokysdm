@@ -61,6 +61,34 @@ CMD<CM>:deletevehicle(cmdid, playerid, params[])
 	}
 	return true;
 }
+CMD<CM>:clancolour(cmdid, playerid, params[])
+{
+	new clanid, color;
+	if(sscanf(params, "ih", clanid, color)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /clancolour [clan ID] [colour]");
+	yield 1;
+	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE id = '%i'", clanid));
+	if(!cache_num_rows()) return SendClientMessage(playerid, COLOR_GRAY, sprintf("No clan exists with the ID %i.", clanid));
+	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET color = %i WHERE id = %i", color & ~0xff, clanid));
+	SendClientMessage(playerid, COLOR_GRAY, "You've succesfully set the colour for that clan.");
+	return true;
+}
+CMD<CM>:officialclans(cmdid, playerid, params[])
+{
+	yield 1;
+	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE official = 1"));
+	if(!cache_num_rows()) return SendErrorMessage(playerid, "No clans found.");
+
+	new clanname[64], owner[32];
+	SendClientMessage(playerid, COLOR_RED, sprintf("Koky's DM Clan List", params));
+	for(new i = 0, r = cache_num_rows(); i < r; i++)
+	{
+		cache_get_value_name(i, "name", clanname);
+		cache_get_value_name(i, "owner_name", owner);
+
+		SendClientMessage(playerid, COLOR_GREY, sprintf("%s (Owner: %s)", clanname, owner));
+	}
+	return true;
+}
 CMD<CM>:saveclanvehicle(cmdid, playerid, params[])
 {
 	new clanName[64], colorOne, colorTwo;
