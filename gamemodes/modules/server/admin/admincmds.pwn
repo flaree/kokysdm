@@ -277,7 +277,7 @@ CMD<AD5>:listadmins(cmdid, playerid, params[])
 
 	yield 1;
 	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT Username, Admin FROM Accounts WHERE Admin > 1"));
-	if(!cache_num_rows()) return SendErrorMessage(playerid, sprintf("No admins found..", params));
+	if(!cache_num_rows()) return SendErrorMessage(playerid, "No admins found..");
 
 	new accountname[25], int:level;
 	SendClientMessage(playerid, COLOR_RED, sprintf("Koky's DM Admin List", params));
