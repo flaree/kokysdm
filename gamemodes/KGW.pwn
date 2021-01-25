@@ -89,12 +89,7 @@ new bool:ConnectionMessages[MAX_PLAYERS] = {true, ...};
 
 new bool:WallHack[MAX_PLAYERS] = {false, ...};
 new NameTagNeedsUpdating[MAX_PLAYERS char];
-new PlayerText3D:WallHackTag[MAX_PLAYERS][MAX_PLAYERS] = {
-	{
-		PlayerText3D:INVALID_3DTEXT_ID
-	},
-	...
-};
+new PlayerText3D:WallHackTag[MAX_PLAYERS][MAX_PLAYERS] = {PlayerText3D:INVALID_3DTEXT_ID, ...};
 
 // Chat keys
 #define ADMCHATKEY   														 '@'
@@ -18659,7 +18654,14 @@ public UpdateNameTag(playerid, fps) {
 	if(NameTagNeedsUpdating{playerid} == 1) {
 		for(new i; i < MAX_PLAYERS; i++) {
 			if(!IsPlayerConnected(i)) continue;
-			if(WallHack[i] == false) continue;
+			if(WallHack[i] == false ){
+                if(WallHackTag[i][playerid] != PlayerText3D:INVALID_3DTEXT_ID) {
+                    DeletePlayer3DTextLabel(i, WallHackTag[i][playerid]);
+                    WallHackTag[i][playerid] = PlayerText3D:INVALID_3DTEXT_ID;
+                }
+                continue;
+            }
+            if(i == playerid) continue;
 			if(WallHackTag[i][playerid] == PlayerText3D:INVALID_3DTEXT_ID) {
                 new
                     PlayerText3D: playerTextId,
@@ -18668,18 +18670,13 @@ public UpdateNameTag(playerid, fps) {
                 GetPlayerPos(playerid, X, Y, Z);
                 new szString[128];
 				format(szString, 256, "%s (%d)\n{FFFFFF}({FF0000}%.1f{FFFFFF}/{AAAAAA}%.1f{FFFFFF})\nFPS: %d", GetName(playerid), playerid, GetHealth(playerid), GetArmour(playerid), fps);
-				new color;
-				if(adminDuty[playerid] == true) color = 0xFF0000FF;
-				color = GetPlayerColor(playerid) >>> 8 + 0x000000FF;
-                playerTextId = CreatePlayer3DTextLabel(i, szString, 0x008080FF, X, Y, Z, 400, playerid, INVALID_VEHICLE_ID);
+                playerTextId = CreatePlayer3DTextLabel(i, szString, 0x008080FF, 0, 0, 0, 400, playerid);
                 WallHackTag[i][playerid] = playerTextId;
+                NameTagNeedsUpdating{playerid} = 0;
             } else {
 				new szString[128];
 				format(szString, 256, "%s (%d)\n{FFFFFF}({FF0000}%.1f{FFFFFF}/{AAAAAA}%.1f{FFFFFF})\nFPS: %d", GetName(playerid), playerid, GetHealth(playerid), GetArmour(playerid), fps);
-				new color;
-				if(adminDuty[playerid] == true) color = 0xFF0000FF;
-				color = GetPlayerColor(playerid) >>> 8 + 0x000000FF;
-                UpdatePlayer3DTextLabelText(i, WallHackTag[i][playerid], color, szString);
+                UpdatePlayer3DTextLabelText(i, WallHackTag[i][playerid], 0xFF0000FF, szString);
 				NameTagNeedsUpdating{playerid} = 0;
 			}
 		}
