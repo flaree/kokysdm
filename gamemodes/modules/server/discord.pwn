@@ -34,7 +34,7 @@ public DCC_OnMessageCreate(DCC_Message:message)
 		DCC_GetUserName(author, username, sizeof username);
 	}
 
-	if(isequal(bot_id, "659130608038969347")){
+	if(isequal(bot_id, "796571715353706536")){
 		return 1;
 	}
 	DCC_GetChannelId(channel, channelid, sizeof channelid);
