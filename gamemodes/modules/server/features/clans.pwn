@@ -3,13 +3,15 @@ new invitedby[MAX_PLAYERS];
 
 CMD<CLN>:createclan(cmdid, playerid, params[]) // ADD -125K PRICE!!
 {
-	if(isnull(params)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /createclan [clanname] (price: $125,000)");
+	if(isnull(params)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /createclan [clanname] (price: $1,500,000)");
 	if(Account[playerid][ClanID] > 0) return SendClientMessage(playerid, -1, "{31AEAA}Clan: {FFFFFF}You are already in a clan. Please refer to /leaveclan");
+	if(Account[playerid][Cash] < 1500000) return SendClientMessage(playerid, -1, "{31AEAA}Clan: You need at least $1,500,000 to purchase a clan!");
+	GivePlayerMoneyEx(playerid, -1500000);
 	if(ClanAlreadyExists(params)) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Clan: {FFFFFF}This name already exists in the database.");
 	if(strlen(params) > 64) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Clan: {FFFFFF}That name is too long. Please shorten it.");
 
 	yield 1;
-	await mysql_aquery_s(SQL_CONNECTION, str_format("INSERT INTO clans (name, owner_name, owner_sqlid, official) VALUES ('%e', '%e', %i, 0)", params, GetName(playerid), Account[playerid][SQLID]));
+	await mysql_aquery_s(SQL_CONNECTION, str_format("INSERT INTO clans (name, owner_name, owner_sqlid, official, color) VALUES ('%e', '%e', %i, 0, 0x0000FFFF)", params, GetName(playerid), Account[playerid][SQLID]));
 
 	Account[playerid][ClanID] = cache_insert_id();
 	Account[playerid][OfficialClan] = 0;
@@ -144,7 +146,7 @@ CMD<CLN>:c(cmdid, playerid, params[])
 {
 	if(Account[playerid][ClanID] == -1) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Clan: {FFFFFF}You aren't in a clan to use the clan chat system.");
 	if(isnull(params)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /c [text]");
-
+	if(Account[playerid][ClanID] == 0) return SendClientMessage(playerid, COLOR_GRAY, "ERROR: You must be in a clan to use this command.");
 	SendClanMessage(Account[playerid][ClanID], Account[playerid][ClanName], sprintf("{%06x}%s(%i){FFFFFF}: %s", GetPlayerColor(playerid) >>> 8, GetName(playerid), Account[playerid][ClanRank], params));
 	return 1;
 }
