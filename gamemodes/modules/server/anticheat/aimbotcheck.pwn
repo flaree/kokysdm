@@ -24,7 +24,7 @@ AimbotCheck(playerid, target)
 	SetPlayerPos(helper, tX, tY + 3, tZ + 2);
 	SendClientMessage(helper, -1, sprintf("{bf0000}Notice: {FFFFFF}You have been used to help an admin check a player for aimbot. Thank you!"));
 	SetTimerEx("SetOldPos", 200, false, "ifff", helper, hX, hY, hZ);
-	SendAdmCmd(2, sprintf("%s has checked %s for aimbot using %s.", GetName(player), GetName(target), GetName(helper)));
+	SendAdmcmdMessage(2, sprintf("%s has checked %s for aimbot using %s.", GetName(playerid), GetName(target), GetName(helper)));
 	SendClientMessage(playerid, -1, sprintf("{31AEAA}Aimbot Check: {FFFFFF}You have checked {%06x}%s{FFFFFF} for aimbot! Helper: {%06x}%s{FFFFFF}.", GetPlayerColor(target) >>> 8, GetName(target), GetPlayerColor(helper) >>> 8, GetName(helper)));
 	return true;
 }

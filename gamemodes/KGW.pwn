@@ -87,7 +87,7 @@ new bool:AdminPMRead[MAX_PLAYERS];
 new bool:HudShow[MAX_PLAYERS] = {true, ...};
 new bool:ConnectionMessages[MAX_PLAYERS] = {true, ...};
 
-new WallHack[MAX_PLAYERS char];
+new bool:WallHack[MAX_PLAYERS] = {false, ...};
 new NameTagNeedsUpdating[MAX_PLAYERS char];
 new PlayerText3D:WallHackTag[MAX_PLAYERS][MAX_PLAYERS] = {
 	{
@@ -1462,6 +1462,7 @@ public OnPlayerConnect(playerid)
 
     HudShow[playerid] = true;
     ConnectionMessages[playerid] = true;
+    WallHack[playerid] = false;
 
 	Account_Reset(playerid);
 	SetPlayerColor(playerid, PlayerColors[playerid]);
@@ -18658,8 +18659,21 @@ public UpdateNameTag(playerid, fps) {
 	if(NameTagNeedsUpdating{playerid} == 1) {
 		for(new i; i < MAX_PLAYERS; i++) {
 			if(!IsPlayerConnected(i)) continue;
-			if(WallHack{i} == 0) continue;
-			if(WallHackTag[i][playerid] != PlayerText3D:INVALID_3DTEXT_ID) {
+			if(WallHack[i] == false) continue;
+			if(WallHackTag[i][playerid] == PlayerText3D:INVALID_3DTEXT_ID) {
+                new
+                    PlayerText3D: playerTextId,
+                    Float: X, Float: Y, Float: Z;
+
+                GetPlayerPos(playerid, X, Y, Z);
+                new szString[128];
+				format(szString, 256, "%s (%d)\n{FFFFFF}({FF0000}%.1f{FFFFFF}/{AAAAAA}%.1f{FFFFFF})\nFPS: %d", GetName(playerid), playerid, GetHealth(playerid), GetArmour(playerid), fps);
+				new color;
+				if(adminDuty[playerid] == true) color = 0xFF0000FF;
+				color = GetPlayerColor(playerid) >>> 8 + 0x000000FF;
+                playerTextId = CreatePlayer3DTextLabel(i, szString, 0x008080FF, X, Y, Z, 400, playerid, INVALID_VEHICLE_ID);
+                WallHackTag[i][playerid] = playerTextId;
+            } else {
 				new szString[128];
 				format(szString, 256, "%s (%d)\n{FFFFFF}({FF0000}%.1f{FFFFFF}/{AAAAAA}%.1f{FFFFFF})\nFPS: %d", GetName(playerid), playerid, GetHealth(playerid), GetArmour(playerid), fps);
 				new color;

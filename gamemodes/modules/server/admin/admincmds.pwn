@@ -37,10 +37,10 @@ CMD<AD1>:setvw(cmdid, playerid, params[])
 }
 CMD<AD1>:wallhack(cmdid, playerid, params[]) {
 	if(SpectatingPlayer[playerid] == -1) return SendErrorMessage(playerid, "You must be spectating to use this command");
-	WallHack{playerid} = !WallHack{playerid};
-	sendFormatMessage(playerid, 0xFFFF0000, "* You have %s wall hacks!", WallHack{playerid}?("enabled"):("disabled"));
+	WallHack[playerid] = !WallHack[playerid];
+	sendFormatMessage(playerid, 0xFFFF0000, "* You have %s wall hacks!", WallHack[playerid]?("enabled"):("disabled"));
 	new szString[256];
-	format(szString, 256, "%s is %s using /wallhack.", GetName(playerid), WallHack{playerid}?("now"):("no longer"));
+	format(szString, 256, "%s is %s using /wallhack.", GetName(playerid), WallHack[playerid]?("now"):("no longer"));
 	SendAdmcmdMessage(1, szString);
 	return 1;
 	#pragma unused params

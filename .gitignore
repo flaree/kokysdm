@@ -4,3 +4,4 @@ logs/*
 *.amx
 compile.bat
 .vscode/
+.vscode/tasks.json
