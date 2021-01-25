@@ -272,6 +272,25 @@ CMD<AD1>:ipcheck(cmdid, playerid, params[])
 	return true;
 }
 
+CMD<AD6>:listadmins(cmdid, playerid, params[])
+{
+
+	yield 1;
+	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT Username, Admin FROM Accounts WHERE Admin > 1"));
+	if(!cache_num_rows()) return SendErrorMessage(playerid, sprintf("No admins found..", params));
+
+	new accountname[25], int:level;
+	SendClientMessage(playerid, COLOR_RED, sprintf("Koky's DM Admin List", params));
+	for(new i = 0, r = cache_num_rows(); i < r; i++)
+	{
+		cache_get_value_name(i, "Username", accountname);
+		cache_get_value_name_int(i, "Admin", level);
+
+		SendClientMessage(playerid, COLOR_GREY, sprintf("%s (Level: %i)", accountname, level));
+	}
+	return true;
+}
+
 CMD<AD5>:setcustomskin(cmdid, playerid, params[])
 {
 	new pID, skinID;
