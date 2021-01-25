@@ -9,7 +9,7 @@ CMD<AD1>:flinchcheck(cmdid, playerid, params[])
 	if(!IsPlayerConnected(target)) return SendErrorMessage(playerid, ERROR_OPTION);
 	if(TimesHit[target] == 0) return SendErrorMessage(playerid, "{FFFFFF}This player has not been shot yet.");
 
-	SendClientMessage(playerid, COLOR_GREY, sprintf("%s (%i) flinch stats - Times Hit: %i Times Flinched: %i (%.2f%%)", GetName(target), target, TimesHit[target], FlinchCount[target], (FlinchCount[target] / TimesHit[target] * 100)));
+	SendClientMessage(playerid, COLOR_GREY, sprintf("%s (%i) flinch stats - Times Hit: %i Times Flinched(Stunned): %i (%.2f%%)", GetName(target), target, TimesHit[target], FlinchCount[target], (FlinchCount[target] / TimesHit[target] * 100)));
 	return true;
 }
 
@@ -18,7 +18,7 @@ CMD<AD1>:flinchcheck(cmdid, playerid, params[])
 hook public OnPlayerUpdate(playerid)
 {
 	new index = GetPlayerAnimationIndex(playerid);
-	if(LastAnimation[playerid] != index && index == 1084)
+	if(LastAnimation[playerid] != index && (index > 1070 && index < 1087))
 	{
 		FlinchCount[playerid] ++;
 	}
