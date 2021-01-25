@@ -272,7 +272,7 @@ CMD<AD1>:ipcheck(cmdid, playerid, params[])
 	return true;
 }
 
-CMD<AD6>:listadmins(cmdid, playerid, params[])
+CMD<AD5>:listadmins(cmdid, playerid, params[])
 {
 
 	yield 1;
