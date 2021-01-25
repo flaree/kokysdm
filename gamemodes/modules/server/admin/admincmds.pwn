@@ -1371,6 +1371,7 @@ CMD<AD3>:shp(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_RED, buf);
 	return 1;
 }
+ALT:sethp = CMD:shp;
 CMD<AD3>:sarm(cmdid, playerid, params[])
 {
 	new targetid, amount;
@@ -1383,6 +1384,8 @@ CMD<AD3>:sarm(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_RED, buf);
 	return 1;
 }
+ALT:setarmour = CMD:sarm;
+ALT:setarmor = CMD:sarm;
 CMD<AD1>:explode(cmdid, playerid, params[])
 {
 	new targetid;
@@ -1494,6 +1497,7 @@ CMD<AD1>:schp(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_RED, string);
 	return 1;
 }
+ALT:setvhp = CMD:schp;
 
 // Senior Administrator (Level 2)
 CMD<AD3>:area(cmdid, playerid, params[])
