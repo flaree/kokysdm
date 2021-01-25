@@ -828,8 +828,6 @@ SendDuel(playerid)
 	}
 	SendClientMessage(playerid, -1, "{bf0000}DUEL: {FFFFFF}You have sent the duel request.");
 
-	ActivityState[playerid] = ACTIVITY_DUEL;
-	ActivityStateID[playerid] = playerid;
 	PlayersAccepted[playerid]++;
 
 	if(InviteCooldown[playerid] != -1)
