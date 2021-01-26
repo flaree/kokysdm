@@ -86,6 +86,7 @@ new pName[MAX_PLAYERS][MAX_PLAYER_NAME + 1];
 new bool:AdminPMRead[MAX_PLAYERS];
 new bool:HudShow[MAX_PLAYERS] = {true, ...};
 new bool:ConnectionMessages[MAX_PLAYERS] = {true, ...};
+new clanskins[MAX_PLAYERS] = {-1, ...};
 
 new bool:WallHack[MAX_PLAYERS] = {false, ...};
 new NameTagNeedsUpdating[MAX_PLAYERS char];
@@ -133,7 +134,7 @@ new Text:logintd;
 
 new bool:ChatLocked = false;
 
-new PlayerText3D:KeyCrates;
+// new PlayerText3D:KeyCrates;
 new Text3D:playerinfo;
 new Text:ChangeColor[66];
 
@@ -1203,17 +1204,13 @@ CreateSpacer(playerid, lines)
 }
 KeyText(playerid)
 {
-	new str[128];
-	format(str, sizeof(str), "{EE5133}User %s's Keys:{33C4EE} %d", GetName(playerid), Account[playerid][PlayerKeys]);
-	KeyCrates = CreatePlayer3DTextLabel(playerid, str, -1,  4773.4414, 1270.6072, 2.2533, 25.0);
-
+    #pragma unused playerid
+	return 1;
 }
 GiveKey(playerid)
 {
 	new str[128];
 	Account[playerid][PlayerKeys]++;
-	format(str, sizeof(str), "{EE5133}User %s's Keys:{33C4EE} %d", GetName(playerid), Account[playerid][PlayerKeys]);
-	UpdatePlayer3DTextLabelText(playerid, KeyCrates, -1, str);
 	format(str, sizeof(str), "{31AEAA}Reward: {FFFFFF}You have recieved a Premium Key, you now have {31AEAA}%d.", Account[playerid][PlayerKeys]);
 	SendClientMessage(playerid, -1, str);
 }
@@ -1230,9 +1227,7 @@ public UpdatePlayerInformation()
 forward UpdateKeyText(playerid);
 public UpdateKeyText(playerid)
 {
-	new str[128];
-	format(str, sizeof(str), "{EE5133}User %s's Keys:{33C4EE} %d", GetName(playerid), Account[playerid][PlayerKeys]);
-	UpdatePlayer3DTextLabelText(playerid, KeyCrates, -1, str);
+    #pragma unused playerid
 	return 1;
 }
 Log(playerid, const string[])
@@ -2056,6 +2051,7 @@ ResetPlayerVariables(playerid)
 	PMReply[playerid] = -1;
 	TimesHit[playerid] = 0;
 	WeaponACTriggers[playerid] = 0;
+    clanskins[playerid] = -1;
 
 	ActivityState[playerid] = 0;
 	ActivityStateID[playerid] = -1;
@@ -3498,6 +3494,11 @@ public OnPlayerCommandReceived(cmdid, playerid, const cmdtext[])
 	if(GetCommandFlags(cmdid) == FRMTDM && ActivityState[playerid] != ACTIVITY_FREEROAM && ActivityState[playerid] != ACTIVITY_TDM)
 	{
 		SendErrorMessage(playerid, "You must be in freeroam/TDM to use this command.");
+		return false;
+	}
+    if(GetCommandFlags(cmdid) == CLNTDM && ActivityState[playerid] != ACTIVITY_TDM)
+	{
+		SendErrorMessage(playerid, "You must be in TDM to use this command.");
 		return false;
 	}
 	LastCommandTime[playerid] = gettime();

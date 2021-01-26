@@ -32,10 +32,19 @@ CMD<CLN>:claninvite(cmdid, playerid, params[])
 	pendinginvite[pid] = Account[playerid][ClanID];
 	invitedby[pid] = playerid;
 	SendClientMessage(pid, -1, sprintf("{31AEAA}Clan Invite: {%06x}%s {FFFFFF}has invited you join the clan %s.", GetPlayerColor(playerid) >>> 8, GetName(playerid), Account[playerid][ClanName]));
+	SendClientMessage(pid, -1, "Type /acceptinvite or /denyinvite to continue. Invitation will expire in 1 minute.");
 
 	SendClientMessage(playerid, -1, sprintf("{31AEAA}Clan Invite: {FFFFFF}You have invited {%06x}%s{FFFFFF} to join your clan!", GetPlayerColor(pid) >>> 8, GetName(pid)));
-
+	SetTimerEx("ExpireInvite", 60000, false, "i", pid);
 	return true;
+}
+forward ExpireInvite(playerid);
+public ExpireInvite(playerid) {
+	if(pendinginvite[playerid] != -1) {
+		pendinginvite[playerid] = -1;
+		invitedby[playerid] = -1;
+		SendClientMessage(playerid, -1, "{31AEAA}Clan Invite: {FFFFFF}Your clan invitation has expired!");
+	}
 }
 CMD<CLN>:clankick(cmdid, playerid, params[]) 
 {
@@ -124,6 +133,74 @@ CMD<CLN>:leaveclan(cmdid, playerid, params[])
 
 	return true;
 }
+CMD<CLNTDM>:clanskin(cmdid, playerid, params[])
+{
+	new slot;
+	if(sscanf(params, "i", slot)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /clanskin [slot 1-3]");
+	if(Account[playerid][ClanID] == -1 || Account[playerid][ClanID] == 0) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Clan: {FFFFFF}You must be in a clan to use this command!");
+	
+	if(slot < 1 || slot > 3) return SendClientMessage(playerid, COLOR_GRAY, "ERROR: Slot ID must be between 1-3");
+
+	yield 1;
+	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE id = '%i'", Account[playerid][ClanID]));
+	if(!cache_num_rows()) return SendClientMessage(playerid, COLOR_GRAY, sprintf("No clan exists with the id %i.", Account[playerid][ClanID]));
+
+	new skinid;
+	if(slot == 1) {
+		cache_get_value_name_int(0, "skin", skinid);
+	} else if(slot == 2) {
+		cache_get_value_name_int(0, "skin2", skinid);
+	} else {
+		cache_get_value_name_int(0, "skin3", skinid);
+	}
+	SetPlayerSkin(playerid, skinid);
+	clanskins[playerid] = skinid;
+	
+	return true;
+}
+// CMD<CLN>:setclanrank(cmdid, playerid, params[])
+// {
+// 	new pid, rank;
+// 	if(sscanf(params, "ui", pid, rank)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /setclanrank [playerid/playername] [rank 1-5]");
+// 	if(Account[playerid][ClanRank] != 4) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Clan: {FFFFFF}You must be clan rank 5 to set another users rank!");
+// 	if(Account[playerid][ClanID] == -1) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Clan: {FFFFFF}You must be in a clan to use this command!");
+// 	if(rank < 1 || rank > 5) return SendClientMessage(playerid, COLOR_GRAY, "ERROR: Rank ID must be between 1-5");
+
+// 	yield 1;
+// 	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE id = '%i'", Account[playerid][ClanID]));
+// 	if(!cache_num_rows()) return SendClientMessage(playerid, COLOR_GRAY, sprintf("No clan exists with the id %i.", Account[playerid][ClanID]));
+
+// 	new clanrank[16];
+// 	cache_get_value_name(0, ranks[rank - 1], clanrank);
+
+// 	Account[pid][ClanRank] = rank - 1;
+// 	Account[pid][ClanRankName] = clanrank;
+// 	SendClientMessage(playerid, COLOR_GRAY, sprintf("Set %s's rank to %i.", GetName(pid), rank));
+// 	return true;
+// }
+// CMD<CLN>:setrankname(cmdid, playerid, params[])
+// {
+// 	new rank, rankname[16];
+// 	if(sscanf(params, "is[16]", rank, rankname)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /setrankname [rank] [name]");
+// 	if(Account[playerid][ClanRank] != 4) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Clan: {FFFFFF}You must be clan rank 5 to set another users rank!");
+// 	if(Account[playerid][ClanID] == -1) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Clan: {FFFFFF}You must be in a clan to use this command!");
+// 	if(rank < 1 || rank > 5) return SendClientMessage(playerid, COLOR_GRAY, "ERROR: Rank ID must be between 1-5");
+
+
+// 	SendClientMessage(playerid, COLOR_LIGHTBLUE, sprintf("You have set the rank title to %s!", rankname));
+// 	if(rank == 1) {
+// 		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET rank0 = '%s' WHERE id = %i", rankname, Account[playerid][ClanID]));
+// 	} else if(rank == 2) {
+// 		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET rank1 = '%s' WHERE id = %i", rankname, Account[playerid][ClanID]));
+// 	} else if(rank == 3) {
+// 		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET rank2 = '%s' WHERE id = %i", rankname, Account[playerid][ClanID]));
+// 	} else if(rank == 4) {
+// 		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET rank3 = '%s' WHERE id = %i", rankname, Account[playerid][ClanID]));
+// 	} else if(rank == 5) {
+// 		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET rank4 = '%s' WHERE id = %i", rankname, Account[playerid][ClanID]));
+// 	}
+// 	return 1;
+// }
 
 CMD<CLN>:acceptinvite(cmdid, playerid, params[])
 {
@@ -136,6 +213,7 @@ CMD<CLN>:acceptinvite(cmdid, playerid, params[])
 	Account[playerid][ClanRank] = 0;
 
 	strcat(Account[playerid][ClanName], Account[pid][ClanName]);
+	pendinginvite[playerid] = -1;
 
 	SendClientMessage(pid, -1, sprintf("{31AEAA}Clan Invite: {%06x}%s {FFFFFF}has accepted your clan invite.", GetPlayerColor(playerid) >>> 8, GetName(playerid)));
 	SendClanMessage(Account[playerid][ClanID], Account[playerid][ClanName], sprintf("%s has joined the clan! They were invited by %s.", GetName(playerid), GetName(pid)));
@@ -147,8 +225,19 @@ CMD<CLN>:c(cmdid, playerid, params[])
 	if(Account[playerid][ClanID] == -1) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Clan: {FFFFFF}You aren't in a clan to use the clan chat system.");
 	if(isnull(params)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /c [text]");
 	if(Account[playerid][ClanID] == 0) return SendClientMessage(playerid, COLOR_GRAY, "ERROR: You must be in a clan to use this command.");
-	SendClanMessage(Account[playerid][ClanID], Account[playerid][ClanName], sprintf("{%06x}%s(%i){FFFFFF}: %s", GetPlayerColor(playerid) >>> 8, GetName(playerid), Account[playerid][ClanRank], params));
+	SendClanMessage(Account[playerid][ClanID], Account[playerid][ClanName], sprintf("%s: %s", GetName(playerid), params));
 	return 1;
+}
+SendClanChatMessage(clanid, clanname[], msg[])
+{
+	foreach(new i: Player)
+	{
+		if(Account[i][ClanID] == clanid)
+		{
+			SendClientMessage(i, COLOR_LIGHTBLUE, sprintf("%s %s", clanname, msg));
+		}
+	}
+	return true;
 }
 SendClanMessage(clanid, clanname[], msg[])
 {
