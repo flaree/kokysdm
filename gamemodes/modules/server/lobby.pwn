@@ -34,7 +34,11 @@ CMD<AD1>:forcelobby(cmdid, playerid, params[])
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid, ERROR_OPTION);
 
 	HandleLobbyTransition(pID);
-	SendPunishmentMessage(sprintf("Admin %s has forced %s to the lobby.", GetName(playerid), GetName(pID)));
+	if (GetPlayerAdminHidden(playerid)) {
+		SendPunishmentMessage(sprintf("An Admin has forced %s to the lobby.", GetName(pID)));
+	} else {
+		SendPunishmentMessage(sprintf("Admin %s has forced %s to the lobby.", GetName(playerid), GetName(pID)));
+	}
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/forcelobby', '', %d)", GetName(playerid), GetName(pID), gettime()));
 	Account[playerid][AdminActions]++;
 	return 1;
