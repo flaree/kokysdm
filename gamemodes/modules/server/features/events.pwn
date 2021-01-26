@@ -419,7 +419,7 @@ HandleEventDeath(playerid, killerid, weaponid)
 	}
 	foreach(new i: Player)
 	{
-		if(ActivityState[i] == ACTIVITY_EVENT)
+		if(ActivityState[i] == ACTIVITY_EVENT || Account[i][Admin] >= 1)
 		{
 			SendDeathMessageToPlayer(i, killerid, playerid, weaponid);
 			
