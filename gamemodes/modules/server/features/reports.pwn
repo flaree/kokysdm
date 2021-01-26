@@ -141,7 +141,7 @@ CMD<AD1>:clearreports(cmdid, playerid, params[])
 	if(!pool_valid(Reports)) return SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Reports:{FFFFFF}  There are currently no reports.");
 
 	SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("{bf0000}Reports:{FFFFFF} You have cleared %i pending report%s.", pool_size(Reports), pool_size(Reports) == 1 ? "" : "s"));
-	SendAdmcmdMessage(1, sprintf("{FF0000}Admin Notice:{FFFFFF} %s has cleared %i report%s.", GetName(playerid), pool_size(Reports), pool_size(Reports) == 1 ? "" : "s"));
+	SendAdmcmdMessage(1, sprintf("%s has cleared %i report%s.", GetName(playerid), pool_size(Reports), pool_size(Reports) == 1 ? "" : "s"));
 	pool_delete(Reports);
 	return true;
 }

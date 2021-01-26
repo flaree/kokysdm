@@ -3951,7 +3951,7 @@ CMD:pay(cmdid, playerid, params[])
 	GivePlayerMoneyEx(playerid, -amount);
 	GivePlayerMoneyEx(player, amount);
 
-	SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{bf0000}Admin NOTICE: {FFFFFF}%s has just paid %s $%s.", GetName(playerid), GetName(player), Comma(amount)));
+	SendAdmcmdMessage(1, sprintf("%s has just paid %s $%s.", GetName(playerid), GetName(player), Comma(amount)));
 	return 1;
 }
 CMD:admins(cmdid, playerid, params[])
