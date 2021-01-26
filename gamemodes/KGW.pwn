@@ -313,10 +313,18 @@ enum pCustomSkinData
 	bool:cSkinUnlocked
 };
 
+enum ClanData
+{
+    skin1,
+    skin2,
+    skin3
+};
+
 //==========================================================================
 //	Server/Player Variables												  //
 //==========================================================================
 
+new Clans[9999][ClanData];
 new Account[MAX_PLAYERS][acc];
 new PlayerCustomSkins[MAX_PLAYERS][MAX_CUSTOM_SKINS][pCustomSkinData];
 
@@ -1389,6 +1397,8 @@ public OnGameModeInit()
 	mysql_tquery(SQL_CONNECTION, "SELECT * FROM `serversettings` LIMIT 1", "LoadSettings");
 
     mysql_tquery(SQL_CONNECTION, "UPDATE Accounts SET LoggedIn = 0");
+
+    mysql_tquery(SQL_CONNECTION, "SELECT * FROM `clans` where official = 1", "LoadClanData");
 
 	new ClockHours;
 	gettime(ClockHours);

@@ -272,7 +272,9 @@ OfficialClanSelection(playerid)
 		SetPlayerColor(playerid, colour);
 		SetPlayerPosEx(playerid, xspawn, yspawn, zspawn, 0, WORLD_TDM);
 		if(clanskins[playerid] == -1) SetPlayerSkinEx(playerid, skin);
-		else SetPlayerSkinEx(playerid, clanskins[playerid]);
+		else if(clanskins[playerid] == 1) SetPlayerSkinEx(playerid, Clans[Account[playerid][ClanID]][skin1]);
+		else if(clanskins[playerid] == 2) SetPlayerSkinEx(playerid, Clans[Account[playerid][ClanID]][skin2]);
+		else if(clanskins[playerid] == 3) SetPlayerSkinEx(playerid, Clans[Account[playerid][ClanID]][skin3]);
 		SetPlayerCheckpoint(playerid, 1929.8989, -1776.3195, 13.5469, 2);
 		SetPlayerMapIcon(playerid, 1, 1367.9875, -1279.7437, 13.5469, 6, 0, MAPICON_GLOBAL_CHECKPOINT);
 		GangZoneShowForPlayer(playerid, igsturf, 0xFF0000FF);

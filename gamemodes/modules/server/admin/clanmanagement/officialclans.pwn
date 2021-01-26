@@ -133,35 +133,40 @@ CMD<CM>:deleteclanvehicle(cmdid, playerid, params[])
 CMD<CM>:setspawn(cmdid, playerid, params[])
 {
 	if(isnull(params)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /setspawn [clanname]");
-	if(!ClanAlreadyExists(params)) return SendClientMessage(playerid, COLOR_GRAY, sprintf("No clan been found with the name %s.", params));
+	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE name = '%e' LIMIT 1", params));
+	if(!cache_num_rows()) return SendClientMessage(playerid, COLOR_GRAY, sprintf("No clan been found with the name %s.", params));
 
 	new Float:x, Float:y, Float:z;
 	GetPlayerPos(playerid, x, y, z);
 	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET x = %f, y = %f, z = %f WHERE name =  '%e'", x, y, z, params));
 	SendClientMessage(playerid, COLOR_LIGHTBLUE, "You have set the clans spawn point. Please take a screenshot of the map to prevent near-by spawn issues. Post it in the Discord!");
-	return 1;
+	return true;
 }
 CMD<CM>:setclanskin(cmdid, playerid, params[])
 {
 	new TargetClan[64], slotid, skinid;
-	if(sscanf(params, "s[64]ii", TargetClan, slotid, skinid)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /setclanskin [clanname] [skin slot] [skinid]");
+	if(sscanf(params, "s[64]ii", TargetClan, slotid, skinid)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /setclanskin [clan name] [skin slot] [skinid]");
 	if(slotid < 1 || slotid > 3) return SendClientMessage(playerid, COLOR_GRAY, "ERROR: Slot ID must be 1, 2 or 3.");
 
-	if(!ClanAlreadyExists(TargetClan)) 
-		return SendClientMessage(playerid, COLOR_GRAY, sprintf("No clan been found with the name %s.", TargetClan));
-
+	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE name = '%e' LIMIT 1", TargetClan));
+	if(!cache_num_rows()) return SendClientMessage(playerid, COLOR_GRAY, sprintf("No clan been found with the name %s.", TargetClan));
+	new clanid = GetClanIDFromName(TargetClan);
 	yield 1;
 	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE skin = %i or skin2 = %i or skin3 = %i", skinid, skinid, skinid));
 	if(cache_num_rows()) return SendClientMessage(playerid, COLOR_LIGHTRED, "A clan is already using this skin!");
-	SendClientMessage(playerid, COLOR_LIGHTBLUE, sprintf("You have set %s's skin at slot %i to %i!", TargetClan, slotid, skinid));
+
+	SendClientMessage(playerid, COLOR_LIGHTBLUE, sprintf("You have set %s's (id: %i) skin at slot %i to %i!", TargetClan, clanid, slotid, skinid));
 	if(slotid == 1) {
 		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET skin = %i WHERE name = '%e'", skinid, TargetClan));
+		Clans[clanid][skin1] = skinid;
 	} else if(slotid == 2) {
 		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET skin2 = %i WHERE name = '%e'", skinid, TargetClan));
+		Clans[clanid][skin2] = skinid;
 	} else if(slotid == 3) {
 		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET skin3 = %i WHERE name = '%e'", skinid, TargetClan));
+		Clans[clanid][skin3] = skinid;
 	}
-	return 1;
+	return true;
 }
 
 // param="type" // Used to determine if it is called under OnGameModeInit or after

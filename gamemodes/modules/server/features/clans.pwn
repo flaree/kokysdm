@@ -141,20 +141,16 @@ CMD<CLNTDM>:clanskin(cmdid, playerid, params[])
 	
 	if(slot < 1 || slot > 3) return SendClientMessage(playerid, COLOR_GRAY, "ERROR: Slot ID must be between 1-3");
 
-	yield 1;
-	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE id = '%i'", Account[playerid][ClanID]));
-	if(!cache_num_rows()) return SendClientMessage(playerid, COLOR_GRAY, sprintf("No clan exists with the id %i.", Account[playerid][ClanID]));
-
 	new skinid;
 	if(slot == 1) {
-		cache_get_value_name_int(0, "skin", skinid);
+		skinid = Clans[Account[playerid][ClanID]][skin1];
 	} else if(slot == 2) {
-		cache_get_value_name_int(0, "skin2", skinid);
+		skinid = Clans[Account[playerid][ClanID]][skin2];
 	} else {
-		cache_get_value_name_int(0, "skin3", skinid);
+		skinid = Clans[Account[playerid][ClanID]][skin3];
 	}
 	SetPlayerSkin(playerid, skinid);
-	clanskins[playerid] = skinid;
+	clanskins[playerid] = slot;
 	
 	return true;
 }

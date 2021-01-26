@@ -50,3 +50,26 @@ public LoadSettings(id)
 	return 1;
 }
 
+forward LoadClanData(id);
+public LoadClanData(id)
+{
+	if(cache_num_rows())
+    {
+		new clanid;
+    	for(new i = 0, r = cache_num_rows(); i < r; i++)
+		{
+			cache_get_value_name_int(i, "id", clanid);
+			cache_get_value_name_int(i, "skin", Clans[clanid][skin1]);
+			cache_get_value_name_int(i, "skin2", Clans[clanid][skin2]);
+			cache_get_value_name_int(i, "skin3", Clans[clanid][skin3]);
+		}
+
+		printf("[MYSQL]: Clan Data Loaded.");
+	}
+	else
+	{
+		print("ERROR: Loading Clan Data");
+	}
+	return 1;
+}
+
