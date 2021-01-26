@@ -2679,7 +2679,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 
 			foreach(new i: Player)
 			{
-				if(ActivityState[i] == ACTIVITY_TDM)
+				if(ActivityState[i] == ACTIVITY_TDM || Account[i][Admin] >= 1)
 				{
 					SendDeathMessageToPlayer(i, killerid, playerid, reason);
 				}
@@ -2771,10 +2771,13 @@ public OnPlayerDeath(playerid, killerid, reason)
 		Account[killerid][KillStreak]++;
 		Account[playerid][KillStreak] = 0;
 
-		foreach(new i: ArenaOccupants[arenaid])
-		{
-			SendDeathMessageToPlayer(i, killerid, playerid, reason);
-		}
+		foreach(new i: Player)
+        {
+            if(ActivityStateID[i] == arenaid || Account[i][Admin] >= 1)
+            {
+                SendDeathMessageToPlayer(i, killerid, playerid, reason);
+            }
+        }
 
 		UpdateKDs(playerid, killerid);
 
