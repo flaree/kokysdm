@@ -10,9 +10,9 @@
 														*Developed by Koky*
 
 ==============================================================================================================
-Update K:DM 0.52.5
+Update K:DM 0.52.6
 Memorial Developers -> Koky ~ TommyB ~ J0sh ES ~ Graber
-Developers -> SimoSbara ~ Davis ~ westham ~ Bauer ~ josef
+Developers -> SimoSbara ~ Davis ~ westham ~ Bauer ~ josef, flare, omcho
 Thanks to -> PatrickGTR :)
 Losers -> BanksDM - LSDM - CarnageTDM!
 
