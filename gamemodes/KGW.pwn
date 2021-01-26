@@ -588,6 +588,12 @@ stock AdminNames(const level, color = true)
         } else {
             format(adminName, sizeof adminName, "Developer");
         }
+    } else if (level == 2021) {
+        if(color) {
+            format(adminName, sizeof adminName, "{bf0000}Server Owner");
+        } else {
+            format(adminName, sizeof adminName, "Server Owner");
+        }
     } else {
         if(color) {
             format(adminName, sizeof adminName, "{bf0000}Management");
