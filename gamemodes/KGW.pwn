@@ -4655,7 +4655,7 @@ CreateServerTextDraws()
 
     //admin duty
 	DutyTextDraw = TextDrawCreate(320.691223, 2.166717, " ");
-	TextDrawLetterSize(DutyTextDraw, 0.255695, 0.894167);
+	TextDrawLetterSize(DutyTextDraw, 0.5, 1.8);
 	TextDrawAlignment(DutyTextDraw, 2);
 	TextDrawColor(DutyTextDraw, -1);
 	TextDrawSetShadow(DutyTextDraw, 0);
@@ -4664,7 +4664,7 @@ CreateServerTextDraws()
 	TextDrawFont(DutyTextDraw, 1);
 	TextDrawSetProportional(DutyTextDraw, 1);
 	TextDrawSetShadow(DutyTextDraw, 0);
-    TextDrawSetString(DutyTextDraw, "~n~~w~-_~r~ON_DUTY~w~-");
+    TextDrawSetString(DutyTextDraw, "~n~~w~-_~r~ON_DUTY~w~_-");
 
 	//login
 	logintd = TextDrawCreate(183.5000, -41.0000, "mdl-1087:Koky_DM");
