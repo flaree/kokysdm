@@ -69,6 +69,7 @@ new Countdown, CountdownTimer;
 
 new SpectatingPlayer[MAX_PLAYERS] = {-1, ...};
 
+new PlayerDeath[MAX_PLAYERS] = {false, ...};
 new countdowntime[MAX_PLAYERS];
 new countdowntimer[MAX_PLAYERS];
 new dmessage[MAX_PLAYERS];
@@ -1464,6 +1465,7 @@ public OnPlayerConnect(playerid)
     HudShow[playerid] = true;
     ConnectionMessages[playerid] = true;
     WallHack[playerid] = false;
+    PlayerDeath[playerid] = false;
 
 	Account_Reset(playerid);
 	SetPlayerColor(playerid, PlayerColors[playerid]);
@@ -2640,6 +2642,8 @@ public KillCamSpec(playerid)
 }
 public OnPlayerDeath(playerid, killerid, reason)
 {
+    if(PlayerDeath[playerid]) return 1;
+    PlayerDeath[playerid] = true;
 	Account[playerid][KillStreak] = 0;
     if(killerid != INVALID_PLAYER_ID && (ActivityState[playerid] == ACTIVITY_TDM || ActivityState[playerid] == ACTIVITY_ARENADM))
     {
@@ -3689,7 +3693,7 @@ public OnPlayerSpawn(playerid)
 	if(ActivityStateID[playerid] != EVENT_TDM) {
 		SetPlayerColor(playerid, PlayerColors[playerid % sizeof PlayerColors]);
 	}
-
+    PlayerDeath[playerid] = false;
 	switch(ActivityState[playerid])
 	{
 		case ACTIVITY_LOBBY: SendPlayerToLobby(playerid);
