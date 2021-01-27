@@ -1302,7 +1302,6 @@ ShowStatsForPlayer(playerid, clickedplayerid)
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}KDM Tokens: {FFFFFF}%d{808080} | Rare Skins: {FFFFFF}%d{808080} | Rare Items: {FFFFFF}%d{808080}", Account[clickedplayerid][Tokens], Account[clickedplayerid][RareSkins], Account[clickedplayerid][RareItems]));
 	if(GetPlayerAdminLevel(playerid) > 0) SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Admin Hours: {FFFFFF}%d{808080} | Admin Actions: {FFFFFF}%d{808080}", Account[clickedplayerid][AdminHours], Account[clickedplayerid][AdminActions]));
 	StatsLine(playerid);
-	InfoBoxForPlayer(playerid, "~g~Loaded user statistics!");
 }
 
 PreloadAnimLib(playerid, const animlib[])
@@ -3856,11 +3855,9 @@ CMD:stats(cmdid, playerid, params[])
     new targetid;
     if(sscanf(params, "u", targetid))
     {
-        InfoBoxForPlayer(playerid, "~g~Gathering players information, please wait...");
 	    ShowStatsForPlayer(playerid, playerid);
         return 1;
     }
-	InfoBoxForPlayer(playerid, "~g~Gathering players information, please wait...");
 	ShowStatsForPlayer(playerid, targetid);
 	return 1;
 }
