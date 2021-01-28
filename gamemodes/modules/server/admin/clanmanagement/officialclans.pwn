@@ -140,9 +140,11 @@ CMD<CM>:setspawn(cmdid, playerid, params[])
 	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE name = '%e' LIMIT 1", TargetClan));
 	if(!cache_num_rows()) return SendClientMessage(playerid, COLOR_GRAY, sprintf("No clan been found with the name %s.", TargetClan));
 
-	new Float:x, Float:y, Float:z;
+	new Float:x, Float:y, Float:z, Float:angle, Float:camx, Float:camy, Float:camz;
 	GetPlayerPos(playerid, x, y, z);
-	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET x = %f, y = %f, z = %f WHERE name =  '%e'", x, y, z, TargetClan));
+	GetPlayerFacingAngle(playerid, angle);
+	GetPlayerCameraPos(playerid, camx, camy, camz);
+	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET x = %f, y = %f, z = %f, angle = %f, camx = %f, camy = %f, camz = %f WHERE name =  '%e'", x, y, z, angle, camx, camy, camz, TargetClan));
 	SendClientMessage(playerid, COLOR_LIGHTBLUE, "You have set the clans spawn point. Please take a screenshot of the map to prevent near-by spawn issues. Post it in the Discord!");
 	return true;
 }
