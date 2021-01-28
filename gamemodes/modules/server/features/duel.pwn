@@ -829,6 +829,7 @@ SendDuel(playerid)
 	SendClientMessage(playerid, -1, "{bf0000}DUEL: {FFFFFF}You have sent the duel request.");
 
 	PlayersAccepted[playerid]++;
+	ActivityState[playerid] = ACTIVITY_DUEL_PREP;
 
 	if(InviteCooldown[playerid] != -1)
 		KillTimer(InviteCooldown[playerid]);

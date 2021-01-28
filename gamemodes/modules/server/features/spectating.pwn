@@ -63,14 +63,14 @@ hook public OnPlayerUpdate(playerid)
 	if(SpectatingPlayer[playerid] != -1 && Account[playerid][Admin] != 0)
 	{
 		UpdateSpecTDs(playerid, SpectatingPlayer[playerid]);
-		if(keys & KEY_SPRINT)
-		{
-			PlayerSpectatePlayer(playerid, SpectatingPlayer[playerid]);
-			if(ActivityState[SpectatingPlayer[playerid]] == ACTIVITY_TDM)
-			{
-				CreateTDMMapping(playerid);
-			}
-		}
+		// if(keys & KEY_SPRINT)
+		// {
+		// 	PlayerSpectatePlayer(playerid, SpectatingPlayer[playerid]);
+		// 	if(ActivityState[SpectatingPlayer[playerid]] == ACTIVITY_TDM)
+		// 	{
+		// 		CreateTDMMapping(playerid);
+		// 	}
+		// }
 
 
 		//SendClientMessageToAll(COLOR_RED, sprintf("updown: %d leftright: %d", updown, leftright));
@@ -100,7 +100,7 @@ hook public OnPlayerUpdate(playerid)
 						if(i == -1) i = MAX_PLAYERS-1;
 					}
 				}
-				SendClientMessage(playerid, -1, sprintf("{bf0000}Spectating: {808080}You are now spectating %s(%i). Player Mode: %s. Press SPRINT key to sync.", GetName(i), i, ReturnActivityDescription(i)));
+				SendClientMessage(playerid, -1, sprintf("{bf0000}Spectating: {808080}You are now spectating %s(%i). Player Mode: %s.", GetName(i), i, ReturnActivityDescription(ActivityState[i])));
 				DestroySpecTDs(playerid);
 				SpectatePlayer(playerid, i);
 				CreateSpecTDs(playerid, i);
@@ -133,7 +133,7 @@ CMD<AD1>:spec(cmdid, playerid, params[])
 	SpectatePlayer(playerid, target);
 	CreateSpecTDs(playerid, target);
 	UpdateSpecTDs(playerid, target);
-	SendClientMessage(playerid, -1, sprintf("{bf0000}(Spectate): {808080}You are now spectating %s(%i). Player Mode: %s. Press SPRINT key to sync.", GetName(target), target, ReturnActivityDescription(target)));
+	SendClientMessage(playerid, -1, sprintf("{bf0000}(Spectate): {808080}You are now spectating %s(%i). Player Mode: %s.", GetName(target), target, ReturnActivityDescription(ActivityState[target])));
 	return true;
 }
 

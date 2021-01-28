@@ -250,8 +250,12 @@ hook public OnPlayerGiveDamageActor(playerid, damaged_actorid, Float:amount, wea
 		}
 		if(damaged_actorid == arena_actor)
 		{
-			ShowArenaDialog(playerid);
-			ResetLobbyActorPositions();
+			if(!IsPlayerInLobby(playerid))  SendClientMessage(playerid, -1, "{31AEAA}Arenas: {FFFFFF}You must be in the lobby to use this command. This may occur due to an ongoing duel request or a bug, /lobby for a fix or contact an admin.");
+			else if(!EnableArenas) SendClientMessage(playerid, -1, "{31AEAA}Arenas: {FFFFFF}Arenas are currently disabled, please wait for them to open.");
+			else {
+				ShowArenaDialog(playerid);
+				ResetLobbyActorPositions();
+			}
 		}
 
 		if(damaged_actorid == copchase_actor)
@@ -261,8 +265,11 @@ hook public OnPlayerGiveDamageActor(playerid, damaged_actorid, Float:amount, wea
 		}
 		if(damaged_actorid == gangwars_actor)
 		{
-			ResetLobbyActorPositions();
-			ShowTeamSelectionDialog(playerid);
+			if(!IsPlayerInLobby(playerid)) SendClientMessage(playerid, -1, "{31AEAA}Team Deathmatch: {FFFFFF}You must be in the lobby to use this command. This may occur due to an ongoing duel request or a bug, /lobby for a fix or contact an admin.");
+			else {
+				ResetLobbyActorPositions();
+				ShowTeamSelectionDialog(playerid);
+			}
 		}
 		if(damaged_actorid == monthlydm_actor)
 		{

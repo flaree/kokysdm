@@ -10,9 +10,9 @@
 														*Developed by Koky*
 
 ==============================================================================================================
-Update K:DM 0.52.5
+Update K:DM 0.52.8
 Memorial Developers -> Koky ~ TommyB ~ J0sh ES ~ Graber
-Developers -> SimoSbara ~ Davis ~ westham ~ Bauer ~ josef
+Developers -> SimoSbara ~ Davis ~ westham ~ Bauer ~ josef, flare, omcho
 Thanks to -> PatrickGTR :)
 Losers -> BanksDM - LSDM - CarnageTDM!
 
@@ -69,6 +69,7 @@ new Countdown, CountdownTimer;
 
 new SpectatingPlayer[MAX_PLAYERS] = {-1, ...};
 
+new PlayerDeath[MAX_PLAYERS] = {false, ...};
 new countdowntime[MAX_PLAYERS];
 new countdowntimer[MAX_PLAYERS];
 new dmessage[MAX_PLAYERS];
@@ -601,7 +602,7 @@ stock AdminNames(const level, color = true)
             format(adminName, sizeof adminName, "{bf0000}Server Owner");
         } else {
             format(adminName, sizeof adminName, "Server Owner");
-        }
+        } 
     } else {
         if(color) {
             format(adminName, sizeof adminName, "{bf0000}Management");
@@ -1304,7 +1305,6 @@ ShowStatsForPlayer(playerid, clickedplayerid)
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}KDM Tokens: {FFFFFF}%d{808080} | Rare Skins: {FFFFFF}%d{808080} | Rare Items: {FFFFFF}%d{808080}", Account[clickedplayerid][Tokens], Account[clickedplayerid][RareSkins], Account[clickedplayerid][RareItems]));
 	if(GetPlayerAdminLevel(playerid) > 0) SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Admin Hours: {FFFFFF}%d{808080} | Admin Actions: {FFFFFF}%d{808080}", Account[clickedplayerid][AdminHours], Account[clickedplayerid][AdminActions]));
 	StatsLine(playerid);
-	InfoBoxForPlayer(playerid, "~g~Loaded user statistics!");
 }
 
 PreloadAnimLib(playerid, const animlib[])
@@ -1469,6 +1469,7 @@ public OnPlayerConnect(playerid)
     HudShow[playerid] = true;
     ConnectionMessages[playerid] = true;
     WallHack[playerid] = false;
+    PlayerDeath[playerid] = false;
 
 	Account_Reset(playerid);
 	SetPlayerColor(playerid, PlayerColors[playerid]);
@@ -2646,6 +2647,8 @@ public KillCamSpec(playerid)
 }
 public OnPlayerDeath(playerid, killerid, reason)
 {
+    if(PlayerDeath[playerid]) return 1;
+    PlayerDeath[playerid] = true;
 	Account[playerid][KillStreak] = 0;
     if(killerid != INVALID_PLAYER_ID && (ActivityState[playerid] == ACTIVITY_TDM || ActivityState[playerid] == ACTIVITY_ARENADM))
     {
@@ -2777,7 +2780,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 		Account[killerid][KillStreak]++;
 		Account[playerid][KillStreak] = 0;
 
-        foreach(new i: Player)
+		foreach(new i: Player)
         {
             if(ActivityStateID[i] == arenaid || Account[i][Admin] >= 1)
             {
@@ -2916,7 +2919,7 @@ stock ToggleAdminHidden(playerid)
 	else {
 		Account[playerid][pAdminHide] = 1;
 	}
-	SendAdminsMessage(1, COLOR_INDIANRED, sprintf("WARNING: %s is %s visible in /admins.", GetName(playerid), (Account[playerid][pAdminHide] == 0 ? "now" : "no longer")));
+	SendAdmcmdMessage(1, sprintf("%s is %s visible in /admins.", GetName(playerid), (Account[playerid][pAdminHide] == 0 ? "now" : "no longer")));
 	return 1;
 }
 
@@ -2973,7 +2976,7 @@ SendAdmcmdMessage(level, str[])
 		new astr[128];
 		if(Account[i][Admin] >= level)
 		{
-			format(astr, sizeof(astr), "{808080}[ADMCMD] {C0C0C0}%s", str);
+			format(astr, sizeof(astr), "{808080}[ADMCMD]: {C0C0C0}%s", str);
 			SendClientMessage(i, 0xFFFFFFFF, astr);
 		}
 	}
@@ -3700,7 +3703,7 @@ public OnPlayerSpawn(playerid)
 	if(ActivityStateID[playerid] != EVENT_TDM) {
 		SetPlayerColor(playerid, PlayerColors[playerid % sizeof PlayerColors]);
 	}
-
+    PlayerDeath[playerid] = false;
 	switch(ActivityState[playerid])
 	{
 		case ACTIVITY_LOBBY: SendPlayerToLobby(playerid);
@@ -3863,11 +3866,9 @@ CMD:stats(cmdid, playerid, params[])
     new targetid;
     if(sscanf(params, "u", targetid))
     {
-        InfoBoxForPlayer(playerid, "~g~Gathering players information, please wait...");
 	    ShowStatsForPlayer(playerid, playerid);
         return 1;
     }
-	InfoBoxForPlayer(playerid, "~g~Gathering players information, please wait...");
 	ShowStatsForPlayer(playerid, targetid);
 	return 1;
 }
@@ -3971,7 +3972,7 @@ CMD:pay(cmdid, playerid, params[])
 	GivePlayerMoneyEx(playerid, -amount);
 	GivePlayerMoneyEx(player, amount);
 
-	SendAdmcmdMessage(1, sprintf("{FFFFFF}%s has just paid %s $%s.", GetName(playerid), GetName(player), Comma(amount)));
+	SendAdmcmdMessage(1, sprintf("%s has just paid %s $%s.", GetName(playerid), GetName(player), Comma(amount)));
 	return 1;
 }
 CMD:admins(cmdid, playerid, params[])
@@ -4003,7 +4004,7 @@ CMD:admins(cmdid, playerid, params[])
         SendClientMessage(playerid, COLOR_WHITE, sprintf("(ID %i) {%06x}%s {FFFFFF}- (%s{FFFFFF}) {bf0000}%s", admin[0], GetPlayerColor(admin[0]) >>> 8, GetName(admin[0]), AdminNames(admin[1]), Account[admin[0]][pAdminHide] == 1 ? "(HIDDEN)" : ""));
     }
     SendClientMessage(playerid, 0xBF0000FF, "______________________________________________");
-	if(!GetPlayerAdminLevel(playerid)) SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{FFFFFF}%s has just typed /admins.", GetName(playerid)));
+	if(!GetPlayerAdminLevel(playerid)) SendAdmcmdMessage(1, sprintf("{FFFFFF}%s has just typed /admins.", GetName(playerid)));
     list_delete(adminlist);
     return true;
 }
@@ -4666,7 +4667,7 @@ CreateServerTextDraws()
 
     //admin duty
 	DutyTextDraw = TextDrawCreate(320.691223, 2.166717, " ");
-	TextDrawLetterSize(DutyTextDraw, 0.255695, 0.894167);
+	TextDrawLetterSize(DutyTextDraw, 0.5, 1.8);
 	TextDrawAlignment(DutyTextDraw, 2);
 	TextDrawColor(DutyTextDraw, -1);
 	TextDrawSetShadow(DutyTextDraw, 0);
@@ -4675,7 +4676,7 @@ CreateServerTextDraws()
 	TextDrawFont(DutyTextDraw, 1);
 	TextDrawSetProportional(DutyTextDraw, 1);
 	TextDrawSetShadow(DutyTextDraw, 0);
-    TextDrawSetString(DutyTextDraw, "~n~~w~-_~r~ON_DUTY~w~-");
+    TextDrawSetString(DutyTextDraw, "~n~~w~-_~r~ON_DUTY~w~_-");
 
 	//login
 	logintd = TextDrawCreate(183.5000, -41.0000, "mdl-1087:Koky_DM");

@@ -4860,7 +4860,7 @@ static PlayerDeath(playerid, const animlib[32], const animname[32], anim_lock = 
 public OnPlayerPrepareDeath(playerid, const animlib[32], const animname[32], &anim_lock, &respawn_time)
 {
 	#if defined WC_OnPlayerPrepareDeath
-		WC_OnPlayerPrepareDeath(playerid, "", animname, anim_lock, respawn_time);
+		WC_OnPlayerPrepareDeath(playerid, animlib, animname, anim_lock, respawn_time);
 	#endif
 }
 

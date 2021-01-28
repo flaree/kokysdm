@@ -453,7 +453,7 @@ DCMD:mute(user, channel, params[])
 
 	DCC_SendChannelMessage(channel, sprintf("**PUNISHMENT:** %s was muted by %s for %i minutes, reason: %s", GetName(target), admin, minutes, reason));
 	SendClientMessageToAll(COLOR_LIGHTRED, sprintf("PUNISHMENT: %s was muted by %s via Discord %i minutes, reason: %s", GetName(target), admin, minutes, reason));
-	SendAdmcmdMessage(1, sprintf("{FFFFFF}%s has muted %s via Discord for %i minutes! Reason: %s", admin, GetName(target), minutes, reason));
+	SendAdmcmdMessage(1, sprintf("%s has muted %s via Discord for %i minutes! Reason: %s", admin, GetName(target), minutes, reason));
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/mute', '%e', '%d')", admin, GetName(target), reason, gettime()));
 	return 1;
 }
@@ -478,7 +478,7 @@ DCMD:unmute(user, channel, params[])
 
 	DCC_SendChannelMessage(channel, sprintf("**PUNISHMENT:** %s was unmuted by %s.", GetName(target), admin));
 	SendClientMessageToAll(COLOR_LIGHTRED, sprintf("PUNISHMENT: %s was unmuted by %s via Discord.", GetName(target), admin));
-	SendAdmcmdMessage(1, sprintf("{FFFFFF}%s has unmuted %s via Discord.", admin, GetName(target)));
+	SendAdmcmdMessage(1, sprintf("{bf0000}%s has unmuted %s via Discord.", admin, GetName(target)));
 	SendClientMessage(target, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}You have been unmuted by an admin.");
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/unmute', 'N/A', '%d')", admin, GetName(target), gettime()));
 	return 1;

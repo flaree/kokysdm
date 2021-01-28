@@ -174,7 +174,7 @@ CMD<CLN>:acceptinvite(cmdid, playerid, params[])
 }
 CMD<CLN>:c(cmdid, playerid, params[])
 {
-	if(Account[playerid][ClanID] == -1) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Clan: {FFFFFF}You aren't in a clan to use the clan chat system.");
+	if(Account[playerid][ClanID] == -1 || Account[playerid][ClanID] == 0) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Clan: {FFFFFF}You aren't in a clan to use the clan chat system.");
 	if(isnull(params)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /c [text]");
 	if(Account[playerid][ClanID] == 0) return SendClientMessage(playerid, COLOR_GRAY, "ERROR: You must be in a clan to use this command.");
 	SendClanMessage(Account[playerid][ClanID], Account[playerid][ClanName], sprintf("%s: %s", GetName(playerid), params));

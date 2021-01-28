@@ -144,27 +144,26 @@ CMD<CM>:setspawn(cmdid, playerid, params[])
 }
 CMD<CM>:setclanskin(cmdid, playerid, params[])
 {
-	new TargetClan[64], slotid, skinid;
-	if(sscanf(params, "s[64]ii", TargetClan, slotid, skinid)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /setclanskin [clan name] [skin slot] [skinid]");
+	new TargetClan, slotid, skinid;
+	if(sscanf(params, "iii", TargetClan, slotid, skinid)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /setclanskin [clan id] [skin slot] [skinid]");
 	if(slotid < 1 || slotid > 3) return SendClientMessage(playerid, COLOR_GRAY, "ERROR: Slot ID must be 1, 2 or 3.");
 
-	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE name = '%e' LIMIT 1", TargetClan));
-	if(!cache_num_rows()) return SendClientMessage(playerid, COLOR_GRAY, sprintf("No clan been found with the name %s.", TargetClan));
-	new clanid = GetClanIDFromName(TargetClan);
+	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE id = %i LIMIT 1", TargetClan));
+	if(!cache_num_rows()) return SendClientMessage(playerid, COLOR_GRAY, sprintf("No clan been found with the id %i.", TargetClan));
 	yield 1;
 	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE skin = %i or skin2 = %i or skin3 = %i", skinid, skinid, skinid));
 	if(cache_num_rows()) return SendClientMessage(playerid, COLOR_LIGHTRED, "A clan is already using this skin!");
 
-	SendClientMessage(playerid, COLOR_LIGHTBLUE, sprintf("You have set %s's (id: %i) skin at slot %i to %i!", TargetClan, clanid, slotid, skinid));
+	SendClientMessage(playerid, COLOR_LIGHTBLUE, sprintf("You have set clan id %i skin at slot %i to %i!", TargetClan, slotid, skinid));
 	if(slotid == 1) {
-		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET skin = %i WHERE name = '%e'", skinid, TargetClan));
-		Clans[clanid][skin1] = skinid;
+		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET skin = %i WHERE id = %i", skinid, TargetClan));
+		Clans[TargetClan][skin1] = skinid;
 	} else if(slotid == 2) {
-		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET skin2 = %i WHERE name = '%e'", skinid, TargetClan));
-		Clans[clanid][skin2] = skinid;
+		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET skin2 = %i WHERE id = %i", skinid, TargetClan));
+		Clans[TargetClan][skin2] = skinid;
 	} else if(slotid == 3) {
-		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET skin3 = %i WHERE name = '%e'", skinid, TargetClan));
-		Clans[clanid][skin3] = skinid;
+		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET skin3 = %i WHERE id = %i", skinid, TargetClan));
+		Clans[TargetClan][skin3] = skinid;
 	}
 	return true;
 }
