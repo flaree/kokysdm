@@ -385,15 +385,75 @@ CMD<AD1>:a(cmdid, playerid, params[])
 	DCC_SendChannelMessage(DCC_FindChannelById(ADMIN_CHANNEL), sprintf("**%s**: `%s`", GetName(playerid), params));
 	return true;
 }
-CMD<AD3>:staffreward(cmdid, playerid, params[])
+CMD<AD1>:staffreward(cmdid, playerid, params[])
 {
-	if(Account[playerid][Donator] != 4)
+	if(Account[playerid][Admin] == 1)
 	{
-		SendAdminsMessage(1, COLOR_RED, sprintf("%s has activated their staff reward!", GetName(playerid)));
+		if(Account[playerid][Donator] < 3)
+		{
+			SendAdminsMessage(1, COLOR_RED, sprintf("%s has activated their silver staff reward!", GetName(playerid)));
+			ActivateUpgrades(playerid, 1);
+		}
+		else SendClientMessage(playerid, COLOR_RED, "You already have Silver or greater V.I.P active!");
+	} else if(Account[playerid][Admin] == 2)
+	{
+		if(Account[playerid][Donator] < 4)
+		{
+			SendAdminsMessage(1, COLOR_RED, sprintf("%s has activated their gold staff reward!", GetName(playerid)));
+			ActivateUpgrades(playerid, 2);
+		}
+		else SendClientMessage(playerid, COLOR_RED, "You already have Gold or greater V.I.P active!");
+	} else
+	{
+		if(Account[playerid][Donator] <= 4)
+		{
+			SendAdminsMessage(1, COLOR_RED, sprintf("%s has activated their staff reward!", GetName(playerid)));
+			ActivateUpgrades(playerid, 3);
+		}
+		else SendClientMessage(playerid, COLOR_RED, "You already have Diamond or greater V.I.P active!");
+	}
+	return true;
+}
+CMD<AD6>:givereward(cmdid, playerid, params[])
+{
+	new user, reward[64];
+	if(sscanf(params, "us[64]", user, reward)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /givereward [bronze|silver|gold|diamond|nc|key|token]");
+	if(isequal(reward, "bronze"))
+	{
+		SendAdmcmdMessage(5, sprintf("%s has given %s bronze donator!", GetName(playerid), GetName(user)));
+		ActivateUpgrades(playerid, 0);
+	}
+	else if(isequal(reward, "silver"))
+	{
+		SendAdmcmdMessage(5, sprintf("%s has given %s silver donator!", GetName(playerid), GetName(user)));
+		ActivateUpgrades(playerid, 1);
+	}
+	else if(isequal(reward, "gold"))
+	{
+		SendAdmcmdMessage(5, sprintf("%s has given %s gold donator!", GetName(playerid), GetName(user)));
+		ActivateUpgrades(playerid, 2);
+	}
+	else if(isequal(reward, "diamond"))
+	{
+		SendAdmcmdMessage(5, sprintf("%s has given %s diamond donator!", GetName(playerid), GetName(user)));
 		ActivateUpgrades(playerid, 3);
 	}
-	else SendClientMessage(playerid, COLOR_RED, "You already have Diamond V.I.P active!");
-	return true;
+	else if(isequal(reward, "nc"))
+	{
+		SendAdmcmdMessage(5, sprintf("%s has given %s namechanges!", GetName(playerid), GetName(user)));
+		ActivateUpgrades(playerid, 4);
+	}
+	else if(isequal(reward, "key"))
+	{
+		SendAdmcmdMessage(5, sprintf("%s has given %s keys!", GetName(playerid), GetName(user)));
+		ActivateUpgrades(playerid, 5);
+	}
+	else if(isequal(reward, "token"))
+	{
+		SendAdmcmdMessage(5, sprintf("%s has given %s a token!", GetName(playerid), GetName(user)));
+		ActivateUpgrades(playerid, 7);
+	}
+	return 1;
 }
 CMD<AD1>:fpscheck(cmdid, playerid, params[])
 {

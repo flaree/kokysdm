@@ -309,7 +309,6 @@ ShowTeamSelectionDialog(playerid)
 	if(!response[E_DIALOG_RESPONSE_Response]) return true;
 
 	new teamchoice = response[E_DIALOG_RESPONSE_Listitem];
-	printf("%i", teamchoice);
 	if(teamchoice == 4 && Account[playerid][Donator] < 3) return SendClientMessage(playerid, COLOR_LIGHTRED, "ERROR: {FFFFFF}This is for Gold or Diamond donators only! (/donate)");
 	if(teamchoice == teamfull) return SendClientMessage(playerid, COLOR_LIGHTRED, "ERROR: {FFFFFF}This team is currently full, please select another team.");
 	if(teamchoice < 5)
