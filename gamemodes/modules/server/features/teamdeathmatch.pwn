@@ -581,7 +581,7 @@ CMD<TDM>:buy(cmdid, playerid, params[])
 }
 CMD<TDM>:tdm(cmdid, playerid, params[])
 {
-	if(ActivityState[playerid] != ACTIVITY_LOBBY) return true;
+	if(!IsPlayerInLobby(playerid)) return SendClientMessage(playerid, -1, "{31AEAA}Team Deathmatch: {FFFFFF}You must be in the lobby to use this command. This may occur due to an ongoing duel request or a bug, /lobby for a fix or contact an admin.");
 
 	ShowTeamSelectionDialog(playerid);
 	return true;
