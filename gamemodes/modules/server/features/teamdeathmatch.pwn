@@ -245,7 +245,6 @@ OfficialClanSelection(playerid)
 	cache_get_value_name_float(0, "z", zspawn);
 	cache_get_value_int(0, "skin", skin);
 	cache_get_value_int(0, "official", isofficial);
-	cache_get_value_int(0, "color", colour);
 
 	if(isofficial == 0)
 		return SendClientMessage(playerid, COLOR_LIGHTRED, "ERROR: {FFFFFF}Your clan is not official. Create a thread on the forums and post frequently.");
@@ -269,7 +268,7 @@ OfficialClanSelection(playerid)
 		Account[playerid][CopChaseDead] = 1;
 		SpawnProtTimer[playerid] = SetTimerEx("SpawnProtection", 8000, false, "i", playerid);
 		
-		SetPlayerColor(playerid, colour);
+		SetPlayerColor(playerid, Clans[Account[playerid][ClanID]][clancolor]);
 		SetPlayerPosEx(playerid, xspawn, yspawn, zspawn, 0, WORLD_TDM);
 		if(clanskins[playerid] == -1) SetPlayerSkinEx(playerid, skin);
 		else if(clanskins[playerid] == 1) SetPlayerSkinEx(playerid, Clans[Account[playerid][ClanID]][skin1]);

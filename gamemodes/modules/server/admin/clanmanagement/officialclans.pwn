@@ -61,17 +61,19 @@ CMD<CM>:deletevehicle(cmdid, playerid, params[])
 	}
 	return true;
 }
-CMD<CM>:clancolour(cmdid, playerid, params[])
+CMD<CM>:setclancolour(cmdid, playerid, params[])
 {
 	new clanid, color;
-	if(sscanf(params, "ih", clanid, color)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /clancolour [clan ID] [colour]");
+	if(sscanf(params, "im", clanid, color)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /clancolour [clan ID] [colour]");
 	yield 1;
 	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE id = '%i'", clanid));
 	if(!cache_num_rows()) return SendClientMessage(playerid, COLOR_GRAY, sprintf("No clan exists with the ID %i.", clanid));
-	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET color = %i WHERE id = %i", color & ~0xff, clanid));
+	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET color = %i WHERE id = %i", color, clanid));
+	Clans[clanid][clancolor] = color;
 	SendClientMessage(playerid, COLOR_GRAY, "You've succesfully set the colour for that clan.");
 	return true;
 }
+ALT:setclancolor = CMD:setclancolour;
 CMD<CM>:officialclans(cmdid, playerid, params[])
 {
 	yield 1;
