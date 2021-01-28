@@ -1680,13 +1680,12 @@ public HttpResponse(playerid, responseCode, data[])
 {
 	if(responseCode == 200)
 	{
-		SendClientMessageToAll(COLOR_RED, data);
-
 		new Float:value = floatstr(data);
+        SendAdmcmdMessage(1, sprintf("%s Proxy %: %f", GetName(playerid), value));
 		if(value >= 0.99) {
         	new ip[16];
         	GetPlayerIp(playerid, ip, sizeof(ip));
-        	//SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("WARNING: %s (ID %d) has connected with a proxy/VPN! (%s)", GetName(playerid), playerid, ip));
+        	SendAdmcmdMessage(1, sprintf("WARNING: %s (ID %d) has connected with a proxy/VPN! (%s)", GetName(playerid), playerid, ip));
         	Account[playerid][pVPN] = 1;
     	}
 		new Float:proxyPercentage;
@@ -1694,8 +1693,7 @@ public HttpResponse(playerid, responseCode, data[])
     	Account[playerid][pVPN] = proxyPercentage;
 	}
 	else {
-		SendClientMessageToAll(COLOR_RED, sprintf("connect failed %d", responseCode));
-		SendClientMessageToAll(COLOR_RED, data);
+		SendAdmcmdMessage(6, sprintf("connect failed %d", responseCode));
 	}
 	return 1;
 }
