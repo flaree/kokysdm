@@ -10,7 +10,7 @@
 														*Developed by Koky*
 
 ==============================================================================================================
-Update K:DM 0.52.6
+Update K:DM 0.52.8
 Memorial Developers -> Koky ~ TommyB ~ J0sh ES ~ Graber
 Developers -> SimoSbara ~ Davis ~ westham ~ Bauer ~ josef, flare, omcho
 Thanks to -> PatrickGTR :)
@@ -2970,7 +2970,7 @@ SendAdmcmdMessage(level, str[])
 		new astr[128];
 		if(Account[i][Admin] >= level)
 		{
-			format(astr, sizeof(astr), "{808080}[ADMCMD] {C0C0C0}%s", str);
+			format(astr, sizeof(astr), "{808080}[ADMCMD]: {C0C0C0}%s", str);
 			SendClientMessage(i, 0xFFFFFFFF, astr);
 		}
 	}

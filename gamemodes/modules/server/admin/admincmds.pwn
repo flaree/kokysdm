@@ -2028,4 +2028,12 @@ CMD<AD5>:ulserv(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_GREEN, "Server password has been removed.");
 	return 1;
 }
+CMD<AD6>:togglearenas(cmdid, playerid, params[])
+{
+	EnableArenas = !EnableArenas;
+	new szString[256];
+	format(szString, 256, "{808080}[ADMCMD]: {FFFFFF}%s has %s arenas.", AdminHiddenName(playerid), EnableArenas?("enabled"):("disabled"));
+	SendClientMessageToAll(-1, szString);
+	return 1;
+}
 // END OF SCRIPT
