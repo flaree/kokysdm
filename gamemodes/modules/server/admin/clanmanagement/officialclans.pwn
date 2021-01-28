@@ -134,13 +134,15 @@ CMD<CM>:deleteclanvehicle(cmdid, playerid, params[])
 }
 CMD<CM>:setspawn(cmdid, playerid, params[])
 {
-	if(isnull(params)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /setspawn [clanname]");
-	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE name = '%e' LIMIT 1", params));
-	if(!cache_num_rows()) return SendClientMessage(playerid, COLOR_GRAY, sprintf("No clan been found with the name %s.", params));
+	new TargetClan[64];
+	if(sscanf(params, "s[64]", TargetClan)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /setspawn [clanname]");
+	yield 1;
+	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE name = '%e' LIMIT 1", TargetClan));
+	if(!cache_num_rows()) return SendClientMessage(playerid, COLOR_GRAY, sprintf("No clan been found with the name %s.", TargetClan));
 
 	new Float:x, Float:y, Float:z;
 	GetPlayerPos(playerid, x, y, z);
-	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET x = %f, y = %f, z = %f WHERE name =  '%e'", x, y, z, params));
+	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET x = %f, y = %f, z = %f WHERE name =  '%e'", x, y, z, TargetClan));
 	SendClientMessage(playerid, COLOR_LIGHTBLUE, "You have set the clans spawn point. Please take a screenshot of the map to prevent near-by spawn issues. Post it in the Discord!");
 	return true;
 }
@@ -149,9 +151,9 @@ CMD<CM>:setclanskin(cmdid, playerid, params[])
 	new TargetClan, slotid, skinid;
 	if(sscanf(params, "iii", TargetClan, slotid, skinid)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /setclanskin [clan id] [skin slot] [skinid]");
 	if(slotid < 1 || slotid > 3) return SendClientMessage(playerid, COLOR_GRAY, "ERROR: Slot ID must be 1, 2 or 3.");
-
+	yield 1;
 	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE id = %i LIMIT 1", TargetClan));
-	if(!cache_num_rows()) return SendClientMessage(playerid, COLOR_GRAY, sprintf("No clan been found with the id %i.", TargetClan));
+	if(!cache_num_rows()) return SendClientMessage(playerid, COLOR_GRAY, sprintf("No clan been found with the IDs %i. Type /officialclans for a list of clans to IDs.", TargetClan));
 	yield 1;
 	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE skin = %i or skin2 = %i or skin3 = %i", skinid, skinid, skinid));
 	if(cache_num_rows()) return SendClientMessage(playerid, COLOR_LIGHTRED, "A clan is already using this skin!");
