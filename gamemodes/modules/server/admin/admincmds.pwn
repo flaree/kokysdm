@@ -1174,8 +1174,8 @@ CMD<AD1>:forceteam(cmdid, playerid, params[])
 	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
 	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
     if(GetPlayerAdminLevel(playerid) < Account[targetid][Admin]) return SendClientMessage(playerid, COLOR_RED, NOLEVEL);
-	ForceClassSelection(targetid);
-	SetPlayerHealth(targetid, 0.0);
+	SendPlayerToLobby(playerid);
+	ShowTeamSelectionDialog(targetid);
 	PlayerPlaySound(targetid, 1057, 0.0, 0.0, 0.0);
 	PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);
 	new buf[150];
