@@ -518,8 +518,13 @@ GiveTDMAmmunation(playerid)
 	if(Account[playerid][Donator] == 4)
 	{
 		GivePlayerWeapon(playerid, WEAPON_SNIPER, 25);
+		SetPlayerArmour(playerid, 100);
+		SendClientMessage(playerid, -1, "{fdff00}DONATOR: You have been given a Sniper & 100 armour for being Diamond Donator!");
+	} else if(Account[playerid][Donator] == 4)
+	{
+		GivePlayerWeapon(playerid, WEAPON_SNIPER, 10);
 		SetPlayerArmour(playerid, 75);
-		SendClientMessage(playerid, -1, "{fdff00}DONATOR: You have been given a Sniper for being Diamond Donator!");
+		SendClientMessage(playerid, -1, "{fdff00}DONATOR: You have been given a Sniper & 75 armour for being Gold Donator!");
 	}
 
 	if(Account[playerid][Donator] >= 3 && GetPlayerTeam(playerid) == 5)
