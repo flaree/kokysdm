@@ -18661,34 +18661,34 @@ Float:GetArmour(playerid) {
 
 forward UpdateNameTag(playerid, fps);
 public UpdateNameTag(playerid, fps) {
-	if(NameTagNeedsUpdating{playerid} == 1) {
-		for(new i; i < MAX_PLAYERS; i++) {
-			if(!IsPlayerConnected(i)) continue;
-			if(WallHack[i] == false ){
-                if(WallHackTag[i][playerid] != PlayerText3D:INVALID_3DTEXT_ID) {
-                    DeletePlayer3DTextLabel(i, WallHackTag[i][playerid]);
-                    WallHackTag[i][playerid] = PlayerText3D:INVALID_3DTEXT_ID;
-                }
-                continue;
-            }
-            if(i == playerid) continue;
-			if(WallHackTag[i][playerid] == PlayerText3D:INVALID_3DTEXT_ID) {
-                new
-                    PlayerText3D: playerTextId,
-                    Float: X, Float: Y, Float: Z;
+	// if(NameTagNeedsUpdating{playerid} == 1) {
+	// 	for(new i; i < MAX_PLAYERS; i++) {
+	// 		if(!IsPlayerConnected(i)) continue;
+	// 		if(WallHack[i] == false ){
+    //             if(WallHackTag[i][playerid] != PlayerText3D:INVALID_3DTEXT_ID) {
+    //                 DeletePlayer3DTextLabel(i, WallHackTag[i][playerid]);
+    //                 WallHackTag[i][playerid] = PlayerText3D:INVALID_3DTEXT_ID;
+    //             }
+    //             continue;
+    //         }
+    //         if(i == playerid) continue;
+	// 		if(WallHackTag[i][playerid] == PlayerText3D:INVALID_3DTEXT_ID) {
+    //             new
+    //                 PlayerText3D: playerTextId,
+    //                 Float: X, Float: Y, Float: Z;
 
-                GetPlayerPos(playerid, X, Y, Z);
-                new szString[128];
-				format(szString, 256, "%s (%d)\n{FFFFFF}({FF0000}%.1f{FFFFFF}/{AAAAAA}%.1f{FFFFFF})\nFPS: %d", GetName(playerid), playerid, GetHealth(playerid), GetArmour(playerid), fps);
-                playerTextId = CreatePlayer3DTextLabel(i, szString, 0x008080FF, 0, 0, 0, 400, playerid);
-                WallHackTag[i][playerid] = playerTextId;
-                NameTagNeedsUpdating{playerid} = 0;
-            } else {
-				new szString[128];
-				format(szString, 256, "%s (%d)\n{FFFFFF}({FF0000}%.1f{FFFFFF}/{AAAAAA}%.1f{FFFFFF})\nFPS: %d", GetName(playerid), playerid, GetHealth(playerid), GetArmour(playerid), fps);
-                UpdatePlayer3DTextLabelText(i, WallHackTag[i][playerid], 0xFF0000FF, szString);
-				NameTagNeedsUpdating{playerid} = 0;
-			}
-		}
-	}
+    //             GetPlayerPos(playerid, X, Y, Z);
+    //             new szString[128];
+	// 			format(szString, 256, "%s (%d)\n{FFFFFF}({FF0000}%.1f{FFFFFF}/{AAAAAA}%.1f{FFFFFF})\nFPS: %d", GetName(playerid), playerid, GetHealth(playerid), GetArmour(playerid), fps);
+    //             playerTextId = CreatePlayer3DTextLabel(i, szString, 0x008080FF, 0, 0, 0, 400, playerid);
+    //             WallHackTag[i][playerid] = playerTextId;
+    //             NameTagNeedsUpdating{playerid} = 0;
+    //         } else {
+	// 			new szString[128];
+	// 			format(szString, 256, "%s (%d)\n{FFFFFF}({FF0000}%.1f{FFFFFF}/{AAAAAA}%.1f{FFFFFF})\nFPS: %d", GetName(playerid), playerid, GetHealth(playerid), GetArmour(playerid), fps);
+    //             UpdatePlayer3DTextLabelText(i, WallHackTag[i][playerid], 0xFF0000FF, szString);
+	// 			NameTagNeedsUpdating{playerid} = 0;
+	// 		}
+	// 	}
+	// }
 }
