@@ -64,7 +64,7 @@ CMD<AD1>:sv(cmdid, playerid, params[])
 		if(sscanf(params, "i", id)) return SendClientMessage(playerid, COLOR_RED, "[USAGE]: /sv [vehicle id]");
 	}
     SetVehicleToRespawn(id);
-	SendClientMessage(playerid, COLOR_RED, "{808080}[ADMCMD]: Vehicle respawned.");
+	SendClientMessage(playerid, COLOR_RED, "{808080}[ADMCMD]:{FFFFFF} Vehicle respawned.");
 	return 1;
 }
 CMD<AD3>:aveh(cmdid, playerid, params[])
@@ -302,7 +302,7 @@ CMD<AD5>:setcustomskin(cmdid, playerid, params[])
 CMD<AD4>:alockchat(cmdid, playerid, params[])
 {
 	ChatLocked = !ChatLocked;
-	SendClientMessageToAll(COLOR_GRAY, sprintf("{808080}[ADMCMD]: {FFFFFF}%s has %s the chat.", AdminName(playerid), ChatLocked == true ? "locked" : "unlocked"));
+	SendClientMessageToAll(COLOR_GRAY, sprintf("{808080}[ADMCMD]:{FFFFFF} %s has %s the chat.", AdminName(playerid), ChatLocked == true ? "locked" : "unlocked"));
 	return 1;
 }
 CMD<AD1>:clearchat(cmdid, playerid, params[])
@@ -311,7 +311,7 @@ CMD<AD1>:clearchat(cmdid, playerid, params[])
 	{
 		SendClientMessageToAll(0xFFFFFFFF, " ");
 	}
-	SendClientMessageToAll(COLOR_GRAY, sprintf("{808080}[ADMCMD]: {FFFFFF}%s has cleared the chat.", AdminName(playerid)));
+	SendClientMessageToAll(COLOR_GRAY, sprintf("{808080}[ADMCMD]:{FFFFFF} %s has cleared the chat.", AdminName(playerid)));
 	return 1;
 }
 
@@ -1179,7 +1179,7 @@ CMD<AD1>:forceteam(cmdid, playerid, params[])
 	PlayerPlaySound(targetid, 1057, 0.0, 0.0, 0.0);
 	PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);
 	new buf[150];
-	format(buf, sizeof(buf), "{808080}[ADMCMD]: %s has forced you to class selection.", AdminName(playerid));
+	format(buf, sizeof(buf), "{808080}[ADMCMD]:{FFFFFF} %s has forced you to class selection.", AdminName(playerid));
 	SendClientMessage(targetid, COLOR_RED, buf);
 	format(buf, sizeof(buf), "You have forced %s to class selection.", GetName(targetid));
 	SendClientMessage(playerid, COLOR_RED, buf);
@@ -1192,7 +1192,7 @@ CMD<AD1>:weaps(cmdid, playerid, params[])
 	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
 	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
     new weapons[13][2], weaponname[35], string[40], count=0;
-	format(string, sizeof(string), "{808080}[ADMCMD]: %s's Weapons:", GetName(targetid));
+	format(string, sizeof(string), "{808080}[ADMCMD]:{FFFFFF} %s's Weapons:", GetName(targetid));
 	SendClientMessage(playerid, COLOR_RED, string);
 	for (new i = 0; i <= 12; i++)
 	{
@@ -1270,7 +1270,7 @@ CMD<AD1>:nos(cmdid, playerid, params[])
 		}
 	}
 	AddVehicleComponent(vehicle, 1010);
-    SendClientMessage(playerid, COLOR_RED, "{808080}[ADMCMD]: You have added nitros (10x) to your vehicle.");
+    SendClientMessage(playerid, COLOR_RED, "{808080}[ADMCMD]:{FFFFFF} You have added nitros (10x) to your vehicle.");
 	return 1;
 }
 
@@ -1299,7 +1299,7 @@ CMD<AD1>:tempban(cmdid, playerid, params[])
 	GetPlayerIp(targetid, Player_IP, 16);
     mysql_format(SQL_CONNECTION, query, sizeof(query), "INSERT INTO `bandata` (`User`, `BannedBy`,`ExpiresOn`,`BannedOn`,`BanReason`,`IPAddress`) VALUES ('%e','%e', DATE_ADD(NOW(), INTERVAL '%d' HOUR), NOW(), '%e', '%e');", GetName(targetid), GetName(playerid), hours, reason, Player_IP);
 	mysql_tquery(SQL_CONNECTION, query, "", "");
-	format(string, sizeof(string), "{808080}[ADMCMD]: %s has banned %s for %d hours. Reason: %s", AdminName(playerid), GetName(targetid), hours, reason);
+	format(string, sizeof(string), "{808080}[ADMCMD]:{FFFFFF} %s has banned %s for %d hours. Reason: %s", AdminName(playerid), GetName(targetid), hours, reason);
 	SendClientMessageToAll(COLOR_RED, string);
 	KickPlayer(targetid);
 	return 1;
@@ -1660,7 +1660,7 @@ CMD<AD2>:ainject(cmdid, playerid, params[])
 	PutPlayerInVehicle(targetid, vehicle, seatid);
 
 	new buf[65];
-	format(buf, sizeof(buf), "{808080}[ADMCMD]: You have injected %s into your vehicle.", GetName(targetid));
+	format(buf, sizeof(buf), "{808080}[ADMCMD]:{FFFFFF} You have injected %s into your vehicle.", GetName(targetid));
 	SendClientMessage(playerid, COLOR_RED, buf);
 	return 1;
 }
@@ -1711,7 +1711,7 @@ CMD<AD2>:vget(cmdid, playerid, params[])
 	LinkVehicleToInterior(targetid, GetPlayerInterior(playerid));
 	SetVehicleVirtualWorld(targetid, GetPlayerVirtualWorld(playerid));
 	new buf[70];
-	format(buf, sizeof(buf), "{808080}[ADMCMD]: You have teleported teleported vehicle ID %d to youself.", targetid);
+	format(buf, sizeof(buf), "{808080}[ADMCMD]:{FFFFFF} You have teleported teleported vehicle ID %d to youself.", targetid);
 	SendClientMessage(playerid, COLOR_RED, buf);
 	return 1;
 }
@@ -1734,7 +1734,7 @@ CMD<AD3>:copyweaps(cmdid, playerid, params[])
 		    GivePlayerWeapon(toid, weapons[i][0], weapons[i][1]);
 	    }
 	}
- 	format(string, sizeof(string), "{808080}[ADMCMD]: Weapons have been copied from %s to %s.", GetName(targetid), GetName(toid));
+ 	format(string, sizeof(string), "{808080}[ADMCMD]:{FFFFFF} Weapons have been copied from %s to %s.", GetName(targetid), GetName(toid));
   	SendClientMessage(playerid, COLOR_RED, string);
 	return 1;
 }
@@ -1742,7 +1742,7 @@ CMD<AD2>:jetpack(cmdid, playerid, params[])
 {
 	if(adminDuty[playerid] == false) return SendClientMessage(playerid, COLOR_RED, "[ERROR]: You can't use this command while off admin duty!");
 	SetPlayerSpecialAction(playerid, SPECIAL_ACTION_USEJETPACK);
-	SendClientMessage(playerid, COLOR_RED, "{808080}[ADMCMD]: You have spawned a jetpack.");
+	SendClientMessage(playerid, COLOR_RED, "{808080}[ADMCMD]:{FFFFFF} You have spawned a jetpack.");
 	return 1;
 }
 CMD<AD2>:unfreezeall(cmdid, playerid, params[])
@@ -1852,7 +1852,7 @@ CMD<AD5>:giveallmoney(cmdid, playerid, params[])
 		Account[i][Cash] += amount;
 	}
 	new buf[150];
-	format(buf, sizeof(buf), "{808080}[ADMCMD]: %s has given all players $%i.", AdminName(playerid), amount);
+	format(buf, sizeof(buf), "{808080}[ADMCMD]:{FFFFFF} %s has given all players $%i.", AdminName(playerid), amount);
 	SendClientMessageToAll(COLOR_RED, buf);
 	return 1;
 }
@@ -1865,7 +1865,7 @@ CMD<AD3>:healall(cmdid, playerid, params[])
 	}
 
     new buf[150];
-	format(buf, sizeof(buf), "{808080}[ADMCMD]: %s has healed all players.", AdminName(playerid));
+	format(buf, sizeof(buf), "{808080}[ADMCMD]:{FFFFFF} %s has healed all players.", AdminName(playerid));
 	DCC_SendChannelMessage(DCC_FindChannelById(ADMIN_CHANNEL), sprintf("**[ADMCMD]** %s has healed all players.", GetName(playerid)));
     SendClientMessageToAll(COLOR_RED, buf);
 	return 1;
@@ -1879,7 +1879,7 @@ CMD<AD3>:armourall(cmdid, playerid, params[])
 	}
 
 	new buf[150];
-	format(buf, sizeof(buf), "{808080}[ADMCMD]: %s(%i) has armoured all players.", AdminName(playerid));
+	format(buf, sizeof(buf), "{808080}[ADMCMD]:{FFFFFF} %s(%i) has armoured all players.", AdminName(playerid));
 	DCC_SendChannelMessage(DCC_FindChannelById(ADMIN_CHANNEL), sprintf("**[ADMCMD]** %s has armoured all players.", GetName(playerid)));
     SendClientMessageToAll(COLOR_RED, buf);
 	return 1;
@@ -1910,7 +1910,7 @@ CMD<AD3>:agivemoney(cmdid, playerid, params[])
 	ResetPlayerMoney(targetid);
 	GivePlayerMoney(targetid, Account[targetid][Cash]);
 	new buf[150];
-	format(buf, sizeof(buf), "{808080}[ADMCMD]: %s gave you %d$ cash.", AdminName(playerid), amount);
+	format(buf, sizeof(buf), "{808080}[ADMCMD]:{FFFFFF} %s gave you %d$ cash.", AdminName(playerid), amount);
 	DCC_SendChannelMessage(DCC_FindChannelById(ADMIN_CHANNEL), sprintf("**[ADMCMD]** %s has spawned %s %d$ cash.", GetName(playerid), GetName(targetid), amount));
 	SendClientMessage(targetid, COLOR_RED, buf);
 	format(buf, sizeof(buf), "You gave %s %d$ cash.", GetName(targetid), amount);
@@ -1929,7 +1929,7 @@ CMD<AD3>:setworld(cmdid, playerid, params[])
 	PlayerPlaySound(targetid, 1057, 0.0, 0.0, 0.0);
 	PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);
 	new buf[150];
-	format(buf, sizeof(buf), "{808080}[ADMCMD]: %s has set your virtual world id to %i.", AdminName(playerid), id);
+	format(buf, sizeof(buf), "{808080}[ADMCMD]:{FFFFFF} %s has set your virtual world id to %i.", AdminName(playerid), id);
 	SendClientMessage(targetid, COLOR_RED, buf);
 	format(buf, sizeof(buf), "You have set %s(%i)'s virtual world id to %i.", GetName(targetid), targetid, id);
 	SendClientMessage(playerid, COLOR_RED, buf);
@@ -1976,7 +1976,7 @@ CMD<AD4>:setmoney(cmdid, playerid, params[])
 	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
 	Account[targetid][Cash] = amount;
 	new buf[150];
-	format(buf, sizeof(buf), "{808080}[ADMCMD]: %s set your cash to %d$.", AdminName(playerid), amount);
+	format(buf, sizeof(buf), "{808080}[ADMCMD]:{FFFFFF} %s set your cash to %d$.", AdminName(playerid), amount);
 	SendClientMessage(targetid, COLOR_RED, buf);
 	format(buf, sizeof(buf), "You have set %s's cash to %d$.", GetName(targetid), amount);
 	DCC_SendChannelMessage(DCC_FindChannelById(ADMIN_CHANNEL), sprintf("**[ADMCMD]** %s has set %s's cash to %d$.", GetName(playerid), GetName(targetid), amount));
