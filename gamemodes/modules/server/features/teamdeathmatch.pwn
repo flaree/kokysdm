@@ -235,7 +235,7 @@ hook public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 
 OfficialClanSelection(playerid)
 {
-	new clan = Account[playerid][ClanID], Float:xspawn, Float:yspawn, Float:zspawn, skin, isofficial, int:colour;
+	new clan = Account[playerid][ClanID], Float:xspawn, Float:yspawn, Float:zspawn, skin, isofficial;
 
 	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE id = %d", clan));
 	if(!cache_num_rows()) return false;
