@@ -1174,10 +1174,9 @@ CMD<AD1>:forceteam(cmdid, playerid, params[])
 	if(!IsPlayerConnected(targetid)) return SendClientMessage(playerid, COLOR_RED, NOPLAYER);
 	if(Account[targetid][LoggedIn] != 1) return SendClientMessage(playerid, COLOR_RED, NOTLOGGEDIN);
     if(GetPlayerAdminLevel(playerid) < Account[targetid][Admin]) return SendClientMessage(playerid, COLOR_RED, NOLEVEL);
-	SendPlayerToLobby(playerid);
+	SendPlayerToLobby(targetid);
 	ShowTeamSelectionDialog(targetid);
 	PlayerPlaySound(targetid, 1057, 0.0, 0.0, 0.0);
-	PlayerPlaySound(playerid, 1057, 0.0, 0.0, 0.0);
 	new buf[150];
 	format(buf, sizeof(buf), "{808080}[ADMCMD]:{FFFFFF} %s has forced you to class selection.", AdminName(playerid));
 	SendClientMessage(targetid, COLOR_RED, buf);
