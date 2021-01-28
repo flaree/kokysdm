@@ -417,7 +417,7 @@ CMD<AD1>:staffreward(cmdid, playerid, params[])
 CMD<AD6>:givereward(cmdid, playerid, params[])
 {
 	new user, reward[64];
-	if(sscanf(params, "us[64]", user, reward)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /givereward [bronze|silver|gold|diamond|nc|key|token]");
+	if(sscanf(params, "us[64]", user, reward)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /givereward [player id/name] [bronze|silver|gold|diamond|nc|key|token]");
 	if(isequal(reward, "bronze"))
 	{
 		SendAdmcmdMessage(5, sprintf("%s has given %s bronze donator!", GetName(playerid), GetName(user)));
