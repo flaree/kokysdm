@@ -145,7 +145,7 @@ public VPNCheck(playerid, responsecode, data[])
 	return 1;
 }
 
-stock AdminHiddenName(playerid)
+stock AdminName(playerid)
 {
 	new string[40];
 	if(Account[playerid][pAdminHide]) format(string, 40, "An admin");

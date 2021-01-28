@@ -2913,7 +2913,7 @@ stock ToggleAdminHidden(playerid)
 	else {
 		Account[playerid][pAdminHide] = 1;
 	}
-	SendAdminsMessage(1, COLOR_INDIANRED, sprintf("WARNING: %s is %s visible in /admins.", GetName(playerid), (Account[playerid][pAdminHide] == 0 ? "now" : "no longer")));
+	SendAdmcmdMessage(1, sprintf("%s is %s visible in /admins.", GetName(playerid), (Account[playerid][pAdminHide] == 0 ? "now" : "no longer")));
 	return 1;
 }
 
@@ -3993,7 +3993,7 @@ CMD:admins(cmdid, playerid, params[])
         SendClientMessage(playerid, COLOR_WHITE, sprintf("(ID %i) {%06x}%s {FFFFFF}- (%s{FFFFFF}) {bf0000}%s", admin[0], GetPlayerColor(admin[0]) >>> 8, GetName(admin[0]), AdminNames(admin[1]), Account[admin[0]][pAdminHide] == 1 ? "(HIDDEN)" : ""));
     }
     SendClientMessage(playerid, 0xBF0000FF, "______________________________________________");
-	if(!GetPlayerAdminLevel(playerid)) SendAdminsMessage(1, COLOR_LIGHTRED, sprintf("{FFFFFF}%s has just typed /admins.", GetName(playerid)));
+	if(!GetPlayerAdminLevel(playerid)) SendAdmcmdMessage(1, sprintf("{FFFFFF}%s has just typed /admins.", GetName(playerid)));
     list_delete(adminlist);
     return true;
 }
