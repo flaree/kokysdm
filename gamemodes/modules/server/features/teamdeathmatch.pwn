@@ -235,7 +235,7 @@ hook public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 
 OfficialClanSelection(playerid)
 {
-	new clan = Account[playerid][ClanID], Float:xspawn, Float:yspawn, Float:zspawn, skin, isofficial;
+	new clan = Account[playerid][ClanID], Float:xspawn, Float:yspawn, Float:zspawn, Float:angle, skin, isofficial;
 
 	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE id = %d", clan));
 	if(!cache_num_rows()) return false;
@@ -243,6 +243,7 @@ OfficialClanSelection(playerid)
 	cache_get_value_name_float(0, "x", xspawn);
 	cache_get_value_name_float(0, "y", yspawn);
 	cache_get_value_name_float(0, "z", zspawn);
+	cache_get_value_name_float(0, "angle", angle);
 	cache_get_value_int(0, "skin", skin);
 	cache_get_value_int(0, "official", isofficial);
 
@@ -270,6 +271,8 @@ OfficialClanSelection(playerid)
 		
 		SetPlayerColor(playerid, Clans[Account[playerid][ClanID]][clancolor]);
 		SetPlayerPosEx(playerid, xspawn, yspawn, zspawn, 0, WORLD_TDM);
+		SetPlayerFacingAngle(playerid, angle);
+		SetCameraBehindPlayer(playerid);
 		if(clanskins[playerid] == -1) SetPlayerSkinEx(playerid, skin);
 		else if(clanskins[playerid] == 1) SetPlayerSkinEx(playerid, Clans[Account[playerid][ClanID]][skin1]);
 		else if(clanskins[playerid] == 2) SetPlayerSkinEx(playerid, Clans[Account[playerid][ClanID]][skin2]);
@@ -306,6 +309,7 @@ ShowTeamSelectionDialog(playerid)
 	if(!response[E_DIALOG_RESPONSE_Response]) return true;
 
 	new teamchoice = response[E_DIALOG_RESPONSE_Listitem];
+	printf("%i", teamchoice);
 	if(teamchoice == 4 && Account[playerid][Donator] < 3) return SendClientMessage(playerid, COLOR_LIGHTRED, "ERROR: {FFFFFF}This is for Gold or Diamond donators only! (/donate)");
 	if(teamchoice == teamfull) return SendClientMessage(playerid, COLOR_LIGHTRED, "ERROR: {FFFFFF}This team is currently full, please select another team.");
 	if(teamchoice < 5)
@@ -511,15 +515,14 @@ GiveTDMAmmunation(playerid)
 
 	SetPlayerHealth(playerid, 100);
 	SetPlayerArmour(playerid, 50);
-
 	if(Account[playerid][Donator] == 4)
 	{
 		GivePlayerWeapon(playerid, WEAPON_SNIPER, 25);
-		GivePlayerWeapon(playerid, WEAPON_PARACHUTE, 1);
+		SetPlayerArmour(playerid, 75);
 		SendClientMessage(playerid, -1, "{fdff00}DONATOR: You have been given a Sniper for being Diamond Donator!");
 	}
 
-	if(Account[playerid][Donator] == 3)
+	if(Account[playerid][Donator] >= 3 && GetPlayerTeam(playerid) == 5)
 	{
 		GivePlayerWeapon(playerid, WEAPON_PARACHUTE, 1);
 	}
