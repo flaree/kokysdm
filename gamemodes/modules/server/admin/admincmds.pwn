@@ -1998,14 +1998,27 @@ CMD<AD3>:setworld(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_RED, buf);
 	return 1;
 }
+forward RespawnAllCars();
+public RespawnAllCars() {
+	new bool: respawn;
+	for(new i = GetVehiclePoolSize(); i > 0; i--)
+	{
+		respawn = true;
+		foreach(new player: Player)
+		{
+			if(IsPlayerInVehicle(player, i)) respawn = false;
+		}
+		if(respawn) SetVehicleToRespawn(i);
+	}
+	SendClientMessageToAll(COLOR_LIGHTGREEN, "SERVER: All unoccupied vehicles have been respawned!");
+}
 CMD<AD2>:spawncars(cmdid, playerid)
 {
 	SendClientMessageToAll(COLOR_LIGHTGREEN, "SERVER: All unoccupied vehicles will be respawned in 20 seconds!");
-	cmd_ann(cid_ann, playerid, "~y~vehicles respawning in ~r~ 20 ~y~secs.");
-	SetTimer("RespawnCars", 20000, false); // (20 seconds)
+	SetTimer("RespawnAllCars", 20000, false); // (20 seconds)
 	return 1;
 }
-
+ALT:respawncars = CMD:spawncars;
 // Manager (Level 4)
 CMD<AD4>:fakecmd(cmdid, playerid, params[])
 {
