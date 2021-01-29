@@ -432,6 +432,7 @@ public AllowTurfCapture()
 	SendTDMMessage(COLOR_LIGHTRED, "{49FF00}TURF: The turf is now available for capture! Go grab it for your team.");
 	beingcaptured = -1;
 	allowcapture = 1;
+	turfholder = 0;
 	return true;
 }
 public RemoveFromTDM(playerid, team)
