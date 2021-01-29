@@ -64,25 +64,6 @@ CMD:cancelreport(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_GREY, sprintf("{bf0000}Reports:{FFFFFF} Could not find a report by you against %s.", GetName(target)));
 	return true;
 }
-CMD:myreports(cmdid, playerid, params[])
-{
-	if(!pool_valid(Reports)) return SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Reports:{FFFFFF}  There are currently no reports.");
-
-	new count, report[REPORT_DATA];
-	strcat(reportstr, "Report ID\tReporter\tReported\n");
-	for_pool(i: Reports)
-	{
-		iter_get_arr(i, report);
-		if(report[ReportingPlayer] == playerid)
-		{
-			strcat(reportstr, sprintf("%i\t%s\t%s\n", iter_get_key(i), GetName(report[ReportingPlayer]), GetName(report[ReportedPlayer])));
-			count ++;
-		}
-	}
-	if(count == 0) return SendErrorMessage(playerid, "You currently have no active reports.");
-	else Dialog_Show(playerid, ReportList, DIALOG_STYLE_TABLIST_HEADERS, sprintf("Your Active Reports - %i", count), reportstr, "Select", "Cancel");
-	return true;
-}
 CMD<AD1>:reports(cmdid, playerid, params[])
 {
 	ShowReportDialog(playerid);
