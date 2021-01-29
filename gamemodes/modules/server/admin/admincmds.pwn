@@ -469,7 +469,7 @@ ALT:fps = CMD:fpscheck;
 CMD<AD1>:forcerules(cmdid, playerid, params[])
 {
 	new pID, reason[64];
-	if(sscanf(params, "us", pID, reason)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /forcerules [ID] [Reason]");
+	if(sscanf(params, "us[64]", pID, reason)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /forcerules [ID] [Reason]");
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid, ERROR_OPTION);
 
 	Dialog_Show(pID, RULES, DIALOG_STYLE_MSGBOX, "Forced Rules", "{1E90FF}1. {FFFFFF}No third party modifications\n{1E90FF}2. {FFFFFF}No bug abuse(c-roll, c-bug, c-shoot-c)\n{1E90FF}3. {FFFFFF}No racism\n{1E90FF}4. {FFFFFF}English only\n{1E90FF}5. {FFFFFF}Abuse of commands (/lobby to avoid death)", "Okay", "Close");
