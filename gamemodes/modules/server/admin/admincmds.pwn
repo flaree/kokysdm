@@ -421,37 +421,37 @@ CMD<AD6>:givereward(cmdid, playerid, params[])
 	if(isequal(reward, "bronze"))
 	{
 		SendAdmcmdMessage(5, sprintf("%s has given %s bronze donator!", GetName(playerid), GetName(user)));
-		ActivateUpgrades(playerid, 0);
+		ActivateUpgrades(user, 0);
 	}
 	else if(isequal(reward, "silver"))
 	{
 		SendAdmcmdMessage(5, sprintf("%s has given %s silver donator!", GetName(playerid), GetName(user)));
-		ActivateUpgrades(playerid, 1);
+		ActivateUpgrades(user, 1);
 	}
 	else if(isequal(reward, "gold"))
 	{
 		SendAdmcmdMessage(5, sprintf("%s has given %s gold donator!", GetName(playerid), GetName(user)));
-		ActivateUpgrades(playerid, 2);
+		ActivateUpgrades(user, 2);
 	}
 	else if(isequal(reward, "diamond"))
 	{
 		SendAdmcmdMessage(5, sprintf("%s has given %s diamond donator!", GetName(playerid), GetName(user)));
-		ActivateUpgrades(playerid, 3);
+		ActivateUpgrades(user, 3);
 	}
 	else if(isequal(reward, "nc"))
 	{
 		SendAdmcmdMessage(5, sprintf("%s has given %s namechanges!", GetName(playerid), GetName(user)));
-		ActivateUpgrades(playerid, 4);
+		ActivateUpgrades(user, 4);
 	}
 	else if(isequal(reward, "key"))
 	{
 		SendAdmcmdMessage(5, sprintf("%s has given %s keys!", GetName(playerid), GetName(user)));
-		ActivateUpgrades(playerid, 5);
+		ActivateUpgrades(user, 5);
 	}
 	else if(isequal(reward, "token"))
 	{
 		SendAdmcmdMessage(5, sprintf("%s has given %s a token!", GetName(playerid), GetName(user)));
-		ActivateUpgrades(playerid, 7);
+		ActivateUpgrades(user, 7);
 	}
 	return 1;
 }
