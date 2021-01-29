@@ -95,10 +95,25 @@ TopDeaths(playerid)
 	ShowPlayerDialog(playerid, DIALOG_TOP10, DIALOG_STYLE_MSGBOX, "Top 10 Deaths", output, "Okay", "");
 	return 1;
 }
+HighestSpree(playerid)
+{
+	await mysql_aquery(SQL_CONNECTION, "SELECT Username, HighestSpree FROM Accounts WHERE Banned = 0 ORDER BY HighestSpree DESC LIMIT 10");
+	if(!cache_num_rows()) return true;
+
+	new output[675], dest[24], score;
+	for(new i = 0, r = cache_num_rows(); i < r; i++)
+	{
+		cache_get_value_name(i, "Username", dest);
+		cache_get_value_name_int(i, "HighestSpree", score);
+		strcat(output, sprintf("{4286f4}%d.{dadada} %s with {4286f4}%d{dadada} kills\n", i, dest, score));
+	}
+	ShowPlayerDialog(playerid, DIALOG_TOP10, DIALOG_STYLE_MSGBOX, "Top 10 Sprees", output, "Okay", "");
+	return 1;
+}
 
 CMD:top(cmdid, playerid, params[])
 {
-	if(isnull(params)) return SendClientMessage(playerid, COLOR_GRAY, "[Server]: /top [kills/headshots/deaths/cash/eventswon/eventstarters]");
+	if(isnull(params)) return SendClientMessage(playerid, COLOR_GRAY, "[Server]: /top [kills/headshots/deaths/cash/eventswon/eventstarters/spree]");
 
 	if(!strcmp(params, "kills", false)) TopKills(playerid);
 	else if(!strcmp(params, "headshots", false)) TopHeadshots(playerid);
@@ -106,6 +121,7 @@ CMD:top(cmdid, playerid, params[])
 	else if(!strcmp(params, "cash", false)) TopCash(playerid);
 	else if(!strcmp(params, "eventswon", false)) TopEventWinners(playerid);
 	else if(!strcmp(params, "eventstarters", false)) TopEventStarters(playerid);
-	else SendClientMessage(playerid, COLOR_GRAY, "[Server]: /top [kills/headshots/deaths/cash/eventswon/eventstarters]");
+	else if(!strcmp(params, "spree", false)) HighestSpree(playerid);
+	else SendClientMessage(playerid, COLOR_GRAY, "[Server]: /top [kills/headshots/deaths/cash/eventswon/eventstarters/spree]");
 	return 1;
 }
