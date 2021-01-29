@@ -465,7 +465,17 @@ CMD<AD1>:fpscheck(cmdid, playerid, params[])
 	return 1;
 }
 ALT:fps = CMD:fpscheck;
+CMD<AD1>:setturk(cmdid, playerid, params[])
+{
+	new pID;
+	if(sscanf(params, "u", pID)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /setturk [player name/playerid]");
+	if(!IsPlayerConnected(pID)) return SendClientMessage(playerid, COLOR_GRAY, "{bf0000}NOTICE: {FFFFFF}This player is not connected!");
 
+	Account[pID][pLanguage] = LANGUAGE_TURKISH;
+	SendAdmcmdMessage(1, sprintf("%s has forcefully set %s's language to Turkish.", AdminName(playerid), GetName(pID)));
+	SendClientMessage(pID, -1, sprintf("{bf0000}NOTICE: {FFFFFF}%s forcefully set your language to Turkish.", AdminName(playerid)));
+	return 1;
+}
 CMD<AD1>:forcerules(cmdid, playerid, params[])
 {
 	new pID, reason[64];
