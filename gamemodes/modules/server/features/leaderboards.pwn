@@ -95,7 +95,7 @@ TopDeaths(playerid)
 	ShowPlayerDialog(playerid, DIALOG_TOP10, DIALOG_STYLE_MSGBOX, "Top 10 Deaths", output, "Okay", "");
 	return 1;
 }
-HighestSpree(playerid)
+HighestSprees(playerid)
 {
 	await mysql_aquery(SQL_CONNECTION, "SELECT Username, HighestSpree FROM Accounts WHERE Banned = 0 ORDER BY HighestSpree DESC LIMIT 10");
 	if(!cache_num_rows()) return true;
@@ -121,7 +121,7 @@ CMD:top(cmdid, playerid, params[])
 	else if(!strcmp(params, "cash", false)) TopCash(playerid);
 	else if(!strcmp(params, "eventswon", false)) TopEventWinners(playerid);
 	else if(!strcmp(params, "eventstarters", false)) TopEventStarters(playerid);
-	else if(!strcmp(params, "spree", false)) HighestSpree(playerid);
+	else if(!strcmp(params, "spree", false)) HighestSprees(playerid);
 	else SendClientMessage(playerid, COLOR_GRAY, "[Server]: /top [kills/headshots/deaths/cash/eventswon/eventstarters/spree]");
 	return 1;
 }
