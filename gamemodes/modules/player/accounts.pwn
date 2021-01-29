@@ -84,7 +84,7 @@ Character_Save(playerid)
 	printf("Called SaveChar for player %d", playerid);
 	if(Account[playerid][LoggedIn] == 1)
 	{
-		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE `Accounts` SET `Admin` = %d, `ClanManagement` = %d, `Skin` = %d, `Kills` = %d, `Deaths` = %d, `PlayerKeys` = %d, `PlayerEvents` = %d, `Cash` = %d, `GsignPack` = %d, `WeatherAccess` = %d, `TimeAccess` = %d, `WheelChair` = %d, `InWheelChair` = %d, `OpenedCrates` = %d, `ForumID` = %i, `ForumCode` = %i, `Verified` = %i, `NameChanges` = %d, `PlayerGroup` = %d, `Headshots` = %d, `HighestSpree` = %d, `Color` = %i, Hitmark = %d, EventsStarted = %d, EventsWon = %d, Kicks = %d, Mutes = %d, ForcedRules = %d, BronzePackages = %d, SilverPackages = %d, GoldPackages = %d, DiamondPackages = %d, SkinPackUnlock = %d, NameChangePackages = %d, PremiumKeyPackages = %d, Donator = %d, DonatorActive = %d, DonatorExpired = %d, LobbyWeapon = %d, ShotsHit = %d, ShotsMissed = %d, ShotsFired = %d, ajail_minutes = %d, CustomSkin = %d, Hour = %d, Min = %d, Sec = %d, AdminPin = %d, LastLoggedIn = %d, MonthKills = %d, LastMonthKills = %d, Muted = %d, AdminHours = %d, AdminActions = %d, clanid = %d, clanname = '%e', clanrank = %d, official = %d, Tokens = %d, TokenPackages = %d, RareSkins = %d, RareItems = %d, KDMStaffSkin = %d, ArcherSkin = %d, GucciSnakeSkin = %d, IrishPoliceSkin = %d, NillySkin = %d, Language = %d, DonationAmount = %f WHERE SQLID = %d LIMIT 1",
+		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE `Accounts` SET `Admin` = %d, `ClanManagement` = %d, `Skin` = %d, `Kills` = %d, `Deaths` = %d, `PlayerKeys` = %d, `PlayerEvents` = %d, `Cash` = %d, `GsignPack` = %d, `WeatherAccess` = %d, `TimeAccess` = %d, `WheelChair` = %d, `InWheelChair` = %d, `OpenedCrates` = %d, `ForumID` = %i, `ForumCode` = %i, `Verified` = %i, `NameChanges` = %d, `PlayerGroup` = %d, `Headshots` = %d, `HighestSpree` = %d, `Color` = %i, Hitmark = %d, EventsStarted = %d, EventsWon = %d, Kicks = %d, Mutes = %d, ForcedRules = %d, BronzePackages = %d, SilverPackages = %d, GoldPackages = %d, DiamondPackages = %d, SkinPackUnlock = %d, NameChangePackages = %d, PremiumKeyPackages = %d, Donator = %d, DonatorActive = %d, DonatorExpired = %d, LobbyWeapon = %d, ShotsHit = %d, ShotsMissed = %d, ShotsFired = %d, ajail_minutes = %d, CustomSkin = %d, Hour = %d, Min = %d, Sec = %d, AdminPin = %d, LastLoggedIn = %d, MonthKills = %d, LastMonthKills = %d, Muted = %d, AdminHours = %d, AdminMinutes = %d, AdminSeconds = %d, AdminActions = %d, clanid = %d, clanname = '%e', clanrank = %d, official = %d, Tokens = %d, TokenPackages = %d, RareSkins = %d, RareItems = %d, KDMStaffSkin = %d, ArcherSkin = %d, GucciSnakeSkin = %d, IrishPoliceSkin = %d, NillySkin = %d, Language = %d, DonationAmount = %f WHERE SQLID = %d LIMIT 1",
 			Account[playerid][Admin],
 			Account[playerid][ClanManagement],
 			Account[playerid][Skin],
@@ -138,6 +138,8 @@ Character_Save(playerid)
 			Account[playerid][LastMonthKills],
 			Account[playerid][Muted],
 			Account[playerid][AdminHours],
+			Account[playerid][AdminMinutes],
+			Account[playerid][AdminSeconds],
 			Account[playerid][AdminActions],
 			Account[playerid][ClanID], 
 			Account[playerid][ClanName],
@@ -305,6 +307,8 @@ LoginAccount(playerid)
 	cache_get_value_name_int(0, "LastMonthKills", Account[playerid][LastMonthKills]);
 	cache_get_value_name_int(0, "Muted", Account[playerid][Muted]);
 	cache_get_value_name_int(0, "AdminHours", Account[playerid][AdminHours]);
+	cache_get_value_name_int(0, "AdminMinutes", Account[playerid][AdminMinutes]);
+	cache_get_value_name_int(0, "AdminSeconds", Account[playerid][AdminSeconds]);
 	cache_get_value_name_int(0, "AdminActions", Account[playerid][AdminActions]);
 	cache_get_value_name_int(0, "clanid", Account[playerid][ClanID]);
 	cache_get_value_name(0, "clanname", Account[playerid][ClanName]);
