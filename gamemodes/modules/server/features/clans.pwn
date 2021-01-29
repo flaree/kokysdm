@@ -176,8 +176,18 @@ CMD<CLN>:c(cmdid, playerid, params[])
 {
 	if(Account[playerid][ClanID] == -1 || Account[playerid][ClanID] == 0) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Clan: {FFFFFF}You aren't in a clan to use the clan chat system.");
 	if(isnull(params)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /c [text]");
-	if(Account[playerid][ClanID] == 0) return SendClientMessage(playerid, COLOR_GRAY, "ERROR: You must be in a clan to use this command.");
 	SendClanMessage(Account[playerid][ClanID], Account[playerid][ClanName], sprintf("%s: %s", GetName(playerid), params));
+	return 1;
+}
+CMD<CLN>:clan(cmdid, playerid, params[])
+{
+	if(Account[playerid][ClanID] == -1 || Account[playerid][ClanID] == 0) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Clan: {FFFFFF}You aren't in a clan to use the clan chat system.");
+	
+	SendClientMessage(playerid, 0xBF0000FF, "_____________[Clan Members Online]_____________");
+	foreach(new i: Player){
+		if(Account[playerid][ClanID] == Account[i][ClanID]) SendClientMessage(playerid, -1, sprintf("%s(%i) - Rank: %i", GetName(i), i, Account[i][ClanRank]));
+	}
+	SendClientMessage(playerid, 0xBF0000FF, "______________________________________________");
 	return 1;
 }
 SendClanMessage(clanid, clanname[], msg[])
