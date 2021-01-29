@@ -322,10 +322,17 @@ enum ClanData
     clancolor,
 };
 
+enum MOTDenum
+{
+    ServerMOTD[156],
+    AdminMOTD[156],
+};
+
 //==========================================================================
 //	Server/Player Variables												  //
 //==========================================================================
 
+new MOTD[MOTDenum];
 new Clans[9999][ClanData];
 new Account[MAX_PLAYERS][acc];
 new PlayerCustomSkins[MAX_PLAYERS][MAX_CUSTOM_SKINS][pCustomSkinData];

@@ -11,6 +11,7 @@ public OnPlayerFinishedDownloading(playerid, virtualworld)
 		TextDrawShowForPlayer(playerid, logintd);
 		SendClientMessage(playerid, 0xbf0000FF, sprintf("%s [%s]", Server[Name], Server[Version]));
 		SendClientMessage(playerid, COLOR_WHITE, sprintf("Welcome to the server, %s.", tmpName));
+		if(!isempty(MOTD[ServerMOTD])) SendClientMessage(playerid, 0xFFFF00FF, sprintf("[MOTD]: %s", MOTD[ServerMOTD]));
 
 		InfoBoxForPlayer(playerid, "~r~Koky's Deathmatch~w~~n~Welcome to Koky's Deathmatch!");
 
@@ -387,6 +388,7 @@ ShowAdminPinDialog(playerid, adminlevel, correctpin)
 			continue;
 		}
 		SendClientMessage(playerid, -1, sprintf("{bf0000}NOTICE: {FFFFFF}You have logged in as a level %i Administrator.", adminlevel));
+		if(!isempty(MOTD[AdminMOTD])) SendClientMessage(playerid, 0x00FF00FF, sprintf("[A-MOTD]: %s", MOTD[AdminMOTD]));
 		LoginAccount(playerid);
 		break;
 	}

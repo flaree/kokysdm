@@ -22,6 +22,8 @@ public LoadSettings(id)
   		cache_get_value_name(0, "Version", Server[Version]);
 		cache_get_value_name_int(0, "Locked", Server[Locked]);
 		cache_get_value_name(0, "Password", Server[Password]);
+		cache_get_value_name(0, "servermotd", MOTD[ServerMOTD]);
+		cache_get_value_name(0, "adminmotd", MOTD[AdminMOTD]);
 		cache_get_value_name_int(0, "Weather", Server[Weather]);
 
 		new str[128];

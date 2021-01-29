@@ -2067,6 +2067,38 @@ CMD<AD5>:ulserv(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_GREEN, "Server password has been removed.");
 	return 1;
 }
+CMD<AD5>:setmotd(cmdid, playerid, params[])
+{
+	new motd[156];
+	if(sscanf(params, "s[156]", motd))
+	{
+		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE serversettings SET servermotd = ''"));
+		MOTD[ServerMOTD] = motd;
+		SendAdmcmdMessage(5, sprintf("%s has cleared the Server MOTD", GetName(playerid)));
+	} else 
+	{
+		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE serversettings SET servermotd = '%e'", motd));
+		MOTD[ServerMOTD] = motd;
+		SendAdmcmdMessage(5, sprintf("%s has updated the Server MOTD to: %s", GetName(playerid), motd));
+	}
+	return 1;
+}
+CMD<AD5>:setamotd(cmdid, playerid, params[])
+{
+	new motd[156];
+	if(sscanf(params, "s[156]", motd))
+	{
+		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE serversettings SET adminmotd = ''"));
+		MOTD[AdminMOTD] = motd;
+		SendAdmcmdMessage(5, sprintf("%s has cleared the Admin MOTD", GetName(playerid)));
+	} else 
+	{
+		mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE serversettings SET adminmotd = '%e'", motd));
+		MOTD[AdminMOTD] = motd;
+		SendAdmcmdMessage(5, sprintf("%s has updated the Admin MOTD to: %s", GetName(playerid), motd));
+	}
+	return 1;
+}
 CMD<AD6>:togglearenas(cmdid, playerid, params[])
 {
 	EnableArenas = !EnableArenas;
