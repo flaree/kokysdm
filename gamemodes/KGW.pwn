@@ -3908,6 +3908,8 @@ CMD:clanhelp(cmdid, playerid, params[])
 	StatsLine(playerid);
 	SendClientMessage(playerid, COLOR_GRAY, "Clan Commands");
 	SendCommandList(playerid, COLOR_GRAY, CLN);
+    SendClientMessage(playerid, COLOR_GRAY, "CLan TDM Commands");
+    SendCommandList(playerid, COLOR_GRAY, CLNTDM);
 	StatsLine(playerid);
 	return 1;
 }
