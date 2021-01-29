@@ -65,6 +65,7 @@ public LoadClanData(id)
 			cache_get_value_name_int(i, "skin2", Clans[clanid][skin2]);
 			cache_get_value_name_int(i, "skin3", Clans[clanid][skin3]);
 			cache_get_value_name_int(i, "color", Clans[clanid][clancolor]);
+			cache_get_value_name_int(i, "official", Clans[clanid][clanofficial]);
 		}
 
 		printf("[MYSQL]: Clan Data Loaded.");

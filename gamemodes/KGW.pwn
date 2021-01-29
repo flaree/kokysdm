@@ -275,6 +275,8 @@ enum acc
 	MonthKills,
 	LastMonthKills,
 	AdminHours,
+    AdminMinutes,
+    AdminSeconds,
 	AdminActions,
 	ClanID,
 	ClanName[64],
@@ -320,6 +322,7 @@ enum ClanData
     skin2,
     skin3,
     clancolor,
+    clanofficial,
 };
 
 enum MOTDenum
@@ -1309,9 +1312,10 @@ ShowStatsForPlayer(playerid, clickedplayerid)
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Keys: {FFFFFF}%d{808080} | Events: {FFFFFF}%d{808080} | Crates Opened: {FFFFFF}%d{808080} | Highest Spree: {FFFFFF}%d", Account[clickedplayerid][PlayerKeys], Account[clickedplayerid][PlayerEvents], Account[clickedplayerid][OpenedCrates], Account[clickedplayerid][HighestSpree]));
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Events Won: {FFFFFF}%d{808080} | Verified User: {FFFFFF}%s{808080}", Account[clickedplayerid][EventsWon], VerifiedCheck(clickedplayerid)));
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Hours: {FFFFFF}%d{808080} | Minutes: {FFFFFF}%d{808080} | Seconds: {FFFFFF}%d{808080}", Account[clickedplayerid][Hours], Account[clickedplayerid][Minutes], Account[clickedplayerid][Seconds]));
+    if(playerid == clickedplayerid && GetPlayerAdminLevel(playerid) > 0) SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Aduty Hours: {FFFFFF}%d{808080} | Aduty Minutes: {FFFFFF}%d{808080} | Aduty Seconds: {FFFFFF}%d{808080}", Account[clickedplayerid][AdminHours], Account[clickedplayerid][AdminMinutes], Account[clickedplayerid][AdminSeconds]));
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Mutes: {FFFFFF}%d{808080} | Kicks: {FFFFFF}%d{808080} | Forced Rules: {FFFFFF}%d{808080}", Account[clickedplayerid][Mutes], Account[clickedplayerid][Kicks], Account[clickedplayerid][ForcedRules]));
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}KDM Tokens: {FFFFFF}%d{808080} | Rare Skins: {FFFFFF}%d{808080} | Rare Items: {FFFFFF}%d{808080}", Account[clickedplayerid][Tokens], Account[clickedplayerid][RareSkins], Account[clickedplayerid][RareItems]));
-	if(GetPlayerAdminLevel(playerid) > 0) SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Admin Hours: {FFFFFF}%d{808080} | Admin Actions: {FFFFFF}%d{808080}", Account[clickedplayerid][AdminHours], Account[clickedplayerid][AdminActions]));
+	if(GetPlayerAdminLevel(playerid) > 0) SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080} | Admin Actions: {FFFFFF}%d{808080}", Account[clickedplayerid][AdminActions]));
 	StatsLine(playerid);
 }
 
@@ -1965,10 +1969,16 @@ public PlayerSecond(playerid)
 	MessageAmount[playerid] -= 1;
 
 	Account[playerid][Seconds]++;
+    if(GetPlayerAdminLevel(playerid) > 0 && adminDuty[playerid]) Account[playerid][AdminSeconds]++;
 	if(Account[playerid][Seconds] >= 60)
 	{
 		Account[playerid][Seconds] = 0;
 		Account[playerid][Minutes]++;
+        if(GetPlayerAdminLevel(playerid) > 0 && adminDuty[playerid])
+			{
+                Account[playerid][AdminSeconds] = 0;
+				Account[playerid][AdminMinutes]++;
+			}
 
 		if(Account[playerid][Muted] != 0)
 		{
@@ -1996,8 +2006,9 @@ public PlayerSecond(playerid)
 		{
 			Account[playerid][Minutes] = 0;
 			Account[playerid][Hours]++;
-			if(GetPlayerAdminLevel(playerid) > 0)
+			if(GetPlayerAdminLevel(playerid) > 0 && adminDuty[playerid])
 			{
+                Account[playerid][AdminMinutes] = 0;
 				Account[playerid][AdminHours]++;
 			}
 		}
