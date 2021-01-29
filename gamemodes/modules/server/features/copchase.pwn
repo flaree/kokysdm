@@ -142,7 +142,7 @@ StartCopchase(forceEnd = false)
 				{
 					Account[p][pCopchase] = 3;
 					if(GetCopchaseTotalPlayers() > 4)
-						GivePlayerWeapon(p, 30, 200);
+						GivePlayerWeapon(p, 31, 200);
 					new vehid;
 					vehid = CreateVehicle(copchaseCriminalVehicles[random(sizeof(copchaseCriminalVehicles))], copchasePositions[place][0][0], copchasePositions[place][0][1], copchasePositions[place][0][2], copchasePositions[place][0][3], 1, 0, -1, 1);
 					copchaseCriminalVehicle = vehid;
@@ -151,6 +151,7 @@ StartCopchase(forceEnd = false)
 					PutPlayerInVehicle(p, vehid, 0);
 					SetPlayerTeam(p, 3);
 					WC_SetPlayerHealth(p, 100);
+					WC_SetPlayerArmour(p, 100);
 					SendClientMessage(p, COLOR_ORANGE, "{31AEAA}Copchase:{FFA500} You're a criminal! Escape from the cops.");
 					SendClientMessage(p, COLOR_ORANGE, "{31AEAA}Copchase:{FFA500} Survive for 10 minutes or kill them all to win the game.");
 				}
