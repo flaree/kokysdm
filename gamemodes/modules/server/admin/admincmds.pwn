@@ -1014,7 +1014,7 @@ CMD<AD1>:flip(cmdid, playerid)
 	new Float:angle, vID = GetPlayerVehicleID(playerid);
 	GetVehicleZAngle(vID, angle);
 	SetVehicleZAngle(vID, angle);
-	SendAdmcmdMessage(6, sprintf("%s has flipped vehicle %d.", GetName(playerid), vID));
+	if(GetPlayerAdminLevel(playerid) > 0) SendAdmcmdMessage(6, sprintf("%s has flipped vehicle %d.", GetName(playerid), vID));
 	return 1;
 }
 CMD<AD5>:achangename(cmdid, playerid, params[])
