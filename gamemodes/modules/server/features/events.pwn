@@ -4,6 +4,7 @@
 #define EVENT_GUNGAME 2
 #define EVENT_ONEINTHECHAMBER 3
 #define EVENT_TDM 4
+#define EVENT_JEFFERSONTDM 5
 
 #define EVENT_MAP_LVPD 1
 #define EVENT_MAP_WESTERNTOWN 2
@@ -34,16 +35,52 @@ new
 	EventTimer = -1,
 	EventTimers = -1,
 	EventTime = -1,
-	Iterator:EventPlayers<MAX_PLAYERS>; // Timeout timer or event start timer.
+	Iterator:EventPlayers<MAX_PLAYERS>,
+	MAX_EVENT_PLAYERS = MAX_PLAYERS; // Timeout timer or event start timer.
 
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-
+enum EVENT_SPAWNS
+{
+	Float:SpawnX,
+	Float:SpawnY,
+	Float:SpawnZ,
+	Float:SpawnRot,
+	EventTeam
+};
 // -----------------------------------------------------------------------------
 new EventMaps[][] = {"LVPD", "Western Town"};
 
 new EventMapsID[2] = {12, 0};
+
+new EventSpawns[][EVENT_SPAWNS] =
+{
+	//western town
+	{3881.6802, -1958.2377, 3.0083, 350.1957, 0},
+	{3902.8997, -1943.4403, 3.0156, 3.1873, 0},
+	{3925.2549, -1952.1211, 3.0156, 0.8255, 0},
+	{3937.3198, -1927.1698, 3.0156, 89.8130, 0},
+	{3927.3674, -1913.8987, 4.0156, 177.2338, 0},
+	{3883.2200, -1906.6936, 3.5078, 0.6806, 0},
+	{3879.8264, -1875.1056, 7.4844, 271.1727, 0},
+	{3884.0962, -1862.2542, 3.0156, 2.8190, 0},
+	{3935.6987, -1822.7385, 3.0510, 180.4932, 0},
+	{3916.1008, -1802.7905, 3.2122, 179.3091, 0},
+	{3895.5352, -1762.5607, 3.0156, 256.9207, 0},
+	{3912.6602, -1746.3439, 3.0083, 177.5741, 0},
+	{3933.2905, -1766.8291, 3.0156, 104.7352, 0},
+	{3927.2625, -1785.1849, 3.0156, 175.6217, 0},
+
+	//sewers
+	{2849.5378, 2674.5549, 12.5637, 86.9492, 1},
+	{2840.4504, 2692.5986, 12.5637, 88.4032, 1},
+	{2876.7219, 2730.4673, 12.5637, 81.9021, 1},
+	{2845.4578, 2752.4260, 12.5637, 186.9038, 1},
+	{2816.0950, 2748.7756, 12.5537, 181.9969, 1},
+	{2768.6255, 2736.9043, 12.6092, 270.8483, 1},
+	{2779.5361, 2678.9243, 12.5487, 180.3854, 1},
+};
 
 // -----------------------------------------------------------------------------
 // EventTypes is just really for the names in the announcements...
@@ -126,6 +163,28 @@ public EventStart()
 			Account[i][PreventDamage] = 0;
 			EventDeath[i] = 0;
 			if(Account[i][TDMTeam] == 1)
+			{
+				SetPlayerFacingAngle(i, 92.8600);
+				SetPlayerPosEx(i, -973.5776, 1061.2117, 1345.6720, 10, 400);
+			}
+			else
+			{
+				SetPlayerFacingAngle(i, 272.5280);
+				SetPlayerPosEx(i, -1131.6700 ,1057.8746, 1346.4155, 10, 400);
+			}
+		}
+		else if(ActivityStateID[i] == EVENT_JEFFERSONTDM)
+		{
+			GivePlayerWeapon(i, 24, 999);
+			GivePlayerWeapon(i, 31, 999);
+			SendClientMessage(i, COLOR_GRAY, "{31AEAA}Events: {FFFFFF}Event started, first to kill the opposing team wins!");
+			SetPlayerHealth(i, 100);
+			SetPlayerArmour(i, 100);
+			Team1Kills = 0;
+			Team2Kills = 0;
+			Account[i][PreventDamage] = 0;
+			EventDeath[i] = 0;
+			if(Account[i][TDMTeam] == 1) // SET SPAWNS
 			{
 				SetPlayerFacingAngle(i, 92.8600);
 				SetPlayerPosEx(i, -973.5776, 1061.2117, 1345.6720, 10, 400);
@@ -242,6 +301,7 @@ JoinEvent(playerid)
 {
 	if(EventMap == 1)
 		CreateWesternTown(playerid);
+	new team1spawn, team2spawn;
 
 	if(Iter_Count(EventPlayers) == 0) switch(EventChoice)
 	{
@@ -298,6 +358,24 @@ JoinEvent(playerid)
 				Account[playerid][TDMTeam] = 2;
 				Team2Players++;
 				SetPlayerColor(playerid, 0xFF000091); // team red
+			}
+		}
+		case EVENT_JEFFERSONTDM:  
+		{
+			ActivityStateID[playerid] = EVENT_TDM;
+			SetPlayerPosEx(playerid, 964.106994,-53.205497,1001.124572, 3, 400);
+			SetPlayerHealth(playerid, 100);
+			if(Iter_Count(EventPlayers) % 2 != 0)
+			{
+				Account[playerid][TDMTeam] = 1;
+				Team1Players++;
+				SetPlayerColor(playerid, 0x1C75B0FF); // team blue
+			}
+			else
+			{
+				Account[playerid][TDMTeam] = 2;
+				Team2Players++;
+				SetPlayerColor(playerid, 0xfa8072ff); // team mechan9cs
 			}
 		}
 	}
@@ -410,6 +488,24 @@ HandleEventDeath(playerid, killerid, weaponid)
 				SendClientMessageToAll(COLOR_LIGHTRED, sprintf("{31AEAA}Events: {FFFFFF}%s has won the One in the Chamber event with %d life(s) remaining!", GetName(killerid), Lives[killerid]));
 				EndEvent();
 			}
+		}
+	}
+	else if(ActivityStateID[killerid] == EVENT_JEFFERSONTDM && ActivityStateID[playerid] == EVENT_JEFFERSONTDM)
+	{
+		foreach(new i : EventPlayers)
+		{
+			if(i == playerid)
+			{
+				Iter_SafeRemove(EventPlayers, i, i);
+				break;
+			}
+		}
+		SendPlayerToLobby(playerid);
+		if(Iter_Count(EventPlayers) < 2)
+		{
+			if(Account[killerid][TDMTeam] == 1) SendClientMessageToAll(COLOR_LIGHTRED, "{31AEAA}Events: {FFFFFF}S.W.A.T have won Jefferson TDM!");
+			else SendClientMessageToAll(COLOR_LIGHTRED, "{31AEAA}Events: {FFFFFF}Mechanics have won Jefferson TDM!");
+			EndEvent();
 		}
 	}
 	else if(ActivityStateID[killerid] == EVENT_HEADSHOTSONLY)
@@ -601,14 +697,21 @@ Dialog:EVENTS(playerid, response, listitem, inputtext[])
 			Account[playerid][PlayerEvents]--;
 			Account[playerid][EventsStarted]++;
 			StartEvent();
-			JoinEvent(playerid);
+		}
+		case 4:
+		{
+			EventType = EVENT_JEFFERSONTDM;
+			MAX_EVENT_PLAYERS = 20;
+			Account[playerid][PlayerEvents]--;
+			Account[playerid][EventsStarted]++;
+			StartEvent();
 		}
 	}
 	return 1;
 }
 
 // -----------------------------------------------------------------------------
-CMD:startevent(cmdid, playerid, params[])
+CMD<AD1>:startevent(cmdid, playerid, params[])
 {
 	if(ActivityState[playerid] != ACTIVITY_LOBBY) return SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF} You must be in the lobby to use this command.");
 
@@ -617,7 +720,7 @@ CMD:startevent(cmdid, playerid, params[])
 
 	if(Account[playerid][PlayerEvents] > 0)
 	{
-		Dialog_Show(playerid, EVENTS, DIALOG_STYLE_LIST, "Event Types", "Headshot Only\nGun Game\nOne in the Chamber\nTeam Deathmatch\n", "Select", "Cancel");
+		Dialog_Show(playerid, EVENTS, DIALOG_STYLE_LIST, "Event Types", "Headshot Only\nGun Game\nOne in the Chamber\nTeam Deathmatch - First to 25\nJefferson TDM\n", "Select", "Cancel");
 	}
 	else SendClientMessage(playerid, COLOR_GRAY, "{bf0000}Notice: {FFFFFF}You don't have any events, you can win some in our crates!");
 
@@ -638,6 +741,9 @@ CMD:joinevent(cmdid, playerid, params[])
 	
 	if(EventJoinable == false)
 		return SendClientMessage(playerid, -1, "{31AEAA}Events: {FFFFFF}Event in progress, unable to join!");
+
+	if(Iter_Count(EventPlayers) > MAX_EVENT_PLAYERS)
+		return SendClientMessage(playerid, -1, "{31AEAA}Events: {FFFFFF}Event is full!");
 	
 	JoinEvent(playerid);
 	return 1;
