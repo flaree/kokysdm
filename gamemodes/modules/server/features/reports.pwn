@@ -39,7 +39,7 @@ CMD:report(cmdid, playerid, params[])
 	SendAdmcmdMessage(1, sprintf("{bf0000}[%i] Report from: [%s (%i)] | Report on: [%s (%i)] | Reason:[%s] (/reports)", reportid, GetName(playerid), playerid, GetName(target), target, info));
 
 	DCC_SendChannelMessage(DCC_FindChannelByName("in-game-reports"), sprintf("[REPORT: %d] **%s [%d]** reported **%s [%d]**, reason: %s", reportid, GetName(playerid), playerid, GetName(target), target, info));
-	SendClientMessage(playerid, COLOR_GREY, sprintf("{1E90FF}|-{dadada} Report has been sent to all online staff! Please wait for a response. /myreports {1E90FF}-|"));
+	SendClientMessage(playerid, COLOR_GREY, sprintf("{1E90FF}|-{dadada} Report has been sent to all online staff! Please wait for a response. /cancelreport [player] to cancel {1E90FF}-|"));
 	return true;
 }
 CMD:cancelreport(cmdid, playerid, params[])

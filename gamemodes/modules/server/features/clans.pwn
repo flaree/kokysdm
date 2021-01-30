@@ -185,7 +185,7 @@ CMD<CLN>:clan(cmdid, playerid, params[])
 	
 	SendClientMessage(playerid, 0xBF0000FF, "_____________[Clan Members Online]_____________");
 	foreach(new i: Player){
-		if(Account[playerid][ClanID] == Account[i][ClanID]) SendClientMessage(playerid, -1, sprintf("%s(%i) - Rank: %i", GetName(i), i, Account[i][ClanRank]));
+		if(Account[playerid][ClanID] == Account[i][ClanID]) SendClientMessage(playerid, -1, sprintf("%s(%i) - Rank: %i", GetName(i), i + 1, Account[i][ClanRank]));
 	}
 	SendClientMessage(playerid, 0xBF0000FF, "______________________________________________");
 	return 1;
