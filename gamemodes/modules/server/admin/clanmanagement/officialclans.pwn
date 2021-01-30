@@ -16,7 +16,7 @@ CMD<CM>:setofficial(cmdid, playerid, params[])
 	new clanid, clanname[64];
 	cache_get_value_name_int(0, "id", clanid);
 	cache_get_value_name(0, "name", clanname);
-	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET official = %i WHERE id = %d", level, clanid));
+	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET official = %i, color = %i, skin = 3, skin2 = 3, skin3 = 3 WHERE id = %d", level, -65281, clanid));
 	SendClanMessage(clanid, clanname, sprintf("Your clan %s has been set to official by Clan Manager %s", clanname, GetName(playerid)));
 	SendClientMessage(playerid, COLOR_LIGHTRED, sprintf("CLAN MANAGEMENT: You have set %s's official clan level to %i.", clanname, level));
 	UpdateClanOfficialLevel(clanid, level);
@@ -140,11 +140,10 @@ CMD<CM>:setspawn(cmdid, playerid, params[])
 	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE name = '%e' LIMIT 1", TargetClan));
 	if(!cache_num_rows()) return SendClientMessage(playerid, COLOR_GRAY, sprintf("No clan been found with the name %s.", TargetClan));
 
-	new Float:x, Float:y, Float:z, Float:angle, Float:camx, Float:camy, Float:camz;
+	new Float:x, Float:y, Float:z, Float:angle;
 	GetPlayerPos(playerid, x, y, z);
 	GetPlayerFacingAngle(playerid, angle);
-	GetPlayerCameraPos(playerid, camx, camy, camz);
-	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET x = %f, y = %f, z = %f, angle = %f, camx = %f, camy = %f, camz = %f WHERE name =  '%e'", x, y, z, angle, camx, camy, camz, TargetClan));
+	mysql_pquery_s(SQL_CONNECTION, str_format("UPDATE clans SET x = %f, y = %f, z = %f, angle = %f WHERE name =  '%e'", x, y, z, angle, TargetClan));
 	SendClientMessage(playerid, COLOR_LIGHTBLUE, "You have set the clans spawn point. Please take a screenshot of the map to prevent near-by spawn issues. Post it in the Discord!");
 	return true;
 }
