@@ -139,6 +139,7 @@ CMD<CLNTDM>:clanskin(cmdid, playerid, params[])
 	if(sscanf(params, "i", slot)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /clanskin [slot 1-3]");
 	if(Account[playerid][ClanID] == -1 || Account[playerid][ClanID] == 0) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Clan: {FFFFFF}You must be in a clan to use this command!");
 	if(!Clans[Account[playerid][ClanID]][clanofficial]) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Clan: {FFFFFF}Your clan must be official to use this command!");
+	if(GetPlayerTeam(playerid) < 100) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Clan: {FFFFFF}You must be in a clan to use this command!");
 	if(slot < 1 || slot > 3) return SendClientMessage(playerid, COLOR_GRAY, "ERROR: Slot ID must be between 1-3");
 
 	new skinid;
