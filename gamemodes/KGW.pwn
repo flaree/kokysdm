@@ -1741,12 +1741,12 @@ public ShowVerificationDialog(playerid)
 
 Dialog:RULES(playerid, response, listitem, inputtext[])
 {
-	if(!response){ Dialog_Show(playerid, RULES, DIALOG_STYLE_MSGBOX, "Forced Rules", "1. {FFFFFF}No third party modifications\n2. {FFFFFF}No bug abuse(c-roll, c-bug, c-shoot-c)\n3. {FFFFFF}No racism\n4. {FFFFFF}English only\n5. {FFFFFF}Abuse of commands (/lobby to avoid death)", "Okay", "Close");}
+	if(!response){ Dialog_Show(playerid, RULES, DIALOG_STYLE_MSGBOX, "Forced Rules", "1. {FFFFFF}No third party modifications\n2. {FFFFFF}No bug/samp physic abuse(c-roll, c-bug, c-shoot-c)\n3. {FFFFFF}No chat spam and no racism\n4. {FFFFFF}English only\n5. {FFFFFF}Abuse of commands (/lobby to avoid death)\n6.No External Advertisements\n7. Always maintain common courtesy\n8. No trading virtual goods for real life currency\n9. No spawn killing\n10. /teaming for teaming rules", "Okay", "Close");}
 	if(response)
 	{
 		if(Account[playerid][ForcedRules1] == 1)
 		{
-			Dialog_Show(playerid, RULES, DIALOG_STYLE_MSGBOX, "Forced Rules", "1. {FFFFFF}No third party modifications\n2. {FFFFFF}No bug abuse(c-roll, c-bug, c-shoot-c)\n3. {FFFFFF}No racism\n4. {FFFFFF}English only\n5. {FFFFFF}Abuse of commands (/lobby to avoid death)", "Okay", "Close");
+			Dialog_Show(playerid, RULES, DIALOG_STYLE_MSGBOX, "1. {FFFFFF}No third party modifications\n2. {FFFFFF}No bug/samp physic abuse(c-roll, c-bug, c-shoot-c)\n3. {FFFFFF}No chat spam and no racism\n4. {FFFFFF}English only\n5. {FFFFFF}Abuse of commands (/lobby to avoid death)\n6.No External Advertisements\n7. Always maintain common courtesy\n8. No trading virtual goods for real life currency\n9. No spawn killing\n10. /teaming for teaming rules", "Okay", "Close");
 		}
 		if(Account[playerid][ForcedRules1] == 0)
 		{
@@ -4238,7 +4238,14 @@ CMD:freeroam(cmdid, playerid)
 
 CMD:rules(cmdid, playerid, params[])
 {
-	Dialog_Show(playerid, RULES, DIALOG_STYLE_MSGBOX, "Rules", "1. {FFFFFF}No third party modifications\n2. {FFFFFF}No bug/samp physic abuse(c-roll, c-bug, c-shoot-c)\n3. {FFFFFF}No chat spam and no racism\n4. {FFFFFF}English only\n5. {FFFFFF}Abuse of commands (/lobby to avoid death)\n6.No External Advertisements\n7. Always maintain common courtesy\n8. No trading virtual goods for real life currency\n9. No spawn killing.", "Okay", "Close");
+	Dialog_Show(playerid, RULES, DIALOG_STYLE_MSGBOX, "Rules", "1. {FFFFFF}No third party modifications\n2. {FFFFFF}No bug/samp physic abuse(c-roll, c-bug, c-shoot-c)\n3. {FFFFFF}No chat spam and no racism\n4. {FFFFFF}English only\n5. {FFFFFF}Abuse of commands (/lobby to avoid death)\n6.No External Advertisements\n7. Always maintain common courtesy\n8. No trading virtual goods for real life currency\n9. No spawn killing\n10. /teaming for teaming rules", "Okay", "Close");
+	return 1;
+}
+CMD:teaming(cmdid, playerid, params[])
+{
+    yield 1;
+	new response[e_DIALOG_RESPONSE_INFO];
+	AwaitAsyncDialog(playerid, response, DIALOG_STYLE_TABLIST_HEADERS, "Arena Teaming Rules", "Map\tAllowed\n{FFFFFF}Western Town\t{00FF00}Yes\n{FFFFFF}The Sewers\t{00FF00}Yes\n{FFFFFF}Tennis Court\t{FF0000}No\n{FFFFFF}The Farm\t{FF0000}No\n{FFFFFF}RC Battleground\t{00FF00}Yes\n{FFFFFF}Meat Factory\t{FF0000}No\n{FFFFFF}Pleasure Domes\t{FF0000}No\n{FFFFFF}Liberty City\t{FF0000}No\n{FFFFFF}Madd Dogg\t{00FF00}Yes\n{FFFFFF}Jefferson Motel\t{00FF00}Yes\n{FFFFFF}Dust2\t{00FF00}Yes\n{FFFFFF}LVPD\t{FF0000}No\n", "Okay");
 	return 1;
 }
 
