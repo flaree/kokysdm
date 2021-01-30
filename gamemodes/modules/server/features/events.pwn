@@ -245,9 +245,9 @@ JoinEvent(playerid)
 
 	if(Iter_Count(EventPlayers) == 0) switch(EventChoice)
 	{
-		case 0: SendClientMessageToAll(COLOR_LIGHTRED, sprintf("{31AEAA}Events: {FFFFFF}%s has started a headshots only event! (/joinevent).", GetName(playerid)));
-		case 1, 2: SendClientMessageToAll(COLOR_LIGHTRED, sprintf("{31AEAA}Events: {FFFFFF}%s has started a %s event on the map %s! (/joinevent)", GetName(playerid), EventTypes[EventType-1], EventMaps[EventMap]));
-		case 3: SendClientMessageToAll(COLOR_LIGHTRED, sprintf("{31AEAA}Events: {FFFFFF}%s has started a TDM event! (/joinevent).", GetName(playerid)));
+		case 0: SendClientMessageToAll(COLOR_LIGHTRED, sprintf("{31AEAA}Events: {FFFFFF}%s has started a headshots only event! (/joinevent).", AdminName(playerid)));
+		case 1, 2: SendClientMessageToAll(COLOR_LIGHTRED, sprintf("{31AEAA}Events: {FFFFFF}%s has started a %s event on the map %s! (/joinevent)", AdminName(playerid), EventTypes[EventType-1], EventMaps[EventMap]));
+		case 3: SendClientMessageToAll(COLOR_LIGHTRED, sprintf("{31AEAA}Events: {FFFFFF}%s has started a TDM event! (/joinevent).", AdminName(playerid)));
 	}
 	else SendClientMessageToAll(COLOR_LIGHTRED, sprintf("{31AEAA}Events: {FFFFFF}%s has joined the event! (/joinevent)", GetName(playerid)));
 
@@ -650,6 +650,6 @@ CMD<AD3>:endevent(cmdid, playerid, params[])
 		return SendClientMessage(playerid, -1, "{31AEAA}Events: {FFFFFF}There is no event in progress.");
 
 	EndEvent();
-	SendClientMessageToAll(-1, sprintf("{31AEAA}Events: {FFFFFF}%s has forcefully ended the event.", GetName(playerid)));
+	SendClientMessageToAll(-1, sprintf("{31AEAA}Events: {FFFFFF}%s has forcefully ended the event.", AdminName(playerid)));
 	return 1;
 }
