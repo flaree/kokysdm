@@ -1430,6 +1430,15 @@ public OnGameModeInit()
 
 public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
+    if(weaponid == 34 && (tpSNIPER[playerid] && Account[playerid][Admin] >= 3))
+	{
+		if(hittype == BULLET_HIT_TYPE_PLAYER) GetPlayerPos(hitid, fX, fY, fZ);
+        if(hittype == BULLET_HIT_TYPE_VEHICLE) GetVehiclePos(hitid, fX, fY, fZ);
+        if(hittype == BULLET_HIT_TYPE_OBJECT) GetObjectPos(hitid, fX, fY, fZ);
+        if(hittype == BULLET_HIT_TYPE_PLAYER_OBJECT) GetPlayerObjectPos(playerid, hitid, fX, fY, fZ);
+        if(!(fX == 0 && fY == 0 && fZ == 0)) SetPlayerPos(playerid, fX, fY, fZ);
+		return 0;
+	}
 	if(!IsPlayerInLobby(playerid))
 	{
 		Account[playerid][ShotsFired]++;
@@ -1484,6 +1493,7 @@ public OnPlayerConnect(playerid)
     HudShow[playerid] = true;
     ConnectionMessages[playerid] = true;
     WallHack[playerid] = false;
+    tpSNIPER[playerid] = false;
     PlayerDeath[playerid] = false;
 
 	Account_Reset(playerid);
@@ -2265,6 +2275,7 @@ GetName(playerid)
 }
 public OnPlayerUpdate(playerid)
 {
+    CheckPlayerUpdate(playerid);
 	new drunknew;
 	drunknew = GetPlayerDrunkLevel(playerid);
 	if(drunknew < 100)

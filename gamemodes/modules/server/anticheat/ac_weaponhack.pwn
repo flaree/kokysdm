@@ -546,7 +546,6 @@ hook OnPlayerUpdate(playerid)
 			}
 		}
 	}
-	return 1;
 }
 
 CMD<AD1>:weaponfreeze(cmdid, playerid, params[])

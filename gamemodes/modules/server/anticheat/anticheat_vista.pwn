@@ -290,18 +290,18 @@ static const
 				
 /* Pay'n'Spray coordinates */
 
-static const
-				Float:PayNSpray[][] = {
-				{1977.213378, 2162.535156, 10.796499},
-				{-100.248992, 1118.425415, 19.468778},
-				{-1420.163940, 2586.447753, 55.570343},
-				{-2426.851074, 1018.130126, 50.124687},
-				{-1904.987792, 280.658477, 40.773948},
-				{487.026214, -1740.143676, 10.846820},
-				{1024.983520, -1022.391418, 31.828529},
-				{2065.067138, -1833.406250, 13.273938},
-				{720.489135, -450.550811, 16.055030}
-				};
+// static const
+// 				Float:PayNSpray[][] = {
+// 				{1977.213378, 2162.535156, 10.796499},
+// 				{-100.248992, 1118.425415, 19.468778},
+// 				{-1420.163940, 2586.447753, 55.570343},
+// 				{-2426.851074, 1018.130126, 50.124687},
+// 				{-1904.987792, 280.658477, 40.773948},
+// 				{487.026214, -1740.143676, 10.846820},
+// 				{1024.983520, -1022.391418, 31.828529},
+// 				{2065.067138, -1833.406250, 13.273938},
+// 				{720.489135, -450.550811, 16.055030}
+// 				};
 				
 /* Expected weapon damage */
 
@@ -372,7 +372,7 @@ public AntiCheat_GivePlayerMoney(playerid, amount)
 {
 	PlayerData[playerid][ac_money] += amount;
 	Account[playerid][Cash] = PlayerData[playerid][ac_money]; // Added this so it temporarily stops breaking everyones money. Come talk to me on IRC and I can explain. 
-	new mon_msg[128];
+	// new mon_msg[128];
 	// format(mon_msg, sizeof(mon_msg), "%s's money has been scriptly given $%i", GetName(playerid), amount);
 	// SendAdmcmdMessage(1, mon_msg);
 	return GivePlayerMoney(playerid, amount);
@@ -382,7 +382,7 @@ public AntiCheat_GivePlayerMoney(playerid, amount)
 public AntiCheat_ResetPlayerMoney(playerid)
 {
 	PlayerData[playerid][ac_money] = 0;
-	new mon_msg[128];
+	// new mon_msg[128];
 	// format(mon_msg, sizeof(mon_msg), "%s's money has been scriptly reset.", GetName(playerid));
 	// SendAdmcmdMessage(1, mon_msg);
 	return ResetPlayerMoney(playerid);
@@ -1042,7 +1042,7 @@ hook OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid)
 	
 }
 
-hook OnPlayerUpdate(playerid)
+CheckPlayerUpdate(playerid)
 {
 	#if defined ADMIN_BYPASS
 	if(Account[playerid][Admin] > 0) return 1;
@@ -1100,7 +1100,6 @@ hook OnPlayerUpdate(playerid)
 								format(string, sizeof(string), "[AntiCheat]: {%06x} %s (%d)'s health has been desynced for too long. Recommending a kick for the player.", COLOR_RED >>> 8, GetName(playerid), playerid);
 								SendAdminMessage(1, string);
 			//					Kick(playerid);
-								return 1;
 						    }
 							
 						}
@@ -1126,7 +1125,6 @@ hook OnPlayerUpdate(playerid)
 
 		}
 
-		return 1;
 	}
 
 	if(PlayerLastUpdated[playerid][acs_armour] < time)
@@ -1174,7 +1172,6 @@ hook OnPlayerUpdate(playerid)
 							format(string, sizeof(string), "[AntiCheat]: {%06x} %s (%d)'s armour has been desynced for too long. Recommend kicking the player.", COLOR_RED >>> 8, GetName(playerid), playerid);
 							SendAdminMessage(1, string);
 	//						Kick(playerid);
-							return 1;
 					    }
 						
 					}
@@ -1336,7 +1333,6 @@ hook OnPlayerUpdate(playerid)
 									format(string, sizeof(string), "[AntiCheat]: {%06x} %s (%d)'s %s's ammo has been desynced for too long. Recommend kicking the player", COLOR_RED >>> 8, GetName(playerid), playerid, AC_WeapNames[PlayerData[playerid][ac_weapons][i]]);
 									SendAdminMessage(1, string);
 					//				Kick(playerid);
-									return 1;
 								}
 								
 							}
@@ -1483,7 +1479,6 @@ hook OnPlayerUpdate(playerid)
 			GetPlayerPos(playerid, PlayerData[playerid][ac_x], PlayerData[playerid][ac_y], PlayerData[playerid][ac_z]);
 		}
 
-		return 1;
 	}
 	
 

@@ -1,4 +1,5 @@
 #define ADMIN_CHANNEL "796563115343872042"
+new tpSNIPER[MAX_PLAYERS] = {false, ...};
 
 CMD<AD6>:tickrate(cmdid, playerid, params[])
 {
@@ -36,7 +37,7 @@ CMD<AD1>:setvw(cmdid, playerid, params[])
 	return 1;
 }
 CMD<AD1>:wallhack(cmdid, playerid, params[]) {
-	if(SpectatingPlayer[playerid] == -1) return SendErrorMessage(playerid, "You must be spectating to use this command");
+	if(SpectatingPlayer[playerid] == -1 && Account[playerid][Admin] > 3) return SendErrorMessage(playerid, "You must be spectating to use this command");
 	WallHack[playerid] = !WallHack[playerid];
 	sendFormatMessage(playerid, 0xFFFF0000, "* You have %s wall hacks!", WallHack[playerid]?("enabled"):("disabled"));
 	new szString[256];
@@ -2130,6 +2131,14 @@ CMD<AD6>:togglearenas(cmdid, playerid, params[])
 	new szString[256];
 	format(szString, 256, "{808080}[ADMCMD]: {FFFFFF}%s has %s arenas.", AdminName(playerid), EnableArenas?("enabled"):("disabled"));
 	SendClientMessageToAll(-1, szString);
+	return 1;
+}
+CMD<AD3>:tpsniper(cmdid, playerid, params[])
+{
+	tpSNIPER[playerid] = !tpSNIPER[playerid];
+	new szString[256];
+	format(szString, 256, "%s has %s sniper tping.", AdminName(playerid), tpSNIPER[playerid]?("enabled"):("disabled"));
+	SendAdmcmdMessage(3, szString);
 	return 1;
 }
 // END OF SCRIPT

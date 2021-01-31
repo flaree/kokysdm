@@ -33,66 +33,66 @@
 //     return 1;
 // }
 
-static CodeToName(const code) {
-	new cheatName[48];
-	/* ** ** */
-	switch(code) {
-		case 0: cheatName = "Airbreak (onfoot)";
-		case 1: cheatName = "Airbreak (in vehicle)";
-		case 2: cheatName = "Teleport hack (onfoot)";
-		case 3: cheatName = "Teleport hack (in vehicle)";
-		case 4: cheatName = "Teleport hack (into/between vehicles)";
-		case 5: cheatName = "Teleport hack (vehicle to player)";
-		case 6: cheatName = "Teleport hack (pickups)";
-		case 7: cheatName = "FlyHack (onfoot)";
-		case 8: cheatName = "FlyHack (in vehicle)";
-		case 9: cheatName = "SpeedHack (onfoot)";
-		case 10: cheatName = "SpeedHack (in vehicle)";
-		case 11: cheatName = "Health hack (in vehicle)";
-		case 12: cheatName = "Health hack (onfoot)";
-		case 13: cheatName = "Armour hack";
-		case 14: cheatName = "Money hack";
-		case 15: cheatName = "Weapon hack";
-		case 16: cheatName = "Ammo hack (add)";
-		case 17: cheatName = "Ammo hack (infinite)";
-		case 18: cheatName = "Special actions hack";
-		case 19: cheatName = "GodMode from bullets (onfoot)";
-		case 20: cheatName = "GodMode from bullets (in vehicle)";
-		case 21: cheatName = "Invisible hack";
-		case 22: cheatName = "lagcomp-spoof";
-		case 23: cheatName = "Tuning hack";
-		case 24: cheatName = "Parkour mod";
-		case 25: cheatName = "Quick turn";
-		case 26: cheatName = "Rapid fire";
-		case 27: cheatName = "FakeSpawn";
-		case 28: cheatName = "FakeKill";
-		case 29: cheatName = "Pro Aim";
-		case 30: cheatName = "CJ run";
-		case 31: cheatName = "CarShot";
-		case 32: cheatName = "CarJack";
-		case 33: cheatName = "UnFreeze";
-		case 34: cheatName = "AFK Ghost";
-		case 35: cheatName = "Full Aiming";
-		case 36: cheatName = "Fake NPC";
-		case 37: cheatName = "Reconnect";
-		case 38: cheatName = "High ping";
-		case 39: cheatName = "Dialog hack";
-		case 40: cheatName = "Protection from sandbox";
-		case 41: cheatName = "Protection from invalid version";
-		case 42: cheatName = "Rcon hack";
-		case 43: cheatName = "Tuning crasher";
-		case 44: cheatName = "Invalid seat crasher";
-		case 45: cheatName = "Dialog crasher";
-		case 46: cheatName = "Attached object crasher";
-		case 47: cheatName = "Weapon Crasher";
-		case 48: cheatName = "Protection from connection flood in one slot";
-		case 49: cheatName = "Callback functions flood";
-		case 50: cheatName = "Flood by seat changing";
-		case 51: cheatName = "DDos";
-		case 52: cheatName = "NOP's";
-	}
-	return cheatName;
-}
+// static CodeToName(const code) {
+// 	new cheatName[48];
+// 	/* ** ** */
+// 	switch(code) {
+// 		case 0: cheatName = "Airbreak (onfoot)";
+// 		case 1: cheatName = "Airbreak (in vehicle)";
+// 		case 2: cheatName = "Teleport hack (onfoot)";
+// 		case 3: cheatName = "Teleport hack (in vehicle)";
+// 		case 4: cheatName = "Teleport hack (into/between vehicles)";
+// 		case 5: cheatName = "Teleport hack (vehicle to player)";
+// 		case 6: cheatName = "Teleport hack (pickups)";
+// 		case 7: cheatName = "FlyHack (onfoot)";
+// 		case 8: cheatName = "FlyHack (in vehicle)";
+// 		case 9: cheatName = "SpeedHack (onfoot)";
+// 		case 10: cheatName = "SpeedHack (in vehicle)";
+// 		case 11: cheatName = "Health hack (in vehicle)";
+// 		case 12: cheatName = "Health hack (onfoot)";
+// 		case 13: cheatName = "Armour hack";
+// 		case 14: cheatName = "Money hack";
+// 		case 15: cheatName = "Weapon hack";
+// 		case 16: cheatName = "Ammo hack (add)";
+// 		case 17: cheatName = "Ammo hack (infinite)";
+// 		case 18: cheatName = "Special actions hack";
+// 		case 19: cheatName = "GodMode from bullets (onfoot)";
+// 		case 20: cheatName = "GodMode from bullets (in vehicle)";
+// 		case 21: cheatName = "Invisible hack";
+// 		case 22: cheatName = "lagcomp-spoof";
+// 		case 23: cheatName = "Tuning hack";
+// 		case 24: cheatName = "Parkour mod";
+// 		case 25: cheatName = "Quick turn";
+// 		case 26: cheatName = "Rapid fire";
+// 		case 27: cheatName = "FakeSpawn";
+// 		case 28: cheatName = "FakeKill";
+// 		case 29: cheatName = "Pro Aim";
+// 		case 30: cheatName = "CJ run";
+// 		case 31: cheatName = "CarShot";
+// 		case 32: cheatName = "CarJack";
+// 		case 33: cheatName = "UnFreeze";
+// 		case 34: cheatName = "AFK Ghost";
+// 		case 35: cheatName = "Full Aiming";
+// 		case 36: cheatName = "Fake NPC";
+// 		case 37: cheatName = "Reconnect";
+// 		case 38: cheatName = "High ping";
+// 		case 39: cheatName = "Dialog hack";
+// 		case 40: cheatName = "Protection from sandbox";
+// 		case 41: cheatName = "Protection from invalid version";
+// 		case 42: cheatName = "Rcon hack";
+// 		case 43: cheatName = "Tuning crasher";
+// 		case 44: cheatName = "Invalid seat crasher";
+// 		case 45: cheatName = "Dialog crasher";
+// 		case 46: cheatName = "Attached object crasher";
+// 		case 47: cheatName = "Weapon Crasher";
+// 		case 48: cheatName = "Protection from connection flood in one slot";
+// 		case 49: cheatName = "Callback functions flood";
+// 		case 50: cheatName = "Flood by seat changing";
+// 		case 51: cheatName = "DDos";
+// 		case 52: cheatName = "NOP's";
+// 	}
+// 	return cheatName;
+// }
 
 // CMD<AD4>:disableac(cmdid, playerid, params[]) {
 
