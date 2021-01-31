@@ -1312,13 +1312,14 @@ ShowStatsForPlayer(playerid, clickedplayerid)
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Showing statistics for registered user: %s (UserID: %d)", GetName(clickedplayerid), Account[clickedplayerid][SQLID]));
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Donator Rank: {FFFFFF}%s{808080} | Name Changes: {FFFFFF}%d{808080} | Cash: {FFFFFF}$%s{808080}", DonatorRank(clickedplayerid), Account[clickedplayerid][NameChanges], Comma(Account[clickedplayerid][Cash]), Account[clickedplayerid][Skin]));
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Kills: {FFFFFF}%d{808080} | Deaths: {FFFFFF}%d{808080} | Headshots: {FFFFFF}%d{808080} | K/D Ratio: {FFFFFF}%.2f", Kill, Death, Account[clickedplayerid][Headshots], KD));
+    if(Account[clickedplayerid][ClanID] > 0) SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Clan Name: {FFFFFF}%s{808080} | Clan Rank: {FFFFFF}%d{808080}", Account[clickedplayerid][ClanName], Account[clickedplayerid][ClanRank] + 1));
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Keys: {FFFFFF}%d{808080} | Events: {FFFFFF}%d{808080} | Crates Opened: {FFFFFF}%d{808080} | Highest Spree: {FFFFFF}%d", Account[clickedplayerid][PlayerKeys], Account[clickedplayerid][PlayerEvents], Account[clickedplayerid][OpenedCrates], Account[clickedplayerid][HighestSpree]));
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Events Won: {FFFFFF}%d{808080} | Verified User: {FFFFFF}%s{808080}", Account[clickedplayerid][EventsWon], VerifiedCheck(clickedplayerid)));
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Hours: {FFFFFF}%d{808080} | Minutes: {FFFFFF}%d{808080} | Seconds: {FFFFFF}%d{808080}", Account[clickedplayerid][Hours], Account[clickedplayerid][Minutes], Account[clickedplayerid][Seconds]));
     if(playerid == clickedplayerid && GetPlayerAdminLevel(playerid) > 0) SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Aduty Hours: {FFFFFF}%d{808080} | Aduty Minutes: {FFFFFF}%d{808080} | Aduty Seconds: {FFFFFF}%d{808080}", Account[clickedplayerid][AdminHours], Account[clickedplayerid][AdminMinutes], Account[clickedplayerid][AdminSeconds]));
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Mutes: {FFFFFF}%d{808080} | Kicks: {FFFFFF}%d{808080} | Forced Rules: {FFFFFF}%d{808080}", Account[clickedplayerid][Mutes], Account[clickedplayerid][Kicks], Account[clickedplayerid][ForcedRules]));
 	SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}KDM Tokens: {FFFFFF}%d{808080} | Rare Skins: {FFFFFF}%d{808080} | Rare Items: {FFFFFF}%d{808080}", Account[clickedplayerid][Tokens], Account[clickedplayerid][RareSkins], Account[clickedplayerid][RareItems]));
-	if(GetPlayerAdminLevel(playerid) > 0) SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080} | Admin Actions: {FFFFFF}%d{808080}", Account[clickedplayerid][AdminActions]));
+	if(GetPlayerAdminLevel(playerid) > 0) SendClientMessage(playerid, COLOR_GRAY, sprintf("{808080}Admin Actions: {FFFFFF}%d{808080}", Account[clickedplayerid][AdminActions]));
 	StatsLine(playerid);
 }
 

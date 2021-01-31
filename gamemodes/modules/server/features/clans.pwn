@@ -26,7 +26,7 @@ CMD<CLN>:claninvite(cmdid, playerid, params[])
 	new pid;
 	if(sscanf(params, "u", pid)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /claninvite [playerid/playername]");
 	if(!IsPlayerConnected(pid)) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Error: {FFFFFF}This player is not connected!");
-	if(Account[pid][ClanID] == -1 || Account[pid][ClanID] == 0) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Clan: {FFFFFF}This player is already in a clan!");
+	if(Account[pid][ClanID] > 0) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Clan: {FFFFFF}This player is already in a clan!");
 	if(pendinginvite[pid] > -1) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Clan: {FFFFFF}This player already has an invite to a clan!");
 	if(Account[playerid][ClanRank] < 3) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Clan: {FFFFFF}You must be at least rank 3 in order to invite players to the clan!");
 	pendinginvite[pid] = Account[playerid][ClanID];
@@ -94,7 +94,7 @@ CMD<CLN>:deleteclanconfirm(cmdid, playerid, params[])
 CMD<CLN>:transferownership(cmdid, playerid, params[])
 {
 	if (Account[playerid][ClanRank] != 4)
-		return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Error: {FFFFFF}U can not use this command!");
+		return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Error: {FFFFFF}You can not use this command!");
 	new pid;
 	if(sscanf(params, "u", pid)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /transferownership [playerid/playername]");
 	if(!IsPlayerConnected(pid)) return SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Error: {FFFFFF}This player is not connected!");
@@ -186,7 +186,7 @@ CMD<CLN>:clan(cmdid, playerid, params[])
 	
 	SendClientMessage(playerid, 0xBF0000FF, "_____________[Clan Members Online]_____________");
 	foreach(new i: Player){
-		if(Account[playerid][ClanID] == Account[i][ClanID]) SendClientMessage(playerid, -1, sprintf("%s(%i) - Rank: %i", GetName(i), i + 1, Account[i][ClanRank]));
+		if(Account[playerid][ClanID] == Account[i][ClanID]) SendClientMessage(playerid, -1, sprintf("%s(%i) - Rank: %i", GetName(i), i, Account[i][ClanRank] + 1));
 	}
 	SendClientMessage(playerid, 0xBF0000FF, "______________________________________________");
 	return 1;
