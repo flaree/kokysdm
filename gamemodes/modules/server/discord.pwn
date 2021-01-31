@@ -182,6 +182,34 @@ DCMD:ban(user, channel, params[])
 	return 1;
 }
 
+DCMD:oban(user, channel, params[])
+{
+	if(!IsUserDiscordAdmin(user)) return 0;
+	new target[32], reason[128];
+	if(sscanf(params, "s[32]S(Not specified)[128]", target, reason)) return DCC_SendChannelMessage(channel, "**USAGE:** !oban [player name] [reason]");
+	new DCC_Guild:guildId = DCC_FindGuildById(DISCORD_GUILD);
+	new admin[33];
+	DCC_GetGuildMemberNickname(guildId, user, admin, sizeof admin);
+	if(isequal(admin, ""))
+	{
+		DCC_GetUserName(user, admin, sizeof admin);
+	}
+
+	yield 1;
+	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT `SQLID`, `Username`, `LatestIP` FROM `Accounts` WHERE `Username` = '%e'", target));
+	if(!cache_num_rows()) return DCC_SendChannelMessage(channel, sprintf("ERROR: The user %s was not found, please check your input again.", target));
+
+	new playersqlid, ip[16];
+	cache_get_value_name_int(0, "SQLID", playersqlid);
+	cache_get_value_name(0, "LatestIP", ip);
+
+	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO Bans (PlayerName, IP, C_ID, A_ID, Timestamp, BannedBy, Reason) VALUES('%e', '%e', %d, %d, %d, '%e', '%e')", target, ip, playersqlid, playersqlid, gettime(), admin, reason));
+
+	SendPunishmentMessage(sprintf("[DISCORD] Admin %s has offline-banned %s. Reason: %s", admin, target, reason));
+	DCC_SendChannelMessage(channel, sprintf("Admin %s has offline-banned %s. Reason: %s", admin, target, reason));
+	return 1;
+}
+
 DCMD:unban(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
@@ -211,7 +239,7 @@ DCMD:cmds(user, channel, params[])
 {
 	if(!IsUserDiscordAdmin(user)) return 0;
 
-	DCC_SendChannelMessage(channel, "```!cmds, !kick, !ban, !ajail, !mute, !unban, !unjail, !unmute, !fpscheck, !flinchcheck, !aimprofile, !ip, !players, !admins```");
+	DCC_SendChannelMessage(channel, "```!cmds, !kick, !ban, !ajail, !mute, !oban, !unban, !unjail, !unmute, !fpscheck, !flinchcheck, !aimprofile, !ip, !players, !admins```");
 	return 1;
 }
 
