@@ -1,5 +1,4 @@
 #define NOTE_ADMIN_LEVEL 1
-#include <chrono>
 
 CMD<AD1>:notes(cmdid, playerid, params[])
 {
