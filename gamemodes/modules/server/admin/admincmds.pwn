@@ -873,7 +873,7 @@ CMD<AD1>:ban(cmdid, playerid, params[])
 	IssueBan(pID, GetName(playerid), reason);
 	KickPlayer(pID);
 	Account[playerid][AdminActions]++;
-	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/ban', '%e', '%d')", GetName(playerid), pID, reason, gettime()));
+	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/ban', '%e', '%d')", GetName(playerid), GetName(pID), reason, gettime()));
 	return 1;
 }
 CMD<AD4>:banip(cmdid, playerid, params[])
