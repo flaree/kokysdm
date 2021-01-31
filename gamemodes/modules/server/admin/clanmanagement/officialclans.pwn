@@ -43,7 +43,7 @@ CMD<CM>:createclanvehicle(cmdid, playerid, params[])
 
 	GetPlayerPos(playerid, curX, curY, curZ);
 	GetPlayerFacingAngle(playerid, curR);
-	FreeroamVehicle[playerid] = CreateVehicle(vID, curX+1, curY+1, curZ, curR, -1, -1, -1);
+	FreeroamVehicle[playerid] = CreateVehicle(vID, curX+1, curY+1, curZ, curR, -1, -1, -1, 0);
 	LinkVehicleToInterior(FreeroamVehicle[playerid], GetPlayerInterior(playerid));
 	SetVehicleVirtualWorld(FreeroamVehicle[playerid], GetPlayerVirtualWorld(playerid));
 
@@ -196,7 +196,7 @@ public SpawnAllClanVehicles(const type)
 		if (type)
 			carid = AddStaticVehicleEx(vehid, x, y, z, a, colorOne, colorTwo, 60, 0);
 		else 
-			carid = CreateVehicle(vehid, x, y, z, a, colorOne, colorTwo, 60);
+			carid = CreateVehicle(vehid, x, y, z, a, colorOne, colorTwo, 60, 0);
 
 		SetVehicleNumberPlate(carid, clanname);
 		LinkVehicleToInterior(carid, 0);

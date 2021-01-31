@@ -4,34 +4,34 @@
  *  Anticheat Config
  *
 */
-forward OnCheatDetected(const playerid, const ip_address[], const type, const code);
-public OnCheatDetected(const playerid, const ip_address[], const type, const code) {
-    if (type) {
-        #if defined BlockIpAddress
-            BlockIpAddress(ip_address, 0);
-        #else
-            static ac_strtmp[32];
-            format(ac_strtmp, sizeof ac_strtmp, "banip %s", ip_address);
-            SendRconCommand(ac_strtmp);
-        #endif
-    } else {
-        switch (code) {
-            case 40: {
-                SendClientMessage(playerid, AC_DEFAULT_COLOR, MAX_CONNECTS_MSG);
-            }
-            case 41: {
-                SendClientMessage(playerid, AC_DEFAULT_COLOR, UNKNOWN_CLIENT_MSG);
-            }
-            default: {
-                new kickMessage[sizeof KICK_MSG + 48];
-                format(kickMessage, sizeof kickMessage, KICK_MSG, CodeToName(code));
-                SendClientMessage(playerid, 0xFF0000AA, kickMessage);
-            }
-        }
-        AntiCheatKickWithDesync(playerid, code);
-    }
-    return 1;
-}
+// forward OnCheatDetected(const playerid, const ip_address[], const type, const code);
+// public OnCheatDetected(const playerid, const ip_address[], const type, const code) {
+//     if (type) {
+//         #if defined BlockIpAddress
+//             BlockIpAddress(ip_address, 0);
+//         #else
+//             static ac_strtmp[32];
+//             format(ac_strtmp, sizeof ac_strtmp, "banip %s", ip_address);
+//             SendRconCommand(ac_strtmp);
+//         #endif
+//     } else {
+//         switch (code) {
+//             case 40: {
+//                 SendClientMessage(playerid, AC_DEFAULT_COLOR, MAX_CONNECTS_MSG);
+//             }
+//             case 41: {
+//                 SendClientMessage(playerid, AC_DEFAULT_COLOR, UNKNOWN_CLIENT_MSG);
+//             }
+//             default: {
+//                 new kickMessage[sizeof KICK_MSG + 48];
+//                 format(kickMessage, sizeof kickMessage, KICK_MSG, CodeToName(code));
+//                 SendClientMessage(playerid, 0xFF0000AA, kickMessage);
+//             }
+//         }
+//         AntiCheatKickWithDesync(playerid, code);
+//     }
+//     return 1;
+// }
 
 static CodeToName(const code) {
 	new cheatName[48];
@@ -94,39 +94,39 @@ static CodeToName(const code) {
 	return cheatName;
 }
 
-CMD<AD4>:disableac(cmdid, playerid, params[]) {
+// CMD<AD4>:disableac(cmdid, playerid, params[]) {
 
-    for (new i; i < 52; i++) {
-		if (IsAntiCheatEnabled(i)) {
-			EnableAntiCheat(i, false);
-		}
-    }
+//     for (new i; i < 52; i++) {
+// 		if (IsAntiCheatEnabled(i)) {
+// 			EnableAntiCheat(i, false);
+// 		}
+//     }
 
-	SendClientMessage(playerid, -1, "You disabled the whole AntiCheat.");
+// 	SendClientMessage(playerid, -1, "You disabled the whole AntiCheat.");
 
-	return CMD_SUCCESS;
-}
+// 	return CMD_SUCCESS;
+// }
 
-CMD<AD4>:acsettings(cmdid, playerid, params[]) {
-    new dialogStr[48 * 52];
-    format(dialogStr, sizeof dialogStr, "ID\tName\tEnabled\n"); 
-    for (new i; i < 52; i++) {
-        format(dialogStr, sizeof dialogStr, 
-            "%s\n\
-            %i\t%s\t%s", dialogStr, i, CodeToName(i), IsAntiCheatEnabled(i) ? "{00ff00}Yes" : "{ff0000}No");
-    }
-	new response[e_DIALOG_RESPONSE_INFO];
-	yield 1;
-	AwaitAsyncDialog(playerid, response, DIALOG_STYLE_TABLIST_HEADERS, "Select the anticheat", dialogStr, "Select", "Cancel");
+// CMD<AD4>:acsettings(cmdid, playerid, params[]) {
+//     new dialogStr[48 * 52];
+//     format(dialogStr, sizeof dialogStr, "ID\tName\tEnabled\n"); 
+//     for (new i; i < 52; i++) {
+//         format(dialogStr, sizeof dialogStr, 
+//             "%s\n\
+//             %i\t%s\t%s", dialogStr, i, CodeToName(i), IsAntiCheatEnabled(i) ? "{00ff00}Yes" : "{ff0000}No");
+//     }
+// 	new response[e_DIALOG_RESPONSE_INFO];
+// 	yield 1;
+// 	AwaitAsyncDialog(playerid, response, DIALOG_STYLE_TABLIST_HEADERS, "Select the anticheat", dialogStr, "Select", "Cancel");
 
-	if(!response[E_DIALOG_RESPONSE_Response]) {
-        return CMD_SUCCESS;
-    }
+// 	if(!response[E_DIALOG_RESPONSE_Response]) {
+//         return CMD_SUCCESS;
+//     }
 
-    new const listitem = response[E_DIALOG_RESPONSE_Listitem];
+//     new const listitem = response[E_DIALOG_RESPONSE_Listitem];
 
-    EnableAntiCheat(listitem, !IsAntiCheatEnabled(listitem));
-    SendClientMessage(playerid, -1, sprintf("You %s {ffffff}the anticheat for %s.", IsAntiCheatEnabled(listitem) ? "{00ff00}enabled" : "{ff0000}disabled", CodeToName(listitem)));
+//     EnableAntiCheat(listitem, !IsAntiCheatEnabled(listitem));
+//     SendClientMessage(playerid, -1, sprintf("You %s {ffffff}the anticheat for %s.", IsAntiCheatEnabled(listitem) ? "{00ff00}enabled" : "{ff0000}disabled", CodeToName(listitem)));
 
-    return CMD_SUCCESS;
-}
+//     return CMD_SUCCESS;
+// }

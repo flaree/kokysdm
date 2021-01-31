@@ -2819,10 +2819,10 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		s_LastVehicleTick[playerid] = GetTickCount();
 
 		if (newstate == PLAYER_STATE_ONFOOT) {
-			new Float:vx, Float:vy, Float:vz;
-			GetPlayerVelocity(playerid, vx, vy, vz);
+			new Float:vehx, Float:vehy, Float:vehz;
+			GetPlayerVelocity(playerid, vehx, vehy, vehz);
 
-			if (vx*vx + vy*vy + vz*vz <= 0.05) {
+			if (vehx*vehx + vehy*vehy + vehz*vehz <= 0.05) {
 				for (new i = 0; i < MAX_PLAYERS; i++) {
 					if (i != playerid && IsPlayerConnected(i) && IsPlayerStreamedIn(playerid, i)) {
 						SendLastSyncData(playerid, i);
@@ -2908,9 +2908,9 @@ public OnPlayerUpdate(playerid)
 
 	// Detect fall damage based on velocity and animation
 	if (s_CustomFallDamage) {
-		new Float:vz, Float:z;
+		new Float:vehz, Float:z;
 
-		GetPlayerVelocity(playerid, vz, vz, vz);
+		GetPlayerVelocity(playerid, vehz, vehz, vehz);
 		GetPlayerPos(playerid, z, z, z);
 
 		new surfing = GetPlayerSurfingVehicleID(playerid);
@@ -2922,16 +2922,16 @@ public OnPlayerUpdate(playerid)
 		}
 
 		if (surfing || tick - s_LastStop[playerid] < 2000) {
-			vz = 0.0;
+			vehz = 0.0;
 			s_LastZVelo[playerid] = 0.0;
 		} else {
-			if (vz != 0.0) {
-				s_LastZVelo[playerid] = vz;
+			if (vehz != 0.0) {
+				s_LastZVelo[playerid] = vehz;
 			}
 
 			if (z - s_LastZ[playerid] > 1.0) {
 				s_LastZVelo[playerid] = 0.1;
-				vz = 0.1;
+				vehz = 0.1;
 			}
 		}
 
@@ -2943,19 +2943,19 @@ public OnPlayerUpdate(playerid)
 			new prev = s_LastAnim[playerid];
 			s_LastAnim[playerid] = anim;
 
-			if (((prev == 1130 && vz == 0.0) || 1128 <= anim <= 1134 || anim == 1208)) {
+			if (((prev == 1130 && vehz == 0.0) || 1128 <= anim <= 1134 || anim == 1208)) {
 				new Float:amount = -1.0;
-				DebugMessage(playerid, "vz: %f anim: %d prev: %d", vz, anim, prev);
+				DebugMessage(playerid, "vehz: %f anim: %d prev: %d", vehz, anim, prev);
 
-				vz = s_LastZVelo[playerid];
+				vehz = s_LastZVelo[playerid];
 
-				if (vz <= s_FallDeathVelocity) {
+				if (vehz <= s_FallDeathVelocity) {
 					amount = 0.0;
-				} else if (vz <= -0.2) {
-					if (vz == -0.2) {
+				} else if (vehz <= -0.2) {
+					if (vehz == -0.2) {
 						amount = s_WeaponDamage[WEAPON_COLLISION] * 0.2;
 					} else {
-						amount = (vz + 0.2) / (s_FallDeathVelocity + 0.2);
+						amount = (vehz + 0.2) / (s_FallDeathVelocity + 0.2);
 						amount *= s_WeaponDamage[WEAPON_COLLISION];
 					}
 				}
@@ -2965,7 +2965,7 @@ public OnPlayerUpdate(playerid)
 				}
 
 				if (amount >= 0.0) {
-					DebugMessage(playerid, "fall dmg: %.5f (vz: %f, anim: %d, prev: %d)", amount, vz, anim, prev);
+					DebugMessage(playerid, "fall dmg: %.5f (vehz: %f, anim: %d, prev: %d)", amount, vehz, anim, prev);
 
 					InflictDamage(playerid, amount, INVALID_PLAYER_ID, WEAPON_COLLISION, 3);
 
@@ -4722,10 +4722,10 @@ static InflictDamage(playerid, Float:amount, issuerid = INVALID_PLAYER_ID, weapo
 			switch (modelid) {
 				case 509, 481, 510, 462, 448, 581, 522,
 				     461, 521, 523, 463, 586, 468, 471: {
-					new Float:vx, Float:vy, Float:vz;
-					GetVehicleVelocity(vehicleid, vx, vy, vz);
+					new Float:vehx, Float:vehy, Float:vehz;
+					GetVehicleVelocity(vehicleid, vehx, vehy, vehz);
 
-					if (vx*vx + vy*vy + vz*vz >= 0.4) {
+					if (vehx*vehx + vehy*vehy + vehz*vehz >= 0.4) {
 						PlayerDeath(playerid, "PED", "BIKE_fallR", 0);
 					} else {
 						PlayerDeath(playerid, "PED", "BIKE_fall_off", 0);
@@ -4821,9 +4821,9 @@ static PlayerDeath(playerid, const animlib[32], const animname[32], anim_lock = 
 		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
 
 		if (action == SPECIAL_ACTION_USEJETPACK) {
-			new Float:vx, Float:vy, Float:vz;
-			GetPlayerVelocity(playerid, vx, vy, vz);
-			SetPlayerVelocity(playerid, vx, vy, vz);
+			new Float:vehx, Float:vehy, Float:vehz;
+			GetPlayerVelocity(playerid, vehx, vehy, vehz);
+			SetPlayerVelocity(playerid, vehx, vehy, vehz);
 		}
 	}
 

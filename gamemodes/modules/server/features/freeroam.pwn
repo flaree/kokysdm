@@ -185,7 +185,7 @@ CMD<FRM>:veh(cmdid, playerid, params[])
 	}
 	GetPlayerPos(playerid, curX, curY, curZ);
 	GetPlayerFacingAngle(playerid, curR);
-	FreeroamVehicle[playerid] = CreateVehicle(vID, curX+1, curY+1, curZ, curR, color1, color2, -1);
+	FreeroamVehicle[playerid] = CreateVehicle(vID, curX+1, curY+1, curZ, curR, color1, color2, -1, 0);
 	LinkVehicleToInterior(FreeroamVehicle[playerid], GetPlayerInterior(playerid));
 	SetVehicleVirtualWorld(FreeroamVehicle[playerid], GetPlayerVirtualWorld(playerid));
 

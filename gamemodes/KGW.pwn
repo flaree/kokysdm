@@ -31,7 +31,7 @@ Losers -> BanksDM - LSDM - CarnageTDM!
 #pragma warning disable 218
 #pragma warning disable 214
 
-#include <nex-ac>
+// #include <nex-ac>
 
 #define WC_CUSTOM_VENDING_MACHINES false
 #define WC_DEBUG false
@@ -1076,6 +1076,8 @@ new VehicleNames[][] =
 
 //anticheat
 #include "modules/server/anticheat/anticheat.pwn"
+#include "modules/server/anticheat/ac_weaponhack.pwn"
+#include "modules/server/anticheat/anticheat_vista.pwn"
 #include "modules/server/anticheat/settings.pwn"
 
 //server maps
@@ -1417,11 +1419,11 @@ public OnGameModeInit()
 	SetWorldTime(ClockHours);
 
 	AddPlayerClass(1, -318.6522, 1049.3909, 20.3403, 358.4333, 0, 0, 0, 0, 0, 0);
-    for (new i; i < 52; i++) {
-		if (IsAntiCheatEnabled(i)) {
-			EnableAntiCheat(i, false);
-		}
-    }
+    // for (new i; i < 52; i++) {
+	// 	if (IsAntiCheatEnabled(i)) {
+	// 		EnableAntiCheat(i, false);
+	// 	}
+    // }
 	return 1;
 }
 
@@ -2967,7 +2969,7 @@ SendConnectionMessage(str[])
 
 SendErrorMessage(playerid, const str[])
 {
-	new astr[128];
+	new astr[156];
 	format(astr, sizeof(astr), "[SERVER] %s", str);
 	SendClientMessage(playerid, COLOR_GRAY, astr);
 	return 1;
@@ -2978,7 +2980,7 @@ SendAdminsMessage(level, color, str[])
     #pragma unused color
 	foreach(new i: Player)
 	{
-		new astr[128];
+		new astr[156];
 		if(Account[i][Admin] >= level)
 		{
 			format(astr, sizeof(astr), "{808080}(AdmChat) {bf0000}%s", str);
@@ -2991,13 +2993,61 @@ SendAdmcmdMessage(level, str[])
 {
 	foreach(new i: Player)
 	{
-		new astr[128];
+		new astr[156];
 		if(Account[i][Admin] >= level)
 		{
 			format(astr, sizeof(astr), "{808080}[ADMCMD]: {C0C0C0}%s", str);
 			SendClientMessage(i, 0xFFFFFFFF, astr);
 		}
 	}
+}
+
+SendAdminMessage(level, str[])
+{
+	foreach(new i: Player)
+	{
+		new astr[156];
+		if(Account[i][Admin] >= level)
+		{
+			format(astr, sizeof(astr), "%s", str);
+			SendClientMessage(i, 0xFFFFFFFF, astr);
+		}
+	}
+}
+
+isAduty(playerid)
+{
+    return adminDuty[playerid];
+}
+
+AntiCheatMessage(str[], level)
+{
+	foreach(new i: Player)
+	{
+		new astr[128];
+		if(Account[i][Admin] >= level)
+		{
+			format(astr, sizeof(astr), "{FF0000}[GUARDIAN]: {C0C0C0}%s", str);
+			SendClientMessage(i, 0xFFFFFFFF, astr);
+		}
+	}
+}
+AdminsOnline()
+{
+    new bool: admins;
+	foreach(new i: Player)
+	{
+		if(Account[i][Admin] >= 0) admins = true;
+	}
+    return admins;
+}
+IsAdmin(playerid, lvl)
+{
+    return Account[playerid][Admin] >= lvl;
+}
+AdminLvl(playerid)
+{
+    return Account[playerid][Admin];
 }
 
 SendDiscordAdmMessage(level, color, str[])
@@ -3260,23 +3310,23 @@ stock IsAPlane(carid)
 	return 0;
 }
 
-GetVehicleSpeed( vehicleid )
-{
-	// Function: GetVehicleSpeed( vehicleid )
+// GetVehicleSpeed( vehicleid )
+// {
+// 	// Function: GetVehicleSpeed( vehicleid )
 
-	new
-	    Float:x,
-	    Float:y,
-	    Float:z,
-		vel;
+// 	new
+// 	    Float:x,
+// 	    Float:y,
+// 	    Float:z,
+// 		vel;
 
-	GetVehicleVelocity( vehicleid, x, y, z );
+// 	GetVehicleVelocity( vehicleid, x, y, z );
 
-	vel = floatround( floatsqroot( x*x + y*y + z*z ) * 180 );			// KM/H
-//	vel = floatround( floatsqroot( x*x + y*y + z*z ) * 180 / MPH_KMH ); // MPH
+// 	vel = floatround( floatsqroot( x*x + y*y + z*z ) * 180 );			// KM/H
+// //	vel = floatround( floatsqroot( x*x + y*y + z*z ) * 180 / MPH_KMH ); // MPH
 
-	return vel;
-}
+// 	return vel;
+// }
 GetLanguage(language)
 {
 	new lang[64];

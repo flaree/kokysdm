@@ -90,6 +90,8 @@
 #define COLOR_MENU 0xFFFFFFAA		// WHITE (FFFFFF) menu's (/help)
 #define COLOR_SYSTEM_PM 0x66CC00AA	// LIGHT GREEN
 #define COLOR_SYSTEM_PW 0xFFFF33AA	// YELLOW
+#define COLOR_SYNTAX 0xFFFFFFFF
+#define COLOR_WARNING 0xFF0000FF
 
 //==============================================================================
 //          -- > bcrypt workfactor
