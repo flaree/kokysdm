@@ -918,6 +918,7 @@ CMD<AD1>:remoteban(cmdid, playerid, params[])
 	cache_get_value_name(0, "LatestIP", ip);
 
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO Bans (PlayerName, IP, C_ID, A_ID, Timestamp, BannedBy, Reason) VALUES('%e', '%e', %d, %d, %d, '%e', '%e')", account, ip, playersqlid, playersqlid, gettime(), GetName(playerid), reason));
+	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO logs (AdminName, PlayerName, Command, Reason, Timestamp) VALUES('%e', '%e', '/ban', '%e', '%d')", GetName(playerid), account, reason, gettime()));
 
 	Account[playerid][AdminActions]++;
 	SendClientMessage(playerid, -1, sprintf("{1E90FF}(ADMIN NOTICE):{dadada} You have banned the user %s(userid: %d), reason: %s", account, playersqlid, reason));
