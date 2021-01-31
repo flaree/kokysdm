@@ -10,7 +10,7 @@
 														*Developed by Koky*
 
 ==============================================================================================================
-Update K:DM 0.53.1
+Update K:DM 0.53.3
 Memorial Developers -> Koky ~ TommyB ~ J0sh ES ~ Graber
 Developers -> SimoSbara ~ Davis ~ westham ~ Bauer ~ josef, flare, omcho
 Thanks to -> PatrickGTR :)
