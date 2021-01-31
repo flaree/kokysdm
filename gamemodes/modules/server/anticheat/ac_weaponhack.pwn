@@ -374,7 +374,6 @@ hook OnPlayerConnect(playerid)
 	ResetedWeapon(playerid);
 	WeapFreeze[playerid] = 0;
 	LastRLShot[playerid] = 0;
-	return 1;
 }
 
 
@@ -384,7 +383,6 @@ hook OnPlayerDisconnect(playerid)
 	ResetedWeapon(playerid);
 	WeapFreeze[playerid] = 0;
 	LastRLShot[playerid] = 0;
-	return 1;
 }
 
 /*hook OnPlayerDeath(playerid, killerid, reason)
@@ -400,7 +398,6 @@ hook OnPlayerSpawn(playerid)
 		WeapFreeze[playerid] = 0;
 	}
 	PlayerHeldWeapon[playerid] = 0;
-	return 1;
 }
 
 
@@ -552,7 +549,7 @@ hook OnPlayerUpdate(playerid)
 	return 1;
 }
 
-CMD:weaponfreeze(playerid, params[])
+CMD<AD1>:weaponfreeze(cmdid, playerid, params[])
 {
 	if(IsAdmin(playerid, 1))
 	{
@@ -599,7 +596,7 @@ CMD:weaponfreeze(playerid, params[])
 }
 
 
-CMD:forcescroll(playerid, params[])
+CMD<AD1>:forcescroll(cmdid, playerid, params[])
 {
 	if(IsAdmin(playerid, 1))
 	{
@@ -625,13 +622,13 @@ CMD:forcescroll(playerid, params[])
 	return 1;
 }
 
-CMD:fsg(playerid, params[])
+CMD<AD1>:fsg(cmdid, playerid, params[])
 {
-	cmd_forcescroll(playerid, params);
+	cmd_forcescroll(cmdid, playerid, params);
 	return 1;
 }
 
-CMD:adas(playerid, params[])
+CMD<AD1>:adas(cmdid, playerid, params[])
 {
 	if(IsAdmin(playerid, 1))
 	{
@@ -680,9 +677,9 @@ CMD:adas(playerid, params[])
 	return 1;
 }
 
-CMD:advancedas(playerid, params[])
+CMD<AD1>:advancedas(cmdid, playerid, params[])
 {
-	cmd_adas(playerid, params);
+	cmd_adas(cmdid, playerid, params);
 	return 1;
 }
 

@@ -21,13 +21,13 @@ WAC_GivePlayerWeapon(playerid, weaponid, ammo)
 	WeaponData[playerid][slot][ACWeaponAmmo] = ammo;
 	return GivePlayerWeapon(playerid, weaponid, ammo);
 }
-#if defined _ALS_GivePlayerWeapon
-	#undef GivePlayerWeapon
-#else
-	#define _ALS_GivePlayerWeapon
-#endif
+// #if defined _ALS_GivePlayerWeapon
+// 	#undef GivePlayerWeapon
+// #else
+// 	#define _ALS_GivePlayerWeapon
+// #endif
 
-#define GivePlayerWeapon WAC_GivePlayerWeapon
+// #define GivePlayerWeapon WAC_GivePlayerWeapon
 
 CheckPlayerWeapons(playerid)
 {

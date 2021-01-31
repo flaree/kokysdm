@@ -373,8 +373,8 @@ public AntiCheat_GivePlayerMoney(playerid, amount)
 	PlayerData[playerid][ac_money] += amount;
 	Account[playerid][Cash] = PlayerData[playerid][ac_money]; // Added this so it temporarily stops breaking everyones money. Come talk to me on IRC and I can explain. 
 	new mon_msg[128];
-	format(mon_msg, sizeof(mon_msg), "%s's money has been scriptly given $%i", GetName(playerid), amount);
-	SendAdmcmdMessage(1, mon_msg);
+	// format(mon_msg, sizeof(mon_msg), "%s's money has been scriptly given $%i", GetName(playerid), amount);
+	// SendAdmcmdMessage(1, mon_msg);
 	return GivePlayerMoney(playerid, amount);
 }
 #define GivePlayerMoney AntiCheat_GivePlayerMoney
@@ -383,8 +383,8 @@ public AntiCheat_ResetPlayerMoney(playerid)
 {
 	PlayerData[playerid][ac_money] = 0;
 	new mon_msg[128];
-	format(mon_msg, sizeof(mon_msg), "%s's money has been scriptly reset.", GetName(playerid));
-	SendAdmcmdMessage(1, mon_msg);
+	// format(mon_msg, sizeof(mon_msg), "%s's money has been scriptly reset.", GetName(playerid));
+	// SendAdmcmdMessage(1, mon_msg);
 	return ResetPlayerMoney(playerid);
 }
 
@@ -410,7 +410,7 @@ public AntiCheat_SetPlayerHealth(playerid, Float:hp)
 	PlayerData[playerid][ac_health] = hp;
 	PlayerSynced[playerid][acs_health] = 0;
 	ServerSideHP[playerid] = hp;
-	return SetPlayerHealth(playerid, hp);
+	return WC_SetPlayerHealth(playerid, hp);
 }
 #define SetPlayerHealth AntiCheat_SetPlayerHealth
 
@@ -441,7 +441,7 @@ public AntiCheat_SetPlayerArmour(playerid, Float:armor)
 	PlayerData[playerid][ac_armour] = armor;
 	PlayerSynced[playerid][acs_armour] = 0;
 	ServerSideAM[playerid] = armor;
-	return SetPlayerArmour(playerid, armor);
+	return WC_SetPlayerArmour(playerid, armor);
 }
 #define SetPlayerArmour AntiCheat_SetPlayerArmour
 
@@ -503,13 +503,13 @@ stock AntiCheat_GivePlayerWeapon(playerid, weaponid, wpammo)
 	//#if defined RAKGUY_WEAPONHACKS
 	if(!AddedWeapon(playerid, weaponid, wpammo))
 	{
-	    GivePlayerWeapon(playerid, weaponid, 1);
+	    WAC_GivePlayerWeapon(playerid, weaponid, 1);
 		PlayerData[playerid][ac_ammo][WeapSlots[weaponid]] = 9999;
 	    PlayerData[playerid][ac_weapons][WeapSlots[weaponid]] = weaponid;
 		return SetPlayerAmmo(playerid, weaponid, 9999);
 	}
 	//#endif
-	return GivePlayerWeapon(playerid, weaponid, wpammo);
+	return WAC_GivePlayerWeapon(playerid, weaponid, wpammo);
 
 }
 #define GivePlayerWeapon AntiCheat_GivePlayerWeapon
@@ -523,7 +523,7 @@ public AntiCheat_SetPlayerPos(playerid, Float:x, Float:z, Float:y)
     PlayerData[playerid][ac_y] = y;
     PlayerData[playerid][ac_z] = z;
 
-	return SetPlayerPos(playerid, Float:x, Float:z, Float:y);
+	return WC_SetPlayerPos(playerid, Float:x, Float:z, Float:y);
 }
 #define SetPlayerPos AntiCheat_SetPlayerPos
 
@@ -539,20 +539,20 @@ public AC_SetPlayerSpecialAction(playerid, specialaction)
 		PlayerData[playerid][ac_jetpack] = 0;
 	}
 
-	return SetPlayerSpecialAction(playerid, specialaction);
+	return WC_SetPlayerSpecialAction(playerid, specialaction);
 }
 #define SetPlayerSpecialAction AC_SetPlayerSpecialAction
 
 stock AntiCheat_ClearAnimations(playerid, forcesync = 0)
 {
     PlayerData[playerid][ac_jetpack] = 0;
-    return ClearAnimations(playerid, forcesync);
+    return WC_ClearAnimations(playerid, forcesync);
 }
 #define ClearAnimations AntiCheat_ClearAnimations
 
 public AntiCheat_AddStaticVehicle(mdlid, Float:spawn_x, Float:spawn_y, Float:spawn_z, Float:angle, color1, color2)
 {
-	new vehicleid = AddStaticVehicle(mdlid, Float:spawn_x, Float:spawn_y, Float:spawn_z, Float:angle, color1, color2);
+	new vehicleid = Iter_AddStaticVehicle(mdlid, Float:spawn_x, Float:spawn_y, Float:spawn_z, Float:angle, color1, color2);
 	VehicleData[vehicleid][acv_health] = 1000;
 	VehicleData[vehicleid][acv_modelid] = mdlid;
 	Iter_Add(AcVehicle, vehicleid);
@@ -563,7 +563,7 @@ public AntiCheat_AddStaticVehicle(mdlid, Float:spawn_x, Float:spawn_y, Float:spa
 
 public AntiCheat_AddStaticVehicleEx(mdlid, Float:spawn_x, Float:spawn_y, Float:spawn_z, Float:angle, color1, color2, respawn_delay, addsiren)
 {
-	new vehicleid = AddStaticVehicleEx(mdlid, Float:spawn_x, Float:spawn_y, Float:spawn_z, Float:angle, color1, color2, respawn_delay, addsiren);
+	new vehicleid = Iter_AddStaticVehicleEx(mdlid, Float:spawn_x, Float:spawn_y, Float:spawn_z, Float:angle, color1, color2, respawn_delay, addsiren);
 	VehicleData[vehicleid][acv_health] = 1000;
 	VehicleData[vehicleid][acv_modelid] = mdlid;
 	Iter_Add(AcVehicle, vehicleid);
@@ -573,7 +573,7 @@ public AntiCheat_AddStaticVehicleEx(mdlid, Float:spawn_x, Float:spawn_y, Float:s
 
 public AntiCheat_CreateVehicle(mdlid, Float:x, Float:y, Float:z, Float:angle, color1, color2, respawn_delay, addsiren)
 {
-	new vehicleid = CreateVehicle(mdlid, Float:x, Float:y, Float:z, Float:angle, color1, color2, respawn_delay, addsiren);
+	new vehicleid = Iter_CreateVehicle(mdlid, Float:x, Float:y, Float:z, Float:angle, color1, color2, respawn_delay, addsiren);
 	VehicleData[vehicleid][acv_health] = 1000;
 	VehicleData[vehicleid][acv_modelid] = mdlid;
 	Iter_Add(AcVehicle, vehicleid);
@@ -586,7 +586,7 @@ public AntiCheat_DestroyVehicle(vehicleid)
 	VehicleData[vehicleid][acv_health] = 0;
 	VehicleData[vehicleid][acv_modelid] = 0;
 	Iter_Remove(AcVehicle, vehicleid);
-	return DestroyVehicle(vehicleid);
+	return Iter_DestroyVehicle(vehicleid);
 }
 #define DestroyVehicle AntiCheat_DestroyVehicle
 
@@ -626,7 +626,7 @@ public AntiCheat_GetPlayerMoney(playerid)
 
 public AntiCheat_SetSpawnInfo(playerid, pteam, pskin, Float:px, Float:py, Float:pz, Float:pAngle, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo)
 {
-	return SetSpawnInfo(playerid, pteam, pskin, Float:px, Float:py, Float:pz, Float:pAngle, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo);
+	return WC_SetSpawnInfo(playerid, pteam, pskin, Float:px, Float:py, Float:pz, Float:pAngle, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo);
 }
 #define SetSpawnInfo AntiCheat_SetSpawnInfo 
 
@@ -1033,15 +1033,13 @@ hook OnGameModeInit()
 	Desync_Armour = 0;
 	Desync_Weapons = 0;
 	Desync_Ammo = 0;
-	
-	return 1;
+
 }
 
 hook OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid)
 {
 	PlayerData[playerid][ac_int] = newinteriorid;
 	
-	return 1;
 }
 
 hook OnPlayerUpdate(playerid)
@@ -1552,22 +1550,4 @@ stock GetAntiCheatNotificationListStr(name[], value)
 	}
 	
 	return str;
-}
-
-stock GetVehicleSpeed( vehicleid )
-{
-	// Function: GetVehicleSpeed( vehicleid )
-
-	new
-	    Float:x,
-	    Float:y,
-	    Float:z,
-		vel;
-
-	GetVehicleVelocity( vehicleid, x, y, z );
-
-	vel = floatround( floatsqroot( x*x + y*y + z*z ) * 180 );			// KM/H
-//	vel = floatround( floatsqroot( x*x + y*y + z*z ) * 180 / MPH_KMH ); // MPH
-
-	return vel;
 }

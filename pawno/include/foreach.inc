@@ -951,7 +951,7 @@ public OnGameModeInit()
 	stock Iter_CreateVehicle(modelid, Float:x, Float:y, Float:z, Float:angle, color1, color2, respawn_delay, addsiren = 0)
 	{
 		new
-			ret = CreateVehicle(modelid, x, y, z, angle, color1, color2, respawn_delay, addsiren);
+			ret = WC_CreateVehicle(modelid, x, y, z, angle, color1, color2, respawn_delay, addsiren);
 
 		if (ret != INVALID_VEHICLE_ID) {
 			#if defined FOREACH_MULTISCRIPT
@@ -963,13 +963,13 @@ public OnGameModeInit()
 
 		return ret;
 	}
-	#if defined _ALS_CreateVehicle
-		#undef CreateVehicle
-	#else
-		#define _ALS_CreateVehicle
-	#endif
+	// #if defined _ALS_CreateVehicle
+	// 	#undef CreateVehicle
+	// #else
+	// 	#define _ALS_CreateVehicle
+	// #endif
 
-	#define CreateVehicle Iter_CreateVehicle
+	// #define CreateVehicle Iter_CreateVehicle
 
 	/*
 		Iter_AddStaticVehicle
@@ -978,7 +978,7 @@ public OnGameModeInit()
 	stock Iter_AddStaticVehicle(modelid, Float:spawn_x, Float:spawn_y, Float:spawn_z, Float:angle, color1, color2)
 	{
 		new
-			ret = AddStaticVehicle(modelid, spawn_x, spawn_y, spawn_z, angle, color1, color2);
+			ret = WC_AddStaticVehicle(modelid, spawn_x, spawn_y, spawn_z, angle, color1, color2);
 
 		if (ret != INVALID_VEHICLE_ID) {
 			#if defined FOREACH_MULTISCRIPT
@@ -990,13 +990,13 @@ public OnGameModeInit()
 
 		return ret;
 	}
-	#if defined _ALS_AddStaticVehicle
-		#undef AddStaticVehicle
-	#else
-		#define _ALS_AddStaticVehicle
-	#endif
+	// #if defined _ALS_AddStaticVehicle
+	// 	#undef AddStaticVehicle
+	// #else
+	// 	#define _ALS_AddStaticVehicle
+	// #endif
 
-	#define AddStaticVehicle Iter_AddStaticVehicle
+	// #define AddStaticVehicle Iter_AddStaticVehicle
 
 	/*
 		Iter_AddStaticVehicleEx
@@ -1005,7 +1005,7 @@ public OnGameModeInit()
 	stock Iter_AddStaticVehicleEx(modelid, Float:spawn_x, Float:spawn_y, Float:spawn_z, Float:angle, color1, color2, respawn_delay, addsiren = 0)
 	{
 		new
-			ret = AddStaticVehicleEx(modelid, spawn_x, spawn_y, spawn_z, angle, color1, color2, respawn_delay, addsiren);
+			ret = WC_AddStaticVehicleEx(modelid, spawn_x, spawn_y, spawn_z, angle, color1, color2, respawn_delay, addsiren);
 
 		if (ret != INVALID_VEHICLE_ID) {
 			#if defined FOREACH_MULTISCRIPT
@@ -1017,13 +1017,13 @@ public OnGameModeInit()
 
 		return ret;
 	}
-	#if defined _ALS_AddStaticVehicleEx
-		#undef AddStaticVehicleEx
-	#else
-		#define _ALS_AddStaticVehicleEx
-	#endif
+	// #if defined _ALS_AddStaticVehicleEx
+	// 	#undef AddStaticVehicleEx
+	// #else
+	// 	#define _ALS_AddStaticVehicleEx
+	// #endif
 
-	#define AddStaticVehicleEx Iter_AddStaticVehicleEx
+	// #define AddStaticVehicleEx Iter_AddStaticVehicleEx
 
 	/*
 		DestroyVehicleSafe
@@ -1051,15 +1051,15 @@ public OnGameModeInit()
 		#else
 			Iter_Remove(Vehicle, vehicleid);
 		#endif
-		return DestroyVehicle(vehicleid);
+		return WC_DestroyVehicle(vehicleid);
 	}
-	#if defined _ALS_DestroyVehicle
-		#undef DestroyVehicle
-	#else
-		#define _ALS_DestroyVehicle
-	#endif
+	// #if defined _ALS_DestroyVehicle
+	// 	#undef DestroyVehicle
+	// #else
+	// 	#define _ALS_DestroyVehicle
+	// #endif
 
-	#define DestroyVehicle Iter_DestroyVehicle
+	// #define DestroyVehicle Iter_DestroyVehicle
 
 	/*
 		Iter_AddVehicle

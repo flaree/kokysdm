@@ -5799,12 +5799,12 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &weapon, &bodypart)
 #define SpawnPlayer WC_SpawnPlayer
 
 
-#if defined _ALS_SetPlayerHealth
-	#undef SetPlayerHealth
-#else
-	#define _ALS_SetPlayerHealth
-#endif
-#define SetPlayerHealth WC_SetPlayerHealth
+// #if defined _ALS_SetPlayerHealth
+// 	#undef SetPlayerHealth
+// #else
+// 	#define _ALS_SetPlayerHealth
+// #endif
+// #define SetPlayerHealth WC_SetPlayerHealth
 
 
 #if defined _ALS_GetPlayerState
@@ -5823,12 +5823,12 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &weapon, &bodypart)
 #define GetPlayerHealth WC_GetPlayerHealth
 
 
-#if defined _ALS_SetPlayerArmour
-	#undef SetPlayerArmour
-#else
-	#define _ALS_SetPlayerArmour
-#endif
-#define SetPlayerArmour WC_SetPlayerArmour
+// #if defined _ALS_SetPlayerArmour
+// 	#undef SetPlayerArmour
+// #else
+// 	#define _ALS_SetPlayerArmour
+// #endif
+// #define SetPlayerArmour WC_SetPlayerArmour
 
 
 #if defined _ALS_GetPlayerArmour
@@ -5879,12 +5879,12 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &weapon, &bodypart)
 #define ApplyAnimation WC_ApplyAnimation
 
 
-#if defined _ALS_ClearAnimations
-	#undef ClearAnimations
-#else
-	#define _ALS_ClearAnimations
-#endif
-#define ClearAnimations WC_ClearAnimations
+// #if defined _ALS_ClearAnimations
+// 	#undef ClearAnimations
+// #else
+// 	#define _ALS_ClearAnimations
+// #endif
+// #define ClearAnimations WC_ClearAnimations
 
 
 #if defined _ALS_AddPlayerClass
@@ -5903,12 +5903,12 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &weapon, &bodypart)
 #define AddPlayerClassEx WC_AddPlayerClassEx
 
 
-#if defined _ALS_SetSpawnInfo
-	#undef SetSpawnInfo
-#else
-	#define _ALS_SetSpawnInfo
-#endif
-#define SetSpawnInfo WC_SetSpawnInfo
+// #if defined _ALS_SetSpawnInfo
+// 	#undef SetSpawnInfo
+// #else
+// 	#define _ALS_SetSpawnInfo
+// #endif
+// #define SetSpawnInfo WC_SetSpawnInfo
 
 
 #if defined _ALS_TogglePlayerSpectating
@@ -5927,12 +5927,12 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &weapon, &bodypart)
 #define TogglePlayerControllable WC_TogglePlayerControllable
 
 
-#if defined _ALS_SetPlayerPos
-	#undef SetPlayerPos
-#else
-	#define _ALS_SetPlayerPos
-#endif
-#define SetPlayerPos WC_SetPlayerPos
+// #if defined _ALS_SetPlayerPos
+// 	#undef SetPlayerPos
+// #else
+// 	#define _ALS_SetPlayerPos
+// #endif
+// #define SetPlayerPos WC_SetPlayerPos
 
 
 #if defined _ALS_SetPlayerPosFindZ
@@ -5975,35 +5975,35 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &weapon, &bodypart)
 #define PlayerSpectatePlayer WC_PlayerSpectatePlayer
 
 
-#if defined _ALS_DestroyVehicle
-	#undef DestroyVehicle
-#else
-	#define _ALS_DestroyVehicle
-#endif
-#define DestroyVehicle WC_DestroyVehicle
+// #if defined _ALS_DestroyVehicle
+// 	#undef DestroyVehicle
+// #else
+// 	#define _ALS_DestroyVehicle
+// #endif
+// #define DestroyVehicle WC_DestroyVehicle
 
-#if defined _ALS_CreateVehicle
-	#undef CreateVehicle
-#else
-	#define _ALS_CreateVehicle
-#endif
-#define CreateVehicle WC_CreateVehicle
-
-
-#if defined _ALS_AddStaticVehicle
-	#undef AddStaticVehicle
-#else
-	#define _ALS_AddStaticVehicle
-#endif
-#define AddStaticVehicle WC_AddStaticVehicle
+// #if defined _ALS_CreateVehicle
+// 	#undef CreateVehicle
+// #else
+// 	#define _ALS_CreateVehicle
+// #endif
+// #define CreateVehicle WC_CreateVehicle
 
 
-#if defined _ALS_AddStaticVehicleEx
-	#undef AddStaticVehicleEx
-#else
-	#define _ALS_AddStaticVehicleEx
-#endif
-#define AddStaticVehicleEx WC_AddStaticVehicleEx
+// #if defined _ALS_AddStaticVehicle
+// 	#undef AddStaticVehicle
+// #else
+// 	#define _ALS_AddStaticVehicle
+// #endif
+// #define AddStaticVehicle WC_AddStaticVehicle
+
+
+// #if defined _ALS_AddStaticVehicleEx
+// 	#undef AddStaticVehicleEx
+// #else
+// 	#define _ALS_AddStaticVehicleEx
+// #endif
+// #define AddStaticVehicleEx WC_AddStaticVehicleEx
 
 #if defined _ALS_IsPlayerInCheckpoint
 	#undef IsPlayerInCheckpoint
@@ -6013,12 +6013,12 @@ public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &weapon, &bodypart)
 #define IsPlayerInCheckpoint WC_IsPlayerInCheckpoint
 
 
-#if defined _ALS_SetPlayerSpecialAction
-	#undef SetPlayerSpecialAction
-#else
-	#define _ALS_SetPlayerSpecialAction
-#endif
-#define SetPlayerSpecialAction WC_SetPlayerSpecialAction
+// #if defined _ALS_SetPlayerSpecialAction
+// 	#undef SetPlayerSpecialAction
+// #else
+// 	#define _ALS_SetPlayerSpecialAction
+// #endif
+// #define SetPlayerSpecialAction WC_SetPlayerSpecialAction
 
 
 #if defined _ALS_TextDrawCreate
