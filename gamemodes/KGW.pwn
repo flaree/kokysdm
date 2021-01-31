@@ -4381,7 +4381,7 @@ IP_Lookup(playerid)
 
 Account_Lookup(playerid)
 {
-	mysql_pquery_s(SQL_CONNECTION, str_format("SELECT NULL FROM `Bans` WHERE A_ID = %d OR PlayerName = '%e' LIMIT 1", Account[playerid][SQLID], GetName(playerid)), "Lookup_Result", "d", playerid);
+	mysql_pquery_s(SQL_CONNECTION, str_format("SELECT Reason, BannedBy, Timestamp FROM `Bans` WHERE A_ID = %d OR PlayerName = '%e' LIMIT 1", Account[playerid][SQLID], GetName(playerid)), "Lookup_Result", "d", playerid);
 	return 1;
 }
 
@@ -4390,7 +4390,16 @@ public Lookup_Result(playerid)
 {
 	if(cache_num_rows())
 	{
-		SendClientMessage(playerid, COLOR_WHITE, "You are banned from the server.");
+        new banAdmin[32], reason[128], timestamp, Timestamp: ts, output[256];
+        cache_get_value_name(0, "Reason", reason);
+        cache_get_value_name_int(0, "Timestamp", timestamp);
+        cache_get_value_name(0, "BannedBy", banAdmin);
+        ts = Timestamp: timestamp;
+        TimeFormat(ts, ISO6801_FULL_UTC, output);
+		SendClientMessage(playerid, COLOR_RED, "You are banned from the server.");
+        SendClientMessage(playerid, COLOR_RED, sprintf("Banning Admin: %s", banAdmin));
+        SendClientMessage(playerid, COLOR_RED, sprintf("Reason: %s", reason));
+        SendClientMessage(playerid, COLOR_RED, sprintf("Ban Date: %s", output));
 		Dialog_Show(playerid, NONE, DIALOG_STYLE_MSGBOX, "Information", "You are banned from the server.", "Close", "");
 		Account[playerid][LoggedIn] = 0;
 		KickPlayer(playerid);
