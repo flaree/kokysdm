@@ -909,12 +909,12 @@ CMD<AD1>:remoteban(cmdid, playerid, params[])
 	if(sscanf(params, "s[25]S(Not specified)[128]", account, reason)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /remoteban [name] [reason]");
 
 	yield 1;
-	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT `SQLID`, `Username` `LatestIP` FROM `Accounts` WHERE `Username` = '%e'", account));
+	await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT `SQLID`, `Username`, `LatestIP` FROM `Accounts` WHERE `Username` = '%e'", account));
 	if(!cache_num_rows()) return SendClientMessage(playerid, -1, sprintf("{bf0000}NOTICE: {FFFFFF}The user %s was not found, please check your input again.", account));
 
-	new playersqlid, ip;
+	new playersqlid, ip[16];
 	cache_get_value_name_int(0, "SQLID", playersqlid);
-	cache_get_value_name_int(0, "LatestIP", ip);
+	cache_get_value_name(0, "LatestIP", ip);
 
 	mysql_pquery_s(SQL_CONNECTION, str_format("INSERT INTO Bans (PlayerName, IP, C_ID, A_ID, Timestamp, BannedBy, Reason) VALUES('%e', '%e', %d, %d, %d, '%e', '%e')", account, ip, playersqlid, playersqlid, gettime(), GetName(playerid), reason));
 
