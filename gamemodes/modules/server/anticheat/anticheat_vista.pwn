@@ -1227,10 +1227,11 @@ CheckPlayerUpdate(playerid)
 						{
 							if(Desync_Weapons == 0)
 							{
-								new string[128];
-								format(string, sizeof(string), "[AntiCheat]: {%06x} %s (%d)'s %s is desynced for %d seconds. Attempting to resync.", COLOR_RED >>> 8, GetName(playerid), playerid, AC_WeapNames[PlayerData[playerid][ac_weapons][i]], UpdateFail[playerid][acs_weapons][i]);
-								SendAdminMessage(1, string);
-								GivePlayerWeapon(playerid, PlayerData[playerid][ac_weapons][i], 10);
+								// new string[128];
+								// format(string, sizeof(string), "[AntiCheat]: {%06x} %s (%d)'s %s is desynced for %d seconds. Attempting to resync.", COLOR_RED >>> 8, GetName(playerid), playerid, AC_WeapNames[PlayerData[playerid][ac_weapons][i]], UpdateFail[playerid][acs_weapons][i]);
+								// SendAdminMessage(1, string);
+								// GivePlayerWeapon(playerid, PlayerData[playerid][ac_weapons][i], 10);
+								return 1;
 							}
 							
 						}
@@ -1239,9 +1240,9 @@ CheckPlayerUpdate(playerid)
 						{
 							if(Desync_Weapons == 0)
 							{
-								new string[128];
-								format(string, sizeof(string), "[AntiCheat]: {%06x} %s (%d)'s %s has been desynced for too long. Recommend kicking the player", COLOR_RED >>> 8, GetName(playerid), playerid, AC_WeapNames[PlayerData[playerid][ac_weapons][i]]);
-								SendAdminMessage(1, string);
+								// new string[128];
+								// format(string, sizeof(string), "[AntiCheat]: {%06x} %s (%d)'s %s has been desynced for too long. Recommend kicking the player", COLOR_RED >>> 8, GetName(playerid), playerid, AC_WeapNames[PlayerData[playerid][ac_weapons][i]]);
+								// SendAdminMessage(1, string);
 	//							Kick(playerid);
 								return 1;
 							}							
@@ -1318,10 +1319,11 @@ CheckPlayerUpdate(playerid)
 							{
 								if(Desync_Ammo == 0)
 								{
-									new string[128];
-									format(string, sizeof(string), "[AntiCheat]: {%06x} %s (%d)'s %s's ammo is desynced for %d seconds. Attempting to resync.", COLOR_RED >>> 8, GetName(playerid), playerid, AC_WeapNames[PlayerData[playerid][ac_weapons][i]], UpdateFail[playerid][acs_ammo][i]);
-									SendAdminMessage(1, string);
-									GivePlayerWeapon(playerid, PlayerData[playerid][ac_weapons][i], 10);
+									// new string[128];
+									// format(string, sizeof(string), "[AntiCheat]: {%06x} %s (%d)'s %s's ammo is desynced for %d seconds. Attempting to resync.", COLOR_RED >>> 8, GetName(playerid), playerid, AC_WeapNames[PlayerData[playerid][ac_weapons][i]], UpdateFail[playerid][acs_ammo][i]);
+									// SendAdminMessage(1, string);
+									// GivePlayerWeapon(playerid, PlayerData[playerid][ac_weapons][i], 10);
+									return 1;
 								}
 							}
 
@@ -1329,10 +1331,11 @@ CheckPlayerUpdate(playerid)
 							{
 								if(Desync_Ammo == 0)
 								{
-									new string[128];
-									format(string, sizeof(string), "[AntiCheat]: {%06x} %s (%d)'s %s's ammo has been desynced for too long. Recommend kicking the player", COLOR_RED >>> 8, GetName(playerid), playerid, AC_WeapNames[PlayerData[playerid][ac_weapons][i]]);
-									SendAdminMessage(1, string);
+									// new string[128];
+									// format(string, sizeof(string), "[AntiCheat]: {%06x} %s (%d)'s %s's ammo has been desynced for too long. Recommend kicking the player", COLOR_RED >>> 8, GetName(playerid), playerid, AC_WeapNames[PlayerData[playerid][ac_weapons][i]]);
+									// SendAdminMessage(1, string);
 					//				Kick(playerid);
+									return 1;
 								}
 								
 							}

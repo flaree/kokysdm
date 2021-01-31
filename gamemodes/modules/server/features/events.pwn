@@ -608,7 +608,7 @@ Dialog:EVENTS(playerid, response, listitem, inputtext[])
 }
 
 // -----------------------------------------------------------------------------
-CMD:startevent(cmdid, playerid, params[])
+CMD<AD1>:startevent(cmdid, playerid, params[])
 {
 	if(ActivityState[playerid] != ACTIVITY_LOBBY) return SendClientMessage(playerid, -1, "{bf0000}Notice: {FFFFFF} You must be in the lobby to use this command.");
 
@@ -644,7 +644,7 @@ CMD:joinevent(cmdid, playerid, params[])
 }
 
 // -----------------------------------------------------------------------------
-CMD<AD3>:endevent(cmdid, playerid, params[])
+CMD<AD1>:endevent(cmdid, playerid, params[])
 {
 	if(EventType == 0)
 		return SendClientMessage(playerid, -1, "{31AEAA}Events: {FFFFFF}There is no event in progress.");

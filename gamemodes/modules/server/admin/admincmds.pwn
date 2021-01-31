@@ -37,7 +37,10 @@ CMD<AD1>:setvw(cmdid, playerid, params[])
 	return 1;
 }
 CMD<AD1>:wallhack(cmdid, playerid, params[]) {
-	if(SpectatingPlayer[playerid] == -1 && Account[playerid][Admin] > 3) return SendErrorMessage(playerid, "You must be spectating to use this command");
+	if(SpectatingPlayer[playerid] == -1)
+	{
+		if(Account[playerid][Admin] < 4) return SendErrorMessage(playerid, "You must be spectating to use this command");
+	}
 	WallHack[playerid] = !WallHack[playerid];
 	sendFormatMessage(playerid, 0xFFFF0000, "* You have %s wall hacks!", WallHack[playerid]?("enabled"):("disabled"));
 	new szString[256];
@@ -483,7 +486,7 @@ CMD<AD1>:forcerules(cmdid, playerid, params[])
 	if(sscanf(params, "us[64]", pID, reason)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /forcerules [ID] [Reason]");
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid, ERROR_OPTION);
 
-	Dialog_Show(playerid, RULES, DIALOG_STYLE_MSGBOX, "Rules", "1. {FFFFFF}No third party modifications\n2. {FFFFFF}No bug/samp physic abuse(c-roll, c-bug, c-shoot-c)\n3. {FFFFFF}No chat spam and no racism\n4. {FFFFFF}English only\n5. {FFFFFF}Abuse of commands (/lobby to avoid death)\n6.No External Advertisements\n7. Always maintain common courtesy\n8. No trading virtual goods for real life currency\n9. No spawn killing\n10. /teaming for teaming rules", "Okay", "");
+	Dialog_Show(pID, RULES, DIALOG_STYLE_MSGBOX, "Rules", "1. {FFFFFF}No third party modifications\n2. {FFFFFF}No bug/samp physic abuse(c-roll, c-bug, c-shoot-c)\n3. {FFFFFF}No chat spam and no racism\n4. {FFFFFF}English only\n5. {FFFFFF}Abuse of commands (/lobby to avoid death)\n6.No External Advertisements\n7. Always maintain common courtesy\n8. No trading virtual goods for real life currency\n9. No spawn killing\n10. /teaming for teaming rules", "Okay", "");
 	Account[pID][ForcedRules1] = 1;
 	Account[pID][ForcedRules]++;
 	SendPunishmentMessage(sprintf("%s has forced rules upon %s! Reason: %s", AdminName(playerid), GetName(pID), reason));

@@ -632,7 +632,7 @@ CMD<AD1>:adas(cmdid, playerid, params[])
 	if(IsAdmin(playerid, 1))
 	{
 		new targetid;
-		if(sscanf(params, "uk<weapon>", targetid))
+		if(sscanf(params, "u", targetid))
 		{
 			return SendClientMessage(playerid, COLOR_SYNTAX, "[USAGE]: /adas [PlayerID/GetName]");
 		}
