@@ -482,7 +482,7 @@ CMD<AD1>:forcerules(cmdid, playerid, params[])
 	if(sscanf(params, "us[64]", pID, reason)) return SendClientMessage(playerid, COLOR_GRAY, "USAGE: /forcerules [ID] [Reason]");
 	if(!IsPlayerConnected(pID)) return SendErrorMessage(playerid, ERROR_OPTION);
 
-	Dialog_Show(pID, RULES, DIALOG_STYLE_MSGBOX, "Forced Rules", "{1E90FF}1. {FFFFFF}No third party modifications\n{1E90FF}2. {FFFFFF}No bug abuse(c-roll, c-bug, c-shoot-c)\n{1E90FF}3. {FFFFFF}No racism\n{1E90FF}4. {FFFFFF}English only\n{1E90FF}5. {FFFFFF}Abuse of commands (/lobby to avoid death)", "Okay", "Close");
+	Dialog_Show(playerid, RULES, DIALOG_STYLE_MSGBOX, "Rules", "1. {FFFFFF}No third party modifications\n2. {FFFFFF}No bug/samp physic abuse(c-roll, c-bug, c-shoot-c)\n3. {FFFFFF}No chat spam and no racism\n4. {FFFFFF}English only\n5. {FFFFFF}Abuse of commands (/lobby to avoid death)\n6.No External Advertisements\n7. Always maintain common courtesy\n8. No trading virtual goods for real life currency\n9. No spawn killing\n10. /teaming for teaming rules", "Okay", "");
 	Account[pID][ForcedRules1] = 1;
 	Account[pID][ForcedRules]++;
 	SendPunishmentMessage(sprintf("%s has forced rules upon %s! Reason: %s", AdminName(playerid), GetName(pID), reason));
