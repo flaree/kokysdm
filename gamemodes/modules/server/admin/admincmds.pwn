@@ -1958,7 +1958,7 @@ CMD<AD3>:armourall(cmdid, playerid, params[])
 	}
 
 	new buf[150];
-	format(buf, sizeof(buf), "{808080}[ADMCMD]:{FFFFFF} %s(%i) has armoured all players.", AdminName(playerid));
+	format(buf, sizeof(buf), "{808080}[ADMCMD]:{FFFFFF} %s has armoured all players.", AdminName(playerid));
 	DCC_SendChannelMessage(DCC_FindChannelById(ADMIN_CHANNEL), sprintf("**[ADMCMD]** %s has armoured all players.", GetName(playerid)));
     SendClientMessageToAll(COLOR_RED, buf);
 	return 1;
