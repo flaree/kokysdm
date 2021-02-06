@@ -2593,9 +2593,33 @@ SendTDMSpree(playerid)
 	if(Account[playerid][KillStreak] == 25)
 	{
 		SendTDMMessage(-1, sprintf("{fdff00}KILLSTREAK:{FFFFFF} %s is on a {fdff00}%d {FFFFFF}killing spree!", GetName(playerid), Account[playerid][KillStreak]));
-		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +25 kills for your spree!");
+		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +25 kills and grenades for your spree!");
 		GivePlayerKillEx(playerid, 25);
+        GivePlayerWeapon(playerid, 16, 3);
 		GameTextForPlayer(playerid, "~R~NUKE SPREE!", 1000, 6);
+	}
+    if(Account[playerid][KillStreak] > 25 && Account[playerid][KillStreak] % 5 == 0 && Account[playerid][KillStreak] != 50 && Account[playerid][KillStreak] != 100)
+	{
+		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{fdff00}KILLSTREAK:{FFFFFF} %s is on a {fdff00}%d {FFFFFF}killing spree!", GetName(playerid), Account[playerid][KillStreak]));
+		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given 100 armour and ammo for your spree!");
+		SetPlayerArmour(playerid, 100);
+        new weaponid, ammo;
+        GetPlayerWeaponData(playerid, 2, weaponid, ammo);
+        SetPlayerAmmo(playerid, weaponid, ammo + 50);
+	}
+    if(Account[playerid][KillStreak] == 50)
+	{
+		SendClientMessageToAll(-1, sprintf("{fdff00}KILLSTREAK:{FFFFFF} %s is on a {fdff00}%d {FFFFFF}killing spree!", GetName(playerid), Account[playerid][KillStreak]));
+		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given 100 armour and a rpg with 5 ammo for your spree!");
+		GivePlayerKillEx(playerid, 25);
+        GivePlayerWeapon(playerid, 35, 5);
+	}
+    if(Account[playerid][KillStreak] == 100)
+	{
+		SendClientMessageToAll(-1, sprintf("{fdff00}KILLSTREAK:{FFFFFF} %s is on a {fdff00}%d {FFFFFF}killing spree!", GetName(playerid), Account[playerid][KillStreak]));
+		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given 100 armour, health and a minigun with 100 ammo for your spree!");
+		GivePlayerKillEx(playerid, 25);
+        GivePlayerWeapon(playerid, 38, 100);
 	}
 	else
 	{

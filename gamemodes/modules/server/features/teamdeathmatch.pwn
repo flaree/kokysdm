@@ -66,7 +66,7 @@ new ammudata[][] =
 	{WEAPON_SNIPER, 10, -10000},
 	{WEAPON_GRENADE, 1, -10000},
 	{WEAPON_MOLTOV, 1, -10000},
-	{WEAPON_M4, 100, -25000}
+	{WEAPON_M4, 100, -15000}
 };
 
 #include <pp-hooks>
@@ -573,10 +573,10 @@ CMD<TDM>:buy(cmdid, playerid, params[])
 	if(inAmmunation[playerid] == 1)
 	{
 	    ShowPlayerMenu(playerid, AMMUNATION, "Weapons Menu");
-	    AddPlayerMenuItem(playerid, "Sniper", "Lethal weapon, will cost you $40,000 per 10 bullets!");
+	    AddPlayerMenuItem(playerid, "Sniper", "Lethal weapon, will cost you $10,000 per 10 bullets!");
 	    AddPlayerMenuItem(playerid, "Grenade", "Lethal weapon, will cost you $10,000 per grenade!");
 	    AddPlayerMenuItem(playerid, "Molotov Cocktail", "Lethal weapon, will cost you $10,000 per molotov!");
-	    AddPlayerMenuItem(playerid, "M4", "Weapon, will cost you $25,000 per 100 bullets!");
+	    AddPlayerMenuItem(playerid, "M4", "Weapon, will cost you $15,000 per 100 bullets!");
 	    AddPlayerMenuItem(playerid, "Health & Armour", "Medical, will cost you $10,000 per refill!");
 
 	    TogglePlayerControllable(playerid, false);
