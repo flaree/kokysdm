@@ -332,6 +332,13 @@ enum MOTDenum
     AdminMOTD[156],
 };
 
+
+enum CMDCooldown // Cooldown for specific commands
+{
+	HEAL,
+    WHOIS,
+};
+
 //==========================================================================
 //	Server/Player Variables												  //
 //==========================================================================
@@ -340,6 +347,7 @@ new MOTD[MOTDenum];
 new Clans[9999][ClanData];
 new Account[MAX_PLAYERS][acc];
 new PlayerCustomSkins[MAX_PLAYERS][MAX_CUSTOM_SKINS][pCustomSkinData];
+new CmdAvailable[MAX_PLAYERS][CMDCooldown];
 
 //structure is skin id - model - name
 new ServerSkinData[][sCustomSkinData] =
@@ -1181,6 +1189,7 @@ OnDeathCash(playerid, killerid)
 		case 1: GivePlayerMoneyEx(killerid, 150);
 		case 2: GivePlayerMoneyEx(killerid, 250);
 		case 3: GivePlayerMoneyEx(killerid, 350);
+        case 4: GivePlayerMoneyEx(killerid, 500);
 	}
 	GivePlayerMoneyEx(playerid, -50);
 }
@@ -1342,7 +1351,7 @@ public SendRandomMessage()
 {
 	static const randomMessages[][] =  //here, we're creating the array with the name "randomMessages"
 	{
-		"[Koky's Deathmatch]{FFFFFF}: Did you know? There is a 1 in 100 chance of receiving a Premium Key upon killing another player!", //this is the text of your second message
+		"[Koky's Deathmatch]{FFFFFF}: Did you know? There is a 1 in 50 chance of receiving a Premium Key upon killing another player!", //this is the text of your second message
 		"[Koky's Deathmatch]{FFFFFF}: Want a custom skin? Use /skinroll in the lobby!",
 		"[Koky's Deathmatch]{FFFFFF}: Got an idea in mind? Suggest it on our forums. (www.kokysdm.net)",
 		"[Koky's Deathmatch]{FFFFFF}: Use /top to view the top kills, headshots and deaths!",
@@ -2828,7 +2837,7 @@ public OnPlayerDeath(playerid, killerid, reason)
 		SetPlayerScore(killerid, GetPlayerScore(killerid) +1);
 		SendSpree(killerid);
 		OnDeathCash(playerid, killerid);
-		if(random(100) == 49)
+		if(random(50) == 25)
 		{
 			GiveKey(killerid);
 		}
@@ -4132,7 +4141,9 @@ CMD:wheelchair(cmdid, playerid, params[])
 }
 CMD:skin(cmdid, playerid, params[])
 {
-	if(ActivityState[playerid] != ACTIVITY_LOBBY && ActivityState[playerid] != ACTIVITY_FREEROAM) return true;
+	if(ActivityState[playerid] != ACTIVITY_LOBBY && ActivityState[playerid] != ACTIVITY_FREEROAM) {
+        if(!(ActivityState[playerid] == ACTIVITY_TDM && Account[playerid][Donator] >= 1)) return true;
+    }
 
 	if(isnull(params))
 	{
@@ -4165,7 +4176,7 @@ MSelectCreate:skins(playerid)
 	new skin[310], count = 0;
 
 	for (new i = 1; i < 312; i++)
-	{
+	{ 
 		if (i == 74) continue;
 
 		skin[count] = i;
@@ -4178,6 +4189,20 @@ MSelectResponse:skins(playerid, MSelectType:response, itemid, modelid)
 {
 	if(modelid != -1)
 	{
+        if(ActivityState[playerid] == ACTIVITY_TDM){
+            yield 1;
+            await mysql_aquery_s(SQL_CONNECTION, str_format("SELECT * FROM clans WHERE skin = %i or skin2 = %i or skin3 = %i", modelid, modelid, modelid));
+            if(cache_num_rows()) {
+                SendClientMessage(playerid, COLOR_LIGHTRED, "A clan is already using this skin!");
+                MSelect_Close(playerid);
+                return 1;
+            }
+            if(modelid == 106 || modelid == 107 || modelid == 102 || modelid == 104 || modelid == 134 || modelid == 137 || modelid == 108 || modelid == 109) {
+                SendClientMessage(playerid, COLOR_LIGHTRED, "A public team is already using this skin!"); // TDM Skins
+                MSelect_Close(playerid);
+                return 1;
+            }
+        } 
 		SetPlayerSkinEx(playerid, modelid);
 		MSelect_Close(playerid);
 	}
@@ -4571,7 +4596,7 @@ CMD:crateshelp(cmdid, playerid, params[])
 	SendClientMessage(playerid, COLOR_LIGHTRED, "[ CRATES ]");
 	SendClientMessage(playerid, COLOR_LIGHTRED, "1. {FFFFFF}Crates can be used to win items such as money, access to donator commands and more!");
 	SendClientMessage(playerid, COLOR_LIGHTRED, "2. {FFFFFF}There is a 1/100 chance you can get a Premium Key everytime you kill a player.");
-	SendClientMessage(playerid, COLOR_LIGHTRED, "3. {FFFFFF}You can buy Premium Keys via /buykey. Tokens are valued at $100,000 per token.");
+	SendClientMessage(playerid, COLOR_LIGHTRED, "3. {FFFFFF}You can buy Premium Keys via /buykey. Tokens are valued at $5,000,000 per token.");
 	SendClientMessage(playerid, COLOR_LIGHTRED, "4. {FFFFFF}You can use your keys via /opencrate command at the lobby. (/lobby)");
 	SendClientMessage(playerid, COLOR_LIGHTRED, "5. {FFFFFF}You can also get Premium Keys by purchasing them for real money via the forums. (/donate)");
 	SendClientMessage(playerid, COLOR_LIGHTRED, "6. {FFFFFF}Donators are refunded via /skinroll if they get a skin they have already unlocked.");
