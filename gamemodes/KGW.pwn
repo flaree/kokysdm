@@ -333,11 +333,11 @@ enum MOTDenum
 };
 
 
-enum CMDCooldown // Cooldown for specific commands
-{
-	HEAL,
-    WHOIS,
-};
+// enum CMDCooldown // Cooldown for specific commands
+// {
+// 	HEAL,
+//     WHOIS,
+// };
 
 //==========================================================================
 //	Server/Player Variables												  //
@@ -347,7 +347,7 @@ new MOTD[MOTDenum];
 new Clans[9999][ClanData];
 new Account[MAX_PLAYERS][acc];
 new PlayerCustomSkins[MAX_PLAYERS][MAX_CUSTOM_SKINS][pCustomSkinData];
-new CmdAvailable[MAX_PLAYERS][CMDCooldown];
+// new CmdAvailable[MAX_PLAYERS][CMDCooldown];
 
 //structure is skin id - model - name
 new ServerSkinData[][sCustomSkinData] =
@@ -2538,7 +2538,8 @@ SendSpree(playerid)
     if(Account[playerid][KillStreak] > 25 && Account[playerid][KillStreak] % 5 == 0)
 	{
 		SendDMMessage(ActivityStateID[playerid], COLOR_GRAY, sprintf("{fdff00}KILLSTREAK:{FFFFFF} %s is on a {fdff00}%d {FFFFFF}killing spree!", GetName(playerid), Account[playerid][KillStreak]));
-		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +25 kills for your spree!");
+		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given +100 armour and HP for your spree!");
+        SetPlayerHealth(playerid, 100);
 		SetPlayerArmour(playerid, 100);
 	}
 	else
@@ -2611,7 +2612,7 @@ SendTDMSpree(playerid)
 	{
 		SendClientMessageToAll(-1, sprintf("{fdff00}KILLSTREAK:{FFFFFF} %s is on a {fdff00}%d {FFFFFF}killing spree!", GetName(playerid), Account[playerid][KillStreak]));
 		SendClientMessage(playerid, COLOR_GRAY, "{31AEAA}Reward: {FFFFFF}You have been given 100 armour and a rpg with 5 ammo for your spree!");
-		GivePlayerKillEx(playerid, 25);
+		SetPlayerArmour(playerid, 100);
         GivePlayerWeapon(playerid, 35, 5);
 	}
     if(Account[playerid][KillStreak] == 100)
