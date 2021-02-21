@@ -88,6 +88,7 @@ new pName[MAX_PLAYERS][MAX_PLAYER_NAME + 1];
 new bool:AdminPMRead[MAX_PLAYERS];
 new bool:HudShow[MAX_PLAYERS] = {true, ...};
 new bool:ConnectionMessages[MAX_PLAYERS] = {true, ...};
+new bool:ChatToggle[MAX_PLAYERS] = {false, ...};
 new clanskins[MAX_PLAYERS] = {-1, ...};
 
 new bool:WallHack[MAX_PLAYERS] = {false, ...};
@@ -1505,6 +1506,7 @@ public OnPlayerConnect(playerid)
     WallHack[playerid] = false;
     tpSNIPER[playerid] = false;
     PlayerDeath[playerid] = false;
+    ChatToggle[playerid] = true;
 
 	Account_Reset(playerid);
 	SetPlayerColor(playerid, PlayerColors[playerid]);
@@ -3536,7 +3538,7 @@ public OnPlayerText(playerid, const text[])
 
 ChatSend(language, const str[])
 {
-	foreach(new i: Player) if(Account[i][pLanguage] == language)
+	foreach(new i: Player) if(Account[i][pLanguage] == language && ChatToggle[i])
 	{
 		SendClientMessage(i, -1, str);
 	}
@@ -3878,6 +3880,26 @@ CMD:togglejoin(cmdid, playerid, params[])
     }
 
 	return true;
+}
+CMD:togglechat(cmdid, playerid, params[])
+{
+	if(ChatToggle[playerid]) {
+        SendClientMessage(playerid, COLOR_LIGHTRED, "Your chat has been disabled.");
+        ChatToggle[playerid] = false;
+    } else {
+        SendClientMessage(playerid, COLOR_LIGHTRED, "Your chat has been enabled.");
+        ChatToggle[playerid] = true;
+    }
+
+	return true;
+}
+CMD:clearchat(cmdid, playerid, params[])
+{
+	for (new i=0; i<250; i++)
+	{
+		SendClientMessage(playerid, 0xFFFFFFFF, " ");
+	}
+	return 1;
 }
 CMD:selltoken(cmdid, playerid, params[])
 {
