@@ -147,6 +147,7 @@ enum e_AntiCheatPlayerInfo
 	ac_jetpack,
 	ac_modshop,
 	ac_int,
+	ac_paused,
 	//ac_dialog,
 	//ac_lastdialog
 };
@@ -235,58 +236,58 @@ static
 /* Weapons */
 
 static const
-				WeapSlots[47] = {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 8, 8, 8, -1, -1, -1, 2, 2, 2, 3, 3, 3, 4, 4, 5, 5, 4, 6, 6, 7, 7, 7, 7, 8, 12, 9, 9, 9, 11, 11, 11},
+				WeapSlots[47] = {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 8, 8, 8, -1, -1, -1, 2, 2, 2, 3, 3, 3, 4, 4, 5, 5, 4, 6, 6, 7, 7, 7, 7, 8, 12, 9, 9, 9, 11, 11, 11};
 
-				AC_WeapNames[][] = {
-				{"Unarmed (Fist)"},
-				{"Brass Knuckles"},
-				{"Golf Club"},
-				{"Night Stick"},
-				{"Knife"},
-				{"Baseball Bat"},
-				{"Shovel"},
-				{"Pool Cue"},
-				{"Katana"},
-				{"Chainsaw"},
-				{"Purple Dildo"},
-				{"Big White Vibrator"},
-				{"Medium White Vibrator"},
-				{"Small White Vibrator"},
-				{"Flowers"},
-				{"Cane"},
-				{"Grenade"},
-				{"Teargas"},
-				{"Molotov"},
-				{" "},
-				{" "},
-				{" "},
-				{"Colt 45"},
-				{"Colt 45(Silenced)"},
-				{"Deagle"},
-				{"Normal Shotgun"},
-				{"Sawnoff Shotgun"},
-				{"Combat Shotgun"},
-				{"Micro SMG"},
-				{"MP5"},
-				{"AK47"},
-				{"M4"},
-				{"Tec9"},
-				{"Country Rifle"},
-				{"Sniper Rifle"},
-				{"Rocket Launcher"},
-				{"Heat-Seeking Rocket Launcher"},
-				{"Flamethrower"},
-				{"Minigun"},
-				{"Satchel Charge"},
-				{"Detonator"},
-				{"Spray Can"},
-				{"Fire Extinguisher"},
-				{"Camera"},
-				{"Night Vision Goggles"},
-				{"Infrared Vision Goggles"},
-				{"Parachute"},
-				{"Fake Pistol"}
-				};
+				// AC_WeapNames[][] = {
+				// {"Unarmed (Fist)"},
+				// {"Brass Knuckles"},
+				// {"Golf Club"},
+				// {"Night Stick"},
+				// {"Knife"},
+				// {"Baseball Bat"},
+				// {"Shovel"},
+				// {"Pool Cue"},
+				// {"Katana"},
+				// {"Chainsaw"},
+				// {"Purple Dildo"},
+				// {"Big White Vibrator"},
+				// {"Medium White Vibrator"},
+				// {"Small White Vibrator"},
+				// {"Flowers"},
+				// {"Cane"},
+				// {"Grenade"},
+				// {"Teargas"},
+				// {"Molotov"},
+				// {" "},
+				// {" "},
+				// {" "},
+				// {"Colt 45"},
+				// {"Colt 45(Silenced)"},
+				// {"Deagle"},
+				// {"Normal Shotgun"},
+				// {"Sawnoff Shotgun"},
+				// {"Combat Shotgun"},
+				// {"Micro SMG"},
+				// {"MP5"},
+				// {"AK47"},
+				// {"M4"},
+				// {"Tec9"},
+				// {"Country Rifle"},
+				// {"Sniper Rifle"},
+				// {"Rocket Launcher"},
+				// {"Heat-Seeking Rocket Launcher"},
+				// {"Flamethrower"},
+				// {"Minigun"},
+				// {"Satchel Charge"},
+				// {"Detonator"},
+				// {"Spray Can"},
+				// {"Fire Extinguisher"},
+				// {"Camera"},
+				// {"Night Vision Goggles"},
+				// {"Infrared Vision Goggles"},
+				// {"Parachute"},
+				// {"Fake Pistol"}
+				// };
 				
 /* Pay'n'Spray coordinates */
 
@@ -367,6 +368,12 @@ stock Float:GetDistanceBetweenPoints(Float:rx1,Float:ry1,Float:rz1,Float:rx2,Flo
 	return 1;
 }
 #define ShowPlayerDialog AntiCheat_ShowPlayerDialog*/
+
+forward ToggleAnticheat(playerid);
+public ToggleAnticheat(playerid)
+{
+	PlayerData[playerid][ac_paused] = false;
+}
 
 public AntiCheat_GivePlayerMoney(playerid, amount)
 {
@@ -867,7 +874,7 @@ static AntiCheat_SendWarning(playerid, cheatid, extraid)
 		// CheatLog(string);
 		format(msgstring, sizeof(msgstring), "6[AntiCheat]: %s", cheatstr);
 		// IRC_GroupSay(gEcho, IRC_FOCO_ECHO, msgstring);
-		SendAdminMessage(1, string);	
+		if(!PlayerData[playerid][ac_paused]) SendAdminMessage(1, string);	
 	}
 	
 	
@@ -902,6 +909,7 @@ static ResetACData(playerid)
 	PlayerData[playerid][click_Z] = 0.0;
 	PlayerData[playerid][ac_jetpack] = 0;
 	PlayerData[playerid][ac_modshop] = 0;
+	PlayerData[playerid][ac_paused] = false;
 /*	PlayerData[playerid][ac_dialog] = -1;
 	PlayerData[playerid][ac_lastdialog] = -1;
 	SetPVarInt(playerid, "Pending_Dialog", -1);*/
@@ -912,6 +920,8 @@ static ResetACData(playerid)
 hook OnPlayerConnect(playerid)
 {
 	ResetACData(playerid);
+	PlayerData[playerid][ac_paused] = true;
+	SetTimerEx("ToggleAnticheat", 5000, false, "i", playerid);
 }
 
 hook OnPlayerDisconnect(playerid, reason)
@@ -929,6 +939,8 @@ hook OnPlayerSpawn(playerid)
 {
 	PlayerData[playerid][ac_dead] = 0;
 	GetPlayerPos(playerid, PlayerData[playerid][ac_x], PlayerData[playerid][ac_y], PlayerData[playerid][ac_z]);
+	PlayerData[playerid][ac_paused] = true;
+	SetTimerEx("ToggleAnticheat", 5000, false, "i", playerid);
 }
 
 hook OnPlayerStateChange(playerid, newstate, oldstate)
