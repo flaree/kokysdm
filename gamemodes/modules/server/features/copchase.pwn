@@ -128,8 +128,8 @@ StartCopchase(forceEnd = false)
 						vehCount++;
 					}
 
-					WC_SetPlayerHealth(p, 100);
-					WC_SetPlayerArmour(p, 100);
+					SetPlayerHealth(p, 100);
+					SetPlayerArmour(p, 100);
 
 					SetPlayerTeam(p, 2);
 
@@ -150,8 +150,8 @@ StartCopchase(forceEnd = false)
 					LinkVehicleToInterior(vehid, GetPlayerInterior(p));
 					PutPlayerInVehicle(p, vehid, 0);
 					SetPlayerTeam(p, 3);
-					WC_SetPlayerHealth(p, 100);
-					WC_SetPlayerArmour(p, 100);
+					SetPlayerHealth(p, 100);
+					SetPlayerArmour(p, 100);
 					SendClientMessage(p, COLOR_ORANGE, "{31AEAA}Copchase:{FFA500} You're a criminal! Escape from the cops.");
 					SendClientMessage(p, COLOR_ORANGE, "{31AEAA}Copchase:{FFA500} Survive for 10 minutes or kill them all to win the game.");
 				}
