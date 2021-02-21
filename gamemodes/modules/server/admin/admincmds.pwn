@@ -309,7 +309,7 @@ CMD<AD4>:alockchat(cmdid, playerid, params[])
 	SendClientMessageToAll(COLOR_GRAY, sprintf("{808080}[ADMCMD]:{FFFFFF} %s has %s the chat.", AdminName(playerid), ChatLocked == true ? "locked" : "unlocked"));
 	return 1;
 }
-CMD<AD1>:clearchat(cmdid, playerid, params[])
+CMD<AD1>:aclearchat(cmdid, playerid, params[])
 {
 	for (new i=0; i<250; i++)
 	{
