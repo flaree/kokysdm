@@ -4510,7 +4510,7 @@ IP_Lookup(playerid)
 {
 	new ip[18];
 	GetPlayerIp(playerid, ip, sizeof(ip));
-	mysql_pquery_s(SQL_CONNECTION, str_format("SELECT NULL FROM `Bans` WHERE IP = '%e' LIMIT 1", ip), "Lookup_Result", "d", playerid);
+	mysql_pquery_s(SQL_CONNECTION, str_format("SELECT Reason, BannedBy, Timestamp FROM `Bans` WHERE IP = '%e' LIMIT 1", ip), "Lookup_Result", "d", playerid);
 	return 1;
 }
 
